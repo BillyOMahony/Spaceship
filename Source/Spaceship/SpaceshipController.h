@@ -27,5 +27,10 @@ private:
 	 *	@return the screen coordinates of the mouse as a percentage
 	 */
 	FVector2D GetMouseCoordinates();
+
+	/*
+	 *	@return the location of the mouse relative to the center of the screen
+	 */
+	FVector2D GetMousePositionRelativeToCenter();
 };
 

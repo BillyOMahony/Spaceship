@@ -7,7 +7,6 @@ void ASpaceshipController::BeginPlay()
 {
 	Super::BeginPlay();
 
-	bShowMouseCursor = true;
 	FInputModeGameAndUI InputMode;
 	InputMode.SetLockMouseToViewportBehavior(EMouseLockMode::LockAlways);
 	SetInputMode(InputMode);
@@ -27,9 +26,25 @@ FVector2D ASpaceshipController::GetMouseCoordinates()
 	return FVector2D(MouseX/ScreenX, MouseY/ScreenY);
 }
 
+FVector2D ASpaceshipController::GetMousePositionRelativeToCenter()
+{
+	FVector2D MouseCoordinates = GetMouseCoordinates();
+
+	float MouseX = MouseCoordinates.X;
+	float MouseY = MouseCoordinates.Y;
+
+	MouseX = (MouseX - .5) * 2;
+
+	// Multiply by -2 to invert the values.
+	// 1,1 will now
+	MouseY = (MouseY - .5) * -2;
+
+	return FVector2D(MouseX, MouseY);
+}
+
 void ASpaceshipController::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
-	FString MouseLocation = GetMouseCoordinates().ToString();
+	FString MouseLocation = GetMousePositionRelativeToCenter().ToString();
 	GEngine->AddOnScreenDebugMessage(-1, 5, FColor::Red, MouseLocation);
 }
