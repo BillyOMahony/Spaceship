@@ -14,9 +14,15 @@ class SPACESHIP_API ASpaceshipController : public APlayerController
 {
 	GENERATED_BODY()
 
+public:
+	virtual void Tick(float DeltaTime) override;
+
+
 protected:
 	virtual void BeginPlay() override;
 
-public:
-	virtual void Tick(float DeltaTime) override;
+
+private:
+	FVector2D GetMouseCoordinates();
 };
+

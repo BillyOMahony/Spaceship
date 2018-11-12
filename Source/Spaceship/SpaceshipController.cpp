@@ -5,8 +5,16 @@
 void ASpaceshipController::BeginPlay()
 {
 	Super::BeginPlay();
-	// Shows the mouse cursor
+
 	bShowMouseCursor = true;
+	FInputModeGameAndUI InputMode;
+	InputMode.SetLockMouseToViewportBehavior(EMouseLockMode::LockAlways);
+	SetInputMode(InputMode);
+}
+
+FVector2D ASpaceshipController::GetMouseCoordinates()
+{
+	return FVector2D();
 }
 
 void ASpaceshipController::Tick(float DeltaTime)
