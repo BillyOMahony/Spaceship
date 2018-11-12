@@ -23,6 +23,9 @@ protected:
 
 
 private:
+	/*
+	 *	@return the screen coordinates of the mouse as a percentage
+	 */
 	FVector2D GetMouseCoordinates();
 };
 
