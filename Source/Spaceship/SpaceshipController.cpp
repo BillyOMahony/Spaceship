@@ -7,6 +7,7 @@ void ASpaceshipController::BeginPlay()
 {
 	Super::BeginPlay();
 
+	bShowMouseCursor = false;
 	FInputModeGameAndUI InputMode;
 	InputMode.SetLockMouseToViewportBehavior(EMouseLockMode::LockAlways);
 	SetInputMode(InputMode);
