@@ -22,6 +22,18 @@ void UMainThruster::SetSpaceshipHull(UStaticMeshComponent * Hull)
 	SpaceshipHull = Hull;
 }
 
+void UMainThruster::AddThrottle(float ThrottleToAdd)
+{
+	Throttle += ThrottleToAdd;
+	if(Throttle > 1)
+	{
+		Throttle = 1;
+	}else if(Throttle < 0)
+	{
+		Throttle = 0;
+	}
+}
+
 void UMainThruster::AccelerateSpaceship(float DeltaTime)
 {
 	if (InvertAcceleration)
@@ -36,7 +48,7 @@ void UMainThruster::AccelerateSpaceship(float DeltaTime)
 
 	UE_LOG(LogTemp, Warning, TEXT("Velocity: %f"), OutVelocity);
 
-	if(OutVelocity < MaxVelocity)
+	if(OutVelocity < MaxVelocity * Throttle)
 	{
 		SpaceshipHull->AddForce(FVector(AccelerationForce * DeltaTime, 0, 0));
 	}

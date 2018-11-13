@@ -28,14 +28,20 @@ public:
 	UFUNCTION(BlueprintCallable)
 	void SetSpaceshipHull(UStaticMeshComponent * Hull);
 
+	UFUNCTION(BlueprintCallable)
+	void AddThrottle(float ThrottleToAdd);
+
 	void AccelerateSpaceship(float DeltaTime);
 
 private:
 	UPROPERTY(EditAnywhere)
+	float Throttle = 0.f;
+
+	UPROPERTY(EditAnywhere)
 	float MaxVelocity = 10000.f;
 
 	UPROPERTY(EditAnywhere)
-	float AccelerationForce = 100.f;
+	float AccelerationForce = 1000000.f;
 
 	UPROPERTY(EditAnywhere)
 	bool InvertAcceleration = true;
