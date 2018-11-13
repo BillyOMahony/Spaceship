@@ -19,6 +19,7 @@ public:
 	/*
 	*	@return the location of the mouse relative to the center of the screen
 	*/
+	UFUNCTION(BlueprintCallable)
 	FVector2D GetMousePositionRelativeToCenter();
 
 protected:
