@@ -46,6 +46,4 @@ FVector2D ASpaceshipController::GetMousePositionRelativeToCenter()
 void ASpaceshipController::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
-	FString MouseLocation = GetMousePositionRelativeToCenter().ToString();
-	GEngine->AddOnScreenDebugMessage(-1, 5, FColor::Red, MouseLocation);
 }
