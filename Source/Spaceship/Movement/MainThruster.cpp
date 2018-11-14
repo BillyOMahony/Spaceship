@@ -5,13 +5,12 @@
 
 void UMainThruster::TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction * ThisTickFunction)
 {
-
+	AccelerateSpaceship(DeltaTime);
 }
 
 void UMainThruster::SetThrottle(float Throttle)
 {
 	this->Throttle = Throttle;
-	UE_LOG(LogTemp, Error, TEXT("Throttle: %f"), Throttle);
 }
 
 void UMainThruster::AccelerateSpaceship(float DeltaTime)
@@ -30,8 +29,6 @@ void UMainThruster::AccelerateSpaceship(float DeltaTime)
 	ActorForwardVector.Normalize();
 
 	float ForwardVelocity = FVector::DotProduct(ActorForwardVector, OutVelocity * OutDir);
-
-	UE_LOG(LogTemp, Warning, TEXT("ForwardVelocity: %f"), ForwardVelocity);
 
 	if (ForwardVelocity <= MaxVelocity * Throttle)
 	{

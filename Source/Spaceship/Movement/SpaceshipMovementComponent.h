@@ -21,6 +21,7 @@ public:
 protected:
 	// Called when the game starts
 	virtual void BeginPlay() override;
+	void HandleThrustInputs(float DeltaTime);
 
 public:	
 	// Called every frame
@@ -88,7 +89,7 @@ private:
 	/*
 	 *
 	 */
-	void Stabilise();
+	void Stabilise(float DeltaTime);
 
 	/*
 	 *	Adds to MainThrottle

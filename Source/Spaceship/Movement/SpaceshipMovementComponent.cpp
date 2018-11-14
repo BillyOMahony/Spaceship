@@ -1,6 +1,7 @@
 // Fill out your copyright notice in the Description page of Project Settings.
 
 #include "SpaceshipMovementComponent.h"
+#include "Components/StaticMeshComponent.h"
 #include "MainThruster.h"
 #include "SecondaryThruster.h"
 
@@ -25,6 +26,19 @@ void USpaceshipMovementComponent::BeginPlay()
 	
 }
 
+// Called every frame
+void USpaceshipMovementComponent::TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction)
+{
+	Super::TickComponent(DeltaTime, TickType, ThisTickFunction);
+
+	HandleThrottle(DeltaTime);
+
+	HandleThrustInputs(DeltaTime);
+
+	MoveForward(DeltaTime);
+
+	//Stabilise(DeltaTime);
+}
 
 void USpaceshipMovementComponent::HandleThrustInputs(float DeltaTime)
 {
@@ -59,18 +73,6 @@ void USpaceshipMovementComponent::HandleThrustInputs(float DeltaTime)
 			SecondaryThrusters[i]->ActivateThruster(EThrustDirection::Right, DeltaTime);
 		}
 	}
-}
-
-// Called every frame
-void USpaceshipMovementComponent::TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction)
-{
-	Super::TickComponent(DeltaTime, TickType, ThisTickFunction);
-
-	HandleThrottle(DeltaTime);
-
-	HandleThrustInputs(DeltaTime);
-
-	MoveForward(DeltaTime);
 }
 
 void USpaceshipMovementComponent::HandleThrottle(float DeltaTime)
@@ -112,6 +114,86 @@ void USpaceshipMovementComponent::SetSpaceshipHull(UStaticMeshComponent * Spaces
 	}
 }
 
+void USpaceshipMovementComponent::PopulateMainThrusters()
+{
+	GetOwner()->GetComponents<UMainThruster>(MainThrusters);
+}
+
+void USpaceshipMovementComponent::PopulateSecondaryThrusters()
+{
+	GetOwner()->GetComponents<USecondaryThruster>(SecondaryThrusters);
+}
+
+void USpaceshipMovementComponent::MoveForward(float DeltaTime)
+{
+	for (int32 i = 0; i < MainThrusters.Num(); i++) {
+		MainThrusters[i]->SetThrottle(MainThrottle);
+	}
+}
+
+void USpaceshipMovementComponent::Stabilise(float DeltaTime)
+{
+	// Stabilise in Left/Right Direction
+	if (!ThrustDownPressed && !ThrustUpPressed)
+	{
+		FVector HullVelocity = SpaceshipHull->GetComponentVelocity();
+		FVector OutDir;
+		float OutVelocity;
+		HullVelocity.ToDirectionAndLength(OutDir, OutVelocity);
+
+		FVector Direction = SpaceshipHull->GetRightVector();
+		Direction.Normalize();
+
+		float RightVelocity = FVector::DotProduct(Direction, OutVelocity * OutDir);
+
+		if(RightVelocity > 0)
+		{
+			for (int32 i = 0; i < SecondaryThrusters.Num(); i++)
+			{
+				SecondaryThrusters[i]->ActivateThruster(EThrustDirection::Left, DeltaTime);
+			}
+		}
+		else if(RightVelocity < 0)
+		{
+			for (int32 i = 0; i < SecondaryThrusters.Num(); i++)
+			{
+				SecondaryThrusters[i]->ActivateThruster(EThrustDirection::Right, DeltaTime);
+			}
+		}
+	}
+
+	// Stabilise in Up/Down Direction
+	if(!ThrustLeftPressed && !ThrustRightPressed)
+	{
+		UE_LOG(LogTemp, Warning, TEXT("Donkey"));
+
+		FVector HullVelocity = SpaceshipHull->GetComponentVelocity();
+		FVector OutDir;
+		float OutVelocity;
+		HullVelocity.ToDirectionAndLength(OutDir, OutVelocity);
+
+		FVector Direction = SpaceshipHull->GetUpVector();
+		Direction.Normalize();
+
+		float UpVector = FVector::DotProduct(Direction, OutVelocity * OutDir);
+
+		if (UpVector > 0)
+		{
+			for (int32 i = 0; i < SecondaryThrusters.Num(); i++)
+			{
+				SecondaryThrusters[i]->ActivateThruster(EThrustDirection::Down, DeltaTime);
+			}
+		}
+		else if (UpVector < 0)
+		{
+			for (int32 i = 0; i < SecondaryThrusters.Num(); i++)
+			{
+				SecondaryThrusters[i]->ActivateThruster(EThrustDirection::Up, DeltaTime);
+			}
+		}
+	}
+}
+
 void USpaceshipMovementComponent::SetThrottleUpPressed(bool ThrottleUpPressed)
 {
 	this->ThrottleUpPressed = ThrottleUpPressed;
@@ -141,28 +223,4 @@ void USpaceshipMovementComponent::SetThrustRightPressed(bool ThrustRightPressed)
 {
 	this->ThrustRightPressed = ThrustRightPressed;
 }
-
-void USpaceshipMovementComponent::PopulateMainThrusters()
-{
-	GetOwner()->GetComponents<UMainThruster>(MainThrusters);
-}
-
-void USpaceshipMovementComponent::PopulateSecondaryThrusters()
-{
-	GetOwner()->GetComponents<USecondaryThruster>(SecondaryThrusters);
-}
-
-void USpaceshipMovementComponent::MoveForward(float DeltaTime)
-{
-	for (int32 i = 0; i < MainThrusters.Num(); i++) {
-		MainThrusters[i]->SetThrottle(MainThrottle);
-		MainThrusters[i]->AccelerateSpaceship(DeltaTime); // TODO consider only setting throttle here and calling Accelerate in MainThruster.cpp tick
-	}
-}
-
-void USpaceshipMovementComponent::Stabilise()
-{
-
-}
-
 

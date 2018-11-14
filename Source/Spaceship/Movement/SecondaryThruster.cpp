@@ -50,34 +50,17 @@ void USecondaryThruster::ActivateThruster(EThrustDirection ThrustDirection, floa
 
 void USecondaryThruster::ThrustInDirection(FVector Direction, float DeltaTime)
 {
-	FVector ForceToAdd = Direction * AccelerationForce * DeltaTime;
-	SpaceshipHull->AddForce(ForceToAdd);
-	/*
 	FVector HullVelocity = SpaceshipHull->GetComponentVelocity();
 	FVector OutDir;
 	float OutVelocity;
 	HullVelocity.ToDirectionAndLength(OutDir, OutVelocity);
 
-	FVector ActorForwardVector = SpaceshipHull->GetForwardVector();
-	ActorForwardVector.Normalize();
+	Direction.Normalize();
+	
+	float DesiredDirectionVelocity = FVector::DotProduct(Direction, OutVelocity * OutDir);
 
-	float ForwardVelocity = FVector::DotProduct(ActorForwardVector, OutVelocity * OutDir);
-
-	UE_LOG(LogTemp, Warning, TEXT("ForwardVelocity: %f"), ForwardVelocity);
-
-	if (ForwardVelocity <= MaxVelocity * Throttle)
-	{
-		FVector ForceToAdd = ActorForwardVector * AccelerationForce * DeltaTime * Throttle;
+	if (DesiredDirectionVelocity < MaxVelocity) {
+		FVector ForceToAdd = Direction * AccelerationForce * DeltaTime;
 		SpaceshipHull->AddForce(ForceToAdd);
 	}
-	else if (ForwardVelocity > MaxVelocity * Throttle)
-	{
-		// Calculate a multiplier based on current speed / max speed, this causes spaceship to slow down at a nicer rate
-		// At Higher speeds it slows faster than at lower speeds
-		float SpeedBasedMultiplier = ForwardVelocity / MaxVelocity;
-
-		FVector ForceToAdd = ActorForwardVector * AccelerationForce * DeltaTime * DecelerationMultiplier * SpeedBasedMultiplier;
-		SpaceshipHull->AddForce(-ForceToAdd);
-	}
-	*/
 }
