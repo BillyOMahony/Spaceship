@@ -7,6 +7,17 @@
 #include "SecondaryThruster.generated.h"
 
 /**
+ *	The position of this thruster on the X axis relative to the center of the spaceship
+ */
+UENUM(BlueprintType)
+enum class EThrusterPositionX {
+	Front	UMETA(DisplayName = "Front"),
+	Rear	UMETA(DisplayName = "Rear"),
+	Center	UMETA(DisplayName = "Center")
+}
+
+
+/**
  * 
  */
 UCLASS(ClassGroup = (Custom), meta = (BlueprintSpawnableComponent))

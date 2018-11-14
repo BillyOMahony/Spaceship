@@ -30,7 +30,21 @@ void USpaceshipMovementComponent::TickComponent(float DeltaTime, ELevelTick Tick
 {
 	Super::TickComponent(DeltaTime, TickType, ThisTickFunction);
 
+	HandleThrottle(DeltaTime);
+
 	MoveForward(DeltaTime);
+}
+
+void USpaceshipMovementComponent::HandleThrottle(float DeltaTime)
+{
+	if (ThrottleUpPressed) {
+		float MainThrottleToAdd = DeltaTime * MainThrottleChangeMultiplier;
+		AddMainThrottle(MainThrottleToAdd);
+	}
+	else if (ThrottleDownPressed) {
+		float MainThrottleToAdd = DeltaTime * MainThrottleChangeMultiplier * -1;
+		AddMainThrottle(MainThrottleToAdd);
+	}
 }
 
 void USpaceshipMovementComponent::AddMainThrottle(float ThrottleToAdd)
@@ -54,6 +68,16 @@ void USpaceshipMovementComponent::SetSpaceshipHull(UStaticMeshComponent * Spaces
 	for (int32 i = 0; i < MainThrusters.Num(); i++) {
 		MainThrusters[i]->GetDefaultObject<UMainThruster>()->SetSpaceshipHull(SpaceshipHull);
 	}
+}
+
+void USpaceshipMovementComponent::SetThrottleUpPressed(bool ThrottleUpPressed)
+{
+	this->ThrottleUpPressed = ThrottleUpPressed;
+}
+
+void USpaceshipMovementComponent::SetThrottleDownPressed(bool ThrottleDownPressed)
+{
+	this->ThrottleDownPressed = ThrottleDownPressed;
 }
 
 void USpaceshipMovementComponent::MoveForward(float DeltaTime)

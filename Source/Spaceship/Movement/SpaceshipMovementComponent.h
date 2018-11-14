@@ -27,29 +27,61 @@ public:
 	virtual void TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction) override;
 
 	/*
-	 *	Adds to MainThrottle
-	 *	Clamps value between 0 and 1
-	 *	@param ThrottleToAdd - the throttle to add to MainThrottle 
-	 */
-	UFUNCTION(BlueprintCallable)
-	void AddMainThrottle(float ThrottleToAdd);
-
-	/*
 	 *	@param SpaceshipHull - The spaceship hull which forces will be applied to
 	 */
 	UFUNCTION(BlueprintCallable)
 	void SetSpaceshipHull(UStaticMeshComponent * SpaceshipHull);
 
-	void MoveForward(float DeltaTime);
+	/*
+	 *  @param ThrottleUpPressed - Whether or not the ThrottleUp input key is pressed 
+	 */
+	UFUNCTION(BlueprintCallable)
+	void SetThrottleUpPressed(bool ThrottleUpPressed);
 
-	void Stabilise();
+	/*
+	 *  @param ThrottleUpPressed - Whether or not the ThrottleDown input key is pressed 
+	 */
+	UFUNCTION(BlueprintCallable)
+	void SetThrottleDownPressed(bool ThrottleDownPressed);
 
 private:
-	
+	/*
+	 *
+	 */
+	void MoveForward(float DeltaTime);
+
+	/*
+	 *
+	 */
+	void Stabilise();
+
+	/*
+	 *	Adds to MainThrottle
+	 *	Clamps value between 0 and 1
+	 *	@param ThrottleToAdd - the throttle to add to MainThrottle
+	 */
+	void AddMainThrottle(float ThrottleToAdd);
+
+	/*
+	 *	Increases or decreases Throttle if the relevant input key is pressed
+	 *	@param DeltaTime - Time since last frame
+	 */
+	void HandleThrottle(float DeltaTime);
+
+	UPROPERTY(EditAnywhere)
+	float MainThrottleChangeMultiplier = 0.25;
+
 	float MainThrottle;
 	
 	UPROPERTY(EditAnywhere)
 	TArray<TSubclassOf<UMainThruster>> MainThrusters;
 
+	UPROPERTY(EditAnywhere)
+	TArray<TSubclassOf<USecondaryThruster>> SecondaryThrusters;
+
 	UStaticMeshComponent * SpaceshipHull;
+
+	bool ThrottleUpPressed = false;
+
+	bool ThrottleDownPressed = false;
 };
