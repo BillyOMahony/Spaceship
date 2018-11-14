@@ -3,23 +3,9 @@
 #include "MainThruster.h"
 #include "Components/StaticMeshComponent.h"
 
-// Called when the game starts
-void UMainThruster::BeginPlay()
-{
-	Super::BeginPlay();
-
-	// ...
-
-}
-
 void UMainThruster::TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction * ThisTickFunction)
 {
 	AccelerateSpaceship(DeltaTime);
-}
-
-void UMainThruster::SetSpaceshipHull(UStaticMeshComponent * Hull)
-{
-	SpaceshipHull = Hull;
 }
 
 void UMainThruster::AddThrottle(float ThrottleToAdd)
@@ -36,21 +22,31 @@ void UMainThruster::AddThrottle(float ThrottleToAdd)
 
 void UMainThruster::AccelerateSpaceship(float DeltaTime)
 {
-	if (InvertAcceleration)
-	{
-		DeltaTime *= -1;
-	}
-
 	FVector HullVelocity = SpaceshipHull->GetComponentVelocity();
 	FVector OutDir;
 	float OutVelocity;
 	HullVelocity.ToDirectionAndLength(OutDir, OutVelocity);
 
-	UE_LOG(LogTemp, Warning, TEXT("Velocity: %f"), OutVelocity);
+	FVector ActorForwardVector = SpaceshipHull->GetForwardVector();
+	ActorForwardVector.Normalize();
 
-	if(OutVelocity < MaxVelocity * Throttle)
+	float ForwardVelocity = FVector::DotProduct(ActorForwardVector, OutVelocity * OutDir);
+
+	UE_LOG(LogTemp, Warning, TEXT("ForwardVelocity: %f"), ForwardVelocity);
+
+	if (ForwardVelocity <= MaxVelocity * Throttle)
 	{
-		SpaceshipHull->AddForce(FVector(AccelerationForce * DeltaTime, 0, 0));
+		FVector ForceToAdd = ActorForwardVector * AccelerationForce * DeltaTime * Throttle;
+		SpaceshipHull->AddForce(ForceToAdd);
+	}
+	else if (ForwardVelocity > MaxVelocity * Throttle)
+	{
+		// Calculate a multiplier based on current speed / max speed, this causes spaceship to slow down at a nicer rate
+		// At Higher speeds it slows faster than at lower speeds
+		float SpeedBasedMultiplier = ForwardVelocity / MaxVelocity;
+
+		FVector ForceToAdd = ActorForwardVector * AccelerationForce * DeltaTime * DecelerationMultiplier * SpeedBasedMultiplier;
+		SpaceshipHull->AddForce(-ForceToAdd);
 	}
 	
 }

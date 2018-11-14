@@ -31,3 +31,8 @@ void USpaceshipThrusterComponent::TickComponent(float DeltaTime, ELevelTick Tick
 	// ...
 }
 
+void USpaceshipThrusterComponent::SetSpaceshipHull(UStaticMeshComponent * Hull)
+{
+	SpaceshipHull = Hull;
+}
+
