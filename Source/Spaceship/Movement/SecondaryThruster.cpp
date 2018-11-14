@@ -10,3 +10,13 @@ void USecondaryThruster::BeginPlay() {
 void USecondaryThruster::TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction * ThisTickFunction)
 {
 }
+
+void USecondaryThruster::AddForceInDirection()
+{
+
+}
+
+void USecondaryThruster::SetThrottle(float Throttle)
+{
+	this->Throttle = Throttle;
+}

@@ -34,11 +34,16 @@ public:
 	UFUNCTION(BlueprintCallable)
 	void SetSpaceshipHull(UStaticMeshComponent * Hull);
 
+	/*
+	 *	Plays the particle effect for this thruster
+	 *	@param Strength - The strength of this particle effect, should be between 0 and 1
+	 */
+	void PlayParticleEffect(float Strength);
+
 protected:
 	// Called when the game starts
 	virtual void BeginPlay() override;
 
-	UPROPERTY(EditAnywhere)
 	float Throttle = 0.f;
 
 	UPROPERTY(EditAnywhere)

@@ -5,23 +5,22 @@
 
 void UMainThruster::TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction * ThisTickFunction)
 {
-	AccelerateSpaceship(DeltaTime);
+
 }
 
-void UMainThruster::AddThrottle(float ThrottleToAdd)
+void UMainThruster::SetThrottle(float Throttle)
 {
-	Throttle += ThrottleToAdd;
-	if(Throttle > 1)
-	{
-		Throttle = 1;
-	}else if(Throttle < 0)
-	{
-		Throttle = 0;
-	}
+	this->Throttle = Throttle;
+	UE_LOG(LogTemp, Error, TEXT("Throttle: %f"), Throttle);
 }
 
 void UMainThruster::AccelerateSpaceship(float DeltaTime)
 {
+	if (!SpaceshipHull) {
+		UE_LOG(LogTemp, Error, TEXT("UMainThruster::AccelerateSpaceship - SpaceshipHull is nullptr"));
+		return;
+	} 
+
 	FVector HullVelocity = SpaceshipHull->GetComponentVelocity();
 	FVector OutDir;
 	float OutVelocity;

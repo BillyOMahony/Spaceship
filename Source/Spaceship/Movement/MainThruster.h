@@ -21,9 +21,16 @@ public:
 	// Called every frame
 	virtual void TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction) override;
 
+	/*
+	 *	@param Throttle - The new Throttle, should be between 0 and 1 
+	 *  TODO clamp
+	 */
 	UFUNCTION(BlueprintCallable)
-	void AddThrottle(float ThrottleToAdd);
+	void SetThrottle(float Throttle);
 
+	/*
+	 *	Accelerates or decelerates the spaceship in the Forward direction based on Throttle
+	 */
 	void AccelerateSpaceship(float DeltaTime);
 
 private:
