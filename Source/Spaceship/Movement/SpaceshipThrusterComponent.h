@@ -6,16 +6,6 @@
 #include "Components/ActorComponent.h"
 #include "SpaceshipThrusterComponent.generated.h"
 
-UENUM(BlueprintType)
-enum class EThrusterDirection : uint8 {
-	Forward		UMETA(DisplayName = "Forwards"),
-	Backwards	UMETA(DisplayName = "Backwards"),
-	Left		UMETA(DisplayName = "Left"),
-	Right		UMETA(DisplayName = "Right"),
-	Up			UMETA(DisplayName = "Up"),
-	Down		UMETA(DisplayName = "Down")
-};
-
 UCLASS( ClassGroup=(Custom), meta=(BlueprintSpawnableComponent) )
 class SPACESHIP_API USpaceshipThrusterComponent : public UActorComponent
 {
@@ -54,9 +44,6 @@ protected:
 
 	UPROPERTY(EditAnywhere)
 	float DecelerationMultiplier = 2.5f;
-
-	UPROPERTY(EditAnywhere)
-	EThrusterDirection ThrustDirection = EThrusterDirection::Forward;
 
 	UStaticMeshComponent * SpaceshipHull;
 
