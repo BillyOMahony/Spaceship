@@ -69,8 +69,19 @@ public:
 	void SetThrustRightPressed(bool ThrustRightPressed);
 
 private:
+
 	/*
-	 *	
+	 *	Finds all MainThruster Components of this actor and adds them to the MainThrusters array
+	 */
+	void PopulateMainThrusters();
+
+	/*
+	 *	Finds all SecondaryThruster Components of this actor and adds them to the SecondaryThrusters array
+	 */
+	void PopulateSecondaryThrusters();
+
+	/*
+	 *	Instructs all Main Thrusters to accelerate
 	 */
 	void MoveForward(float DeltaTime);
 
@@ -97,11 +108,9 @@ private:
 
 	float MainThrottle;
 	
-	UPROPERTY(EditAnywhere)
-	TArray<TSubclassOf<UMainThruster>> MainThrusters;
+	TArray<UMainThruster *> MainThrusters;
 
-	UPROPERTY(EditAnywhere)
-	TArray<TSubclassOf<USecondaryThruster>> SecondaryThrusters;
+	TArray<USecondaryThruster *> SecondaryThrusters;
 
 	UStaticMeshComponent * SpaceshipHull;
 
@@ -115,5 +124,5 @@ private:
 
 	bool ThrustLeftPressed = false;
 
-	bool ThurstRightPressed = false;
+	bool ThrustRightPressed = false;
 };
