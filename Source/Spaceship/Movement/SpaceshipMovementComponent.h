@@ -44,9 +44,33 @@ public:
 	UFUNCTION(BlueprintCallable)
 	void SetThrottleDownPressed(bool ThrottleDownPressed);
 
+	/*
+	*  @param ThrustUpPressed - Whether or not the ThrustUp input key is pressed
+	*/
+	UFUNCTION(BlueprintCallable)
+	void SetThrustUpPressed(bool ThrustUpPressed);
+
+	/*
+	*  @param ThrustDownPressed - Whether or not the ThrustDown input key is pressed
+	*/
+	UFUNCTION(BlueprintCallable)
+	void SetThrustDownPressed(bool ThrustDownPressed);
+
+	/*
+	*  @param ThrustLeftPressed - Whether or not the ThrustLeft input key is pressed
+	*/
+	UFUNCTION(BlueprintCallable)
+	void SetThrustLeftPressed(bool ThrustLeftPressed);
+
+	/*
+	*  @param ThrustRightPressed - Whether or not the ThrustRight input key is pressed
+	*/
+	UFUNCTION(BlueprintCallable)
+	void SetThrustRightPressed(bool ThrustRightPressed);
+
 private:
 	/*
-	 *
+	 *	
 	 */
 	void MoveForward(float DeltaTime);
 
@@ -84,4 +108,12 @@ private:
 	bool ThrottleUpPressed = false;
 
 	bool ThrottleDownPressed = false;
+
+	bool ThrustUpPressed = false;
+
+	bool ThrustDownPressed = false;
+
+	bool ThrustLeftPressed = false;
+
+	bool ThurstRightPressed = false;
 };

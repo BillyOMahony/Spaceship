@@ -80,11 +80,31 @@ void USpaceshipMovementComponent::SetThrottleDownPressed(bool ThrottleDownPresse
 	this->ThrottleDownPressed = ThrottleDownPressed;
 }
 
+void USpaceshipMovementComponent::SetThrustUpPressed(bool ThrustUpPressed)
+{
+	this->ThrustUpPressed = ThrustUpPressed;
+}
+
+void USpaceshipMovementComponent::SetThrustDownPressed(bool ThrustDownPressed)
+{
+	this->ThrustDownPressed = ThrustDownPressed;
+}
+
+void USpaceshipMovementComponent::SetThrustLeftPressed(bool ThrustLeftPressed)
+{
+	this->ThrustLeftPressed = ThrustLeftPressed;
+}
+
+void USpaceshipMovementComponent::SetThrustRightPressed(bool ThrustRightPressed)
+{
+	this->ThurstRightPressed = ThrustRightPressed;
+}
+
 void USpaceshipMovementComponent::MoveForward(float DeltaTime)
 {
 	for (int32 i = 0; i < MainThrusters.Num(); i++) {
 		MainThrusters[i]->GetDefaultObject<UMainThruster>()->SetThrottle(MainThrottle);
-		MainThrusters[i]->GetDefaultObject<UMainThruster>()->AccelerateSpaceship(DeltaTime);
+		MainThrusters[i]->GetDefaultObject<UMainThruster>()->AccelerateSpaceship(DeltaTime); // TODO consider only setting throttle here and calling Accelerate in MainThruster.cpp tick
 	}
 }
 

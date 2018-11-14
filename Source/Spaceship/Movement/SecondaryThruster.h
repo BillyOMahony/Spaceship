@@ -69,7 +69,7 @@ public:
 	 *	Activates this thruster if it thrusts in the desired direction
 	 *	@param ThrustDirection - The direction of desired thrust
 	 */
-	void ActivateThruster(EThrustDirection ThrustDirection);
+	void ActivateThruster(EThrustDirection ThrustDirection, float DeltaTime);
 
 private:
 	
@@ -77,7 +77,7 @@ private:
 	 *	Adds force on SpaceshipHull in the given direction
 	 *	@param Direction - The direction force will be added in
 	 */
-	void ActivateThruster(FVector Direction);
+	void ThrustInDirection(FVector Direction, float DeltaTime);
 
 	UPROPERTY(EditAnywhere)
 	EThrusterPositionX ThrusterPositionX;
