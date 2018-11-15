@@ -4,7 +4,6 @@
 #include "Components/StaticMeshComponent.h"
 #include "MainThruster.h"
 #include "SecondaryThruster.h"
-#include "SpaceshipController.h"
 
 // Sets default values for this component's properties
 USpaceshipMovementComponent::USpaceshipMovementComponent()
@@ -52,9 +51,6 @@ void USpaceshipMovementComponent::TickSubstitute(float DeltaTime)
 
 	Stabilize(DeltaTime);
 
-	Pitch(DeltaTime);
-
-	Yaw(DeltaTime);
 }
 
 void USpaceshipMovementComponent::HandleThrustInputs(float DeltaTime)
@@ -104,67 +100,20 @@ void USpaceshipMovementComponent::HandleThrottle(float DeltaTime)
 	}
 }
 
-void USpaceshipMovementComponent::Pitch(float DeltaTime)
+void USpaceshipMovementComponent::Pitch(float DeltaTime, float Multiplier)
 {
-	APawn* Pawn = Cast<APawn>(GetOwner());
-	ASpaceshipController * Controller = nullptr;
-	if(Pawn)Controller = Cast<ASpaceshipController>(Pawn->GetController());
-	if(Controller)
-	{
-		FVector2D Rotation2DVector = Controller->GetMousePositionRelativeToCenter();
-
-		if (Rotation2DVector.Y > MousePositionTolerance || Rotation2DVector.Y < -MousePositionTolerance) {
-			
-			float newY;
-
-			if (Rotation2DVector.Y > MousePositionTolerance) newY = Rotation2DVector.Y - MousePositionTolerance;
-			else newY = Rotation2DVector.Y + MousePositionTolerance;
-
-			float PitchMultiplier = newY / (1 - MousePositionTolerance);
-
-			FRotator PitchToAdd = FRotator(DeltaTime * DegPerSecond * PitchMultiplier, 0, 0);
-			SpaceshipHull->AddLocalRotation(PitchToAdd);
-		}
+	if (SpaceshipHull) {
+		FRotator PitchToAdd = FRotator(DeltaTime * DegPerSecond * Multiplier, 0, 0);
+		SpaceshipHull->AddLocalRotation(PitchToAdd);
 	}
 }
 
-void USpaceshipMovementComponent::Yaw(float DeltaTime)
+void USpaceshipMovementComponent::Yaw(float DeltaTime, float Multiplier)
 {
-	APawn* Pawn = Cast<APawn>(GetOwner());
-	ASpaceshipController * Controller = nullptr;
-	if (Pawn)Controller = Cast<ASpaceshipController>(Pawn->GetController());
-	if (Controller)
+	if(SpaceshipHull)
 	{
-		FVector2D Rotation2DVector = Controller->GetMousePositionRelativeToCenter();
-
-		if (Rotation2DVector.X > MousePositionTolerance || Rotation2DVector.X < -MousePositionTolerance) {
-
-			float newX;
-
-			if (Rotation2DVector.X > MousePositionTolerance) newX = Rotation2DVector.X - MousePositionTolerance;
-			else newX = Rotation2DVector.X + MousePositionTolerance;
-
-			float newYAlpha = (Rotation2DVector.Y + 1) / 2;
-
-			float newY = FMath::Lerp(-1.f, 1.f, newYAlpha);
-
-			if (FMath::Abs(newY) > FMath::Abs(newX)) return;
-
-			if(newX > 0)
-			{
-				newX = newX - FMath::Abs(newY);
-			}
-			else if(newX < 0)
-			{
-				newX = newX + FMath::Abs(newY);
-			}
-
-			float YawMultiplier= newX / (1 - MousePositionTolerance);
-
-			FRotator YawToAdd = FRotator(0, DeltaTime * DegPerSecond * YawMultiplier, 0);
-			SpaceshipHull->AddLocalRotation(YawToAdd);
-			
-		}
+		FRotator YawToAdd = FRotator(0, DeltaTime * DegPerSecond * Multiplier, 0);
+		SpaceshipHull->AddLocalRotation(YawToAdd);
 	}
 }
 

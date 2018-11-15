@@ -30,5 +30,20 @@ private:
 	 *	@return the screen coordinates of the mouse as a percentage
 	 */
 	FVector2D GetMouseCoordinates();
+
+	/*
+	 *
+	 */
+	void InputPitch(float DeltaTime);
+
+	/*
+	 *
+	 */
+	void InputYaw(float DeltaTime);
+
+	UPROPERTY(EditAnywhere)
+	float MousePositionTolerance = .2;
+
+	class USpaceshipMovementComponent * MovementComponent;
 };
 

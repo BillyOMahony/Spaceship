@@ -75,6 +75,16 @@ public:
 	UFUNCTION(BlueprintCallable)
 	void SetThrustRightPressed(bool ThrustRightPressed);
 
+	/*
+	*
+	*/
+	void Pitch(float DeltaTime, float Multiplier);
+
+	/*
+	*
+	*/
+	void Yaw(float DeltaTime, float Multiplier);
+
 private:
 
 	/*
@@ -110,21 +120,8 @@ private:
 	 */
 	void HandleThrottle(float DeltaTime);
 
-	/*
-	 *
-	 */
-	void Pitch(float DeltaTime);
-
-	/*
-	 *
-	 */
-	void Yaw(float DeltaTime);
-
 	UPROPERTY(EditAnywhere)
 	float MainThrottleChangeMultiplier = 0.25;
-
-	UPROPERTY(EditAnywhere)
-	float MousePositionTolerance = .2;
 
 	UPROPERTY(EditAnywhere)
 	float DegPerSecond = 20;
