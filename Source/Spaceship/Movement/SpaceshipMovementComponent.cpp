@@ -30,7 +30,19 @@ void USpaceshipMovementComponent::BeginPlay()
 void USpaceshipMovementComponent::TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction)
 {
 	Super::TickComponent(DeltaTime, TickType, ThisTickFunction);
+	/*
+	HandleThrottle(DeltaTime);
 
+	HandleThrustInputs(DeltaTime);
+
+	MoveForward(DeltaTime);
+
+	Stabilize(DeltaTime);
+	*/
+}
+
+void USpaceshipMovementComponent::TickSubstitute(float DeltaTime)
+{
 	HandleThrottle(DeltaTime);
 
 	HandleThrustInputs(DeltaTime);

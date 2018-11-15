@@ -28,6 +28,12 @@ public:
 	virtual void TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction) override;
 
 	/*
+	 *	Tick Function designed to be called directly from bluepring
+	 */
+	UFUNCTION(BlueprintCallable)
+	void TickSubstitute(float DeltaTime);
+
+	/*
 	 *	@param SpaceshipHull - The spaceship hull which forces will be applied to
 	 */
 	UFUNCTION(BlueprintCallable)
