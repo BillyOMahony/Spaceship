@@ -68,16 +68,25 @@ public:
 	/*
 	 *	Activates this thruster if it thrusts in the desired direction
 	 *	@param ThrustDirection - The direction of desired thrust
+	 *	@param DeltaTime - time taken to render frame
 	 */
-	void ActivateThruster(EThrustDirection ThrustDirection, float DeltaTime);
+	void ActivateThruster(EThrustDirection ThrustDirection, float DeltaTime, bool bIsStabilizing);
 
 private:
 	
 	/*
 	 *	Adds force on SpaceshipHull in the given direction
 	 *	@param Direction - The direction force will be added in
+	 *	@param DeltaTime - time taken to render frame
 	 */
 	void ThrustInDirection(FVector Direction, float DeltaTime);
+
+	/*
+	*	Activates this thruster in order to stabilise the spaceship
+	*	@param ThrustDirection - The direction of desired thrust
+	*	@param DeltaTime - time taken to render frame
+	*/
+	void Stabilize(FVector Direction, float DeltaTime);
 
 	UPROPERTY(EditAnywhere)
 	EThrusterPositionX ThrusterPositionX;

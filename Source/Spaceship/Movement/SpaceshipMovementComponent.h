@@ -89,7 +89,7 @@ private:
 	/*
 	 *
 	 */
-	void Stabilise(float DeltaTime);
+	void Stabilize(float DeltaTime);
 
 	/*
 	 *	Adds to MainThrottle

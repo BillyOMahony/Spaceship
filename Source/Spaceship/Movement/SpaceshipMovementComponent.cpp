@@ -37,7 +37,7 @@ void USpaceshipMovementComponent::TickComponent(float DeltaTime, ELevelTick Tick
 
 	MoveForward(DeltaTime);
 
-	//Stabilise(DeltaTime);
+	Stabilize(DeltaTime);
 }
 
 void USpaceshipMovementComponent::HandleThrustInputs(float DeltaTime)
@@ -46,7 +46,7 @@ void USpaceshipMovementComponent::HandleThrustInputs(float DeltaTime)
 	{
 		for(int32 i = 0; i < SecondaryThrusters.Num(); i++)
 		{
-			SecondaryThrusters[i]->ActivateThruster(EThrustDirection::Up, DeltaTime);
+			SecondaryThrusters[i]->ActivateThruster(EThrustDirection::Up, DeltaTime, false);
 		}
 	}
 
@@ -54,7 +54,7 @@ void USpaceshipMovementComponent::HandleThrustInputs(float DeltaTime)
 	{
 		for (int32 i = 0; i < SecondaryThrusters.Num(); i++)
 		{
-			SecondaryThrusters[i]->ActivateThruster(EThrustDirection::Down, DeltaTime);
+			SecondaryThrusters[i]->ActivateThruster(EThrustDirection::Down, DeltaTime, false);
 		}
 	}
 
@@ -62,7 +62,7 @@ void USpaceshipMovementComponent::HandleThrustInputs(float DeltaTime)
 	{
 		for (int32 i = 0; i < SecondaryThrusters.Num(); i++)
 		{
-			SecondaryThrusters[i]->ActivateThruster(EThrustDirection::Left, DeltaTime);
+			SecondaryThrusters[i]->ActivateThruster(EThrustDirection::Left, DeltaTime, false);
 		}
 	}
 
@@ -70,7 +70,7 @@ void USpaceshipMovementComponent::HandleThrustInputs(float DeltaTime)
 	{
 		for (int32 i = 0; i < SecondaryThrusters.Num(); i++)
 		{
-			SecondaryThrusters[i]->ActivateThruster(EThrustDirection::Right, DeltaTime);
+			SecondaryThrusters[i]->ActivateThruster(EThrustDirection::Right, DeltaTime, false);
 		}
 	}
 }
@@ -131,10 +131,10 @@ void USpaceshipMovementComponent::MoveForward(float DeltaTime)
 	}
 }
 
-void USpaceshipMovementComponent::Stabilise(float DeltaTime)
+void USpaceshipMovementComponent::Stabilize(float DeltaTime)
 {
-	// Stabilise in Left/Right Direction
-	if (!ThrustDownPressed && !ThrustUpPressed)
+	// Stabilize in Left/Right Direction
+	if (!ThrustLeftPressed && !ThrustRightPressed)
 	{
 		FVector HullVelocity = SpaceshipHull->GetComponentVelocity();
 		FVector OutDir;
@@ -150,23 +150,21 @@ void USpaceshipMovementComponent::Stabilise(float DeltaTime)
 		{
 			for (int32 i = 0; i < SecondaryThrusters.Num(); i++)
 			{
-				SecondaryThrusters[i]->ActivateThruster(EThrustDirection::Left, DeltaTime);
+				SecondaryThrusters[i]->ActivateThruster(EThrustDirection::Left, DeltaTime, true);
 			}
 		}
 		else if(RightVelocity < 0)
 		{
 			for (int32 i = 0; i < SecondaryThrusters.Num(); i++)
 			{
-				SecondaryThrusters[i]->ActivateThruster(EThrustDirection::Right, DeltaTime);
+				SecondaryThrusters[i]->ActivateThruster(EThrustDirection::Right, DeltaTime, true);
 			}
 		}
 	}
 
-	// Stabilise in Up/Down Direction
-	if(!ThrustLeftPressed && !ThrustRightPressed)
+	// Stabilize in Up/Down Direction
+	if(!ThrustDownPressed && !ThrustUpPressed)
 	{
-		UE_LOG(LogTemp, Warning, TEXT("Donkey"));
-
 		FVector HullVelocity = SpaceshipHull->GetComponentVelocity();
 		FVector OutDir;
 		float OutVelocity;
@@ -175,20 +173,20 @@ void USpaceshipMovementComponent::Stabilise(float DeltaTime)
 		FVector Direction = SpaceshipHull->GetUpVector();
 		Direction.Normalize();
 
-		float UpVector = FVector::DotProduct(Direction, OutVelocity * OutDir);
+		const float UpVector = FVector::DotProduct(Direction, OutVelocity * OutDir);
 
 		if (UpVector > 0)
 		{
 			for (int32 i = 0; i < SecondaryThrusters.Num(); i++)
 			{
-				SecondaryThrusters[i]->ActivateThruster(EThrustDirection::Down, DeltaTime);
+				SecondaryThrusters[i]->ActivateThruster(EThrustDirection::Down, DeltaTime, true);
 			}
 		}
 		else if (UpVector < 0)
 		{
 			for (int32 i = 0; i < SecondaryThrusters.Num(); i++)
 			{
-				SecondaryThrusters[i]->ActivateThruster(EThrustDirection::Up, DeltaTime);
+				SecondaryThrusters[i]->ActivateThruster(EThrustDirection::Up, DeltaTime, true);
 			}
 		}
 	}
