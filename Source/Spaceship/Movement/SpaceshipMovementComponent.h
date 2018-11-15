@@ -110,8 +110,24 @@ private:
 	 */
 	void HandleThrottle(float DeltaTime);
 
+	/*
+	 *
+	 */
+	void Pitch(float DeltaTime);
+
+	/*
+	 *
+	 */
+	void Yaw(float DeltaTime);
+
 	UPROPERTY(EditAnywhere)
 	float MainThrottleChangeMultiplier = 0.25;
+
+	UPROPERTY(EditAnywhere)
+	float MousePositionTolerance = .2;
+
+	UPROPERTY(EditAnywhere)
+	float DegPerSecond = 20;
 
 	float MainThrottle;
 	

@@ -85,6 +85,8 @@ void USecondaryThruster::Stabilize(FVector Direction, float DeltaTime)
 
 	UE_LOG(LogTemp, Error, TEXT("%s"), *ForceBeingAdded);
 	SpaceshipHull->AddForce(ForceToAdd);
+
+	// TODO Particles
 }
 
 void USecondaryThruster::ThrustInDirection(FVector Direction, float DeltaTime)
@@ -101,5 +103,7 @@ void USecondaryThruster::ThrustInDirection(FVector Direction, float DeltaTime)
 	if (DesiredDirectionVelocity < MaxVelocity) {
 		FVector ForceToAdd = Direction * AccelerationForce * DeltaTime;
 		SpaceshipHull->AddForce(ForceToAdd);
+
+		// TODO Particles
 	}
 }
