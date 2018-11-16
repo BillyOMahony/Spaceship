@@ -76,14 +76,30 @@ public:
 	void SetThrustRightPressed(bool ThrustRightPressed);
 
 	/*
-	*
-	*/
+	 *	Pitches the spaceship
+	 *	@param DeltaTime - Time since last frame
+	 *	@param Multiplier - controls direction of pitch and acts as a multiplier
+	 */
 	void Pitch(float DeltaTime, float Multiplier);
 
 	/*
-	*
+	 *	Yaws the spaceship	
+	 *	@param DeltaTime - Time since last frame
+	 *	@param Multiplier - controls direction of yaw and acts as a multiplier
 	*/
 	void Yaw(float DeltaTime, float Multiplier);
+
+	/*
+	*	Rolls the spaceship
+	*	@param DeltaTime - Time since last frame
+	*	@param Multiplier - controls direction of roll and acts as a multiplier
+	*/
+	void Roll(float DeltaTime, float Multiplier);
+
+	/*
+	 *	Rolls the spaceship, but will not roll beyond a certain angle
+	 */
+	void CappedRoll(float DeltaTime, float RollPosition);
 
 private:
 

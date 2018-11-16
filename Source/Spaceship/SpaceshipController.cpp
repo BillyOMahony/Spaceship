@@ -23,6 +23,7 @@ void ASpaceshipController::Tick(float DeltaTime)
 
 	InputPitch(DeltaTime);
 	InputYaw(DeltaTime);
+	InputRoll(DeltaTime);
 }
 
 FVector2D ASpaceshipController::GetMouseCoordinates()
@@ -86,6 +87,27 @@ void ASpaceshipController::InputYaw(float DeltaTime)
 		float YawMultiplier = newX / (1 - MousePositionTolerance);
 
 		MovementComponent->Yaw(DeltaTime, YawMultiplier);
+	}
+}
+
+void ASpaceshipController::InputRoll(float DeltaTime)
+{
+	FVector2D Rotation2DVector = GetMousePositionRelativeToCenter();
+
+	if ((Rotation2DVector.X > MousePositionTolerance || Rotation2DVector.X < -MousePositionTolerance) 
+		|| (Rotation2DVector.Y > MousePositionTolerance || Rotation2DVector.Y < -MousePositionTolerance)) {
+		
+		float RollMultiplier;
+		float newYAlpha = (Rotation2DVector.Y + 1) / 2;
+		if(Rotation2DVector.X > 0)
+		{
+			RollMultiplier = FMath::Lerp(-1.f, 1.f, newYAlpha);
+		}
+		else
+		{
+			RollMultiplier = FMath::Lerp(1.f, -1.f, newYAlpha);
+		}
+		MovementComponent->Roll(DeltaTime, RollMultiplier);
 	}
 }
 

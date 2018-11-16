@@ -117,6 +117,19 @@ void USpaceshipMovementComponent::Yaw(float DeltaTime, float Multiplier)
 	}
 }
 
+void USpaceshipMovementComponent::Roll(float DeltaTime, float Multiplier)
+{
+	if (SpaceshipHull)
+	{
+		FRotator RollToAdd = FRotator(0, 0, DeltaTime * DegPerSecond * Multiplier);
+		SpaceshipHull->AddLocalRotation(RollToAdd);
+	}
+}
+
+void USpaceshipMovementComponent::CappedRoll(float DeltaTime, float RollPosition)
+{
+}
+
 void USpaceshipMovementComponent::AddMainThrottle(float ThrottleToAdd)
 {
 	MainThrottle += ThrottleToAdd;

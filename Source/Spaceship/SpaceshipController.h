@@ -32,14 +32,19 @@ private:
 	FVector2D GetMouseCoordinates();
 
 	/*
-	 *
+	 *	Calculates pitch multiplier and calls the Pitch method of the SpaceshipMovementComponent
 	 */
 	void InputPitch(float DeltaTime);
 
 	/*
-	 *
+	 *	Calculates yaw multiplier and calls the yaw method of the SpaceshipMovementComponent
 	 */
 	void InputYaw(float DeltaTime);
+
+	/*
+	*	Calculates yaw multiplier and calls the yaw method of the SpaceshipMovementComponent
+	*/
+	void InputRoll(float DeltaTime);
 
 	UPROPERTY(EditAnywhere)
 	float MousePositionTolerance = .2;
