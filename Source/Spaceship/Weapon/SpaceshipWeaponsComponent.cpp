@@ -22,6 +22,10 @@ void USpaceshipWeaponsComponent::BeginPlay()
 	// Populate Hardpoint Array
 	GetOwner()->GetComponents<UHardpointComponent>(Hardpoints);
 
+	for (int32 i = 0; i < Hardpoints.Num(); i++)
+	{
+		Hardpoints[i]->SpawnWeapon();
+	}
 	
 }
 

@@ -3,13 +3,11 @@
 #pragma once
 
 #include "CoreMinimal.h"
-#include "Components/ActorComponent.h"
+#include "Components/StaticMeshComponent.h"
 #include "HardpointComponent.generated.h"
 
-class UWeaponComponent;
-
 UCLASS( ClassGroup=(Custom), meta=(BlueprintSpawnableComponent) )
-class SPACESHIP_API UHardpointComponent : public UActorComponent
+class SPACESHIP_API UHardpointComponent : public UStaticMeshComponent
 {
 	GENERATED_BODY()
 
@@ -25,11 +23,15 @@ public:
 	// Called every frame
 	virtual void TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction) override;
 
-private:
-	UPROPERTY(EditAnywhere)
-	UStaticMeshComponent * HardpointMesh;
+	/*
+	 *	Spawns the associated UWeaponComponent if it exists
+	 */
+	void SpawnWeapon();
 
-	UPROPERTY(EditAnywhere)
-	TSubclassOf<UWeaponComponent> WeaponComponent;
-		
+private:
+
+	UPROPERTY(EditAnywhere, Category = "Setup")
+	TSubclassOf<class AWeaponActor> Weapon;
+
+	AWeaponActor * SpawnedWeapon;
 };

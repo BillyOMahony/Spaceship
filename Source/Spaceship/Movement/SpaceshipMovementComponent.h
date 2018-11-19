@@ -28,7 +28,7 @@ public:
 	virtual void TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction) override;
 
 	/*
-	 *	Tick Function designed to be called directly from bluepring
+	 *	Tick Function designed to be called directly from blueprint
 	 */
 	UFUNCTION(BlueprintCallable)
 	void TickSubstitute(float DeltaTime);
