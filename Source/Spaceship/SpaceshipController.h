@@ -29,7 +29,7 @@ private:
 	/*
 	 *	@return the screen coordinates of the mouse as a percentage
 	 */
-	FVector2D GetMouseCoordinates();
+	FVector2D GetMouseCoordinates() const;
 
 	/*
 	 *	Calculates pitch multiplier and calls the Pitch method of the SpaceshipMovementComponent
@@ -46,9 +46,36 @@ private:
 	*/
 	void InputRoll(float DeltaTime);
 
+	/*
+	 *	Deprojects the mouse position to world location
+	 *	@param LookDirection - Out parameter - the direction the camera crosshair is pointing in
+	 *	@return whether or not deprojection was successful
+	 */
+	bool GetCrosshairDirection(FVector &LookDirection) const;
+
+	/*
+	 *	
+	 */
+	bool GetSightRayHitLocation(FVector & HitLocation) const;
+
+	/*
+	 *
+	 */
+	void GetLookVectorHitLocation(FVector LookDirection, FVector &HitLocation) const;
+
+	/*
+	 *
+	 */
+	void AimTowardsCrosshair();
+
+	UPROPERTY(EditAnywhere)
+	float LineTraceRange = 10000.f;
+
 	UPROPERTY(EditAnywhere)
 	float MousePositionTolerance = .2;
 
 	class USpaceshipMovementComponent * MovementComponent;
+
+	class USpaceshipWeaponsComponent * WeaponsComponent;
 };
 

@@ -38,3 +38,11 @@ void USpaceshipWeaponsComponent::TickComponent(float DeltaTime, ELevelTick TickT
 	// ...
 }
 
+void USpaceshipWeaponsComponent::AimAt(FVector Location)
+{
+	for (int32 i = 0; i < Hardpoints.Num(); i++)
+	{
+		Hardpoints[i]->AimWeaponAt(Location);
+	}
+}
+

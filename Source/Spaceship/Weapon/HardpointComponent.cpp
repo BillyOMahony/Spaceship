@@ -39,3 +39,11 @@ void UHardpointComponent::SpawnWeapon()
 	//SpawnedWeapon->SetupAttachment();
 }
 
+void UHardpointComponent::AimWeaponAt(FVector Location)
+{
+	if(SpawnedWeapon)
+	{
+		SpawnedWeapon->AimAt(Location);
+	}
+}
+

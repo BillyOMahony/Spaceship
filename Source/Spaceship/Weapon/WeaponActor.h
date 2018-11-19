@@ -23,4 +23,11 @@ public:
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;
 
+	void AimAt(FVector Location);
+
+	UPROPERTY(VisibleAnywhere)
+	UStaticMeshComponent * Turret;
+
+	UPROPERTY(VisibleAnywhere)
+	UStaticMeshComponent * Barrel;
 };

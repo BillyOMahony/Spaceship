@@ -32,5 +32,4 @@ public:
 private:
 
 	TArray<UHardpointComponent *> Hardpoints;
-		
 };

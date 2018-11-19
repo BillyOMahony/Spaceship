@@ -28,6 +28,8 @@ public:
 	 */
 	void SpawnWeapon();
 
+	void AimWeaponAt(FVector Location);
+
 private:
 
 	UPROPERTY(EditAnywhere, Category = "Setup")

@@ -3,6 +3,7 @@
 #include "SpaceshipController.h"
 #include "Engine.h"
 #include "Movement/SpaceshipMovementComponent.h"
+#include "Weapon/SpaceshipWeaponsComponent.h"
 
 void ASpaceshipController::BeginPlay()
 {
@@ -24,9 +25,11 @@ void ASpaceshipController::Tick(float DeltaTime)
 	InputPitch(DeltaTime);
 	InputYaw(DeltaTime);
 	InputRoll(DeltaTime);
+
+	AimTowardsCrosshair();
 }
 
-FVector2D ASpaceshipController::GetMouseCoordinates()
+FVector2D ASpaceshipController::GetMouseCoordinates() const
 {
 	float MouseX, MouseY;
 	GetMousePosition(MouseX, MouseY);
@@ -108,6 +111,56 @@ void ASpaceshipController::InputRoll(float DeltaTime)
 			RollMultiplier = FMath::Lerp(1.f, -1.f, newYAlpha);
 		}
 		MovementComponent->Roll(DeltaTime, RollMultiplier);
+	}
+}
+
+bool ASpaceshipController::GetCrosshairDirection(FVector & LookDirection) const
+{
+	FVector CameraWorldLocation;
+	return DeprojectMousePositionToWorld(CameraWorldLocation, LookDirection);
+}
+
+bool ASpaceshipController::GetSightRayHitLocation(FVector& HitLocation) const
+{
+	//Find the crosshair position
+	int32 ViewportSizeX, ViewportSizeY;
+	GetViewportSize(ViewportSizeX, ViewportSizeY);
+
+	FVector2D ScreenLocation = GetMouseCoordinates();
+
+	FVector LookDirection;
+	if (GetCrosshairDirection(LookDirection)) {
+		GetLookVectorHitLocation(LookDirection, HitLocation);
+		return true;
+	}
+
+	//Line trace along that look direction and see what we hit (up to max range)
+	return false;
+}
+
+void ASpaceshipController::GetLookVectorHitLocation(FVector LookDirection, FVector & HitLocation) const
+{
+	FHitResult HitResult;
+	auto StartLocation = PlayerCameraManager->GetCameraLocation();
+
+	if (GetWorld()->LineTraceSingleByChannel(HitResult, StartLocation, StartLocation + (LookDirection * LineTraceRange), ECollisionChannel::ECC_Camera)) {
+		//Set Hit Location
+		HitLocation = HitResult.Location;
+		return;
+	}
+	HitLocation = StartLocation + (LookDirection * LineTraceRange);
+}
+
+void ASpaceshipController::AimTowardsCrosshair()
+{
+	if (!GetPawn()) { return; } // if not possessing 
+	WeaponsComponent = GetPawn()->FindComponentByClass<USpaceshipWeaponsComponent>();
+	if (!ensure(WeaponsComponent)) { return; }
+
+	FVector HitLocation; // Out parameter
+	bool bGotHitLocation = GetSightRayHitLocation(HitLocation);
+	if (GetSightRayHitLocation(HitLocation)) {
+		WeaponsComponent->AimAt(HitLocation);
 	}
 }
 
