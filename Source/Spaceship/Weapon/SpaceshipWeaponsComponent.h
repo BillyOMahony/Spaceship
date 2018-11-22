@@ -25,8 +25,15 @@ public:
 	// Called every frame
 	virtual void TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction) override;
 
+	/*
+	 * TODO
+	 */
 	void AimAt(FVector Location);
 
+	/*
+	 *	TODO
+	 */
+	UFUNCTION(BlueprintCallable)
 	void Fire();
 
 private:

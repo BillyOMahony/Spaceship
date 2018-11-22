@@ -28,7 +28,15 @@ public:
 	 */
 	void SpawnWeapon();
 
+	/*
+	 *	TODO
+	 */
 	void AimWeaponAt(FVector Location);
+
+	/*
+	 *	TODO
+	 */
+	void Fire();
 
 private:
 

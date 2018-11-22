@@ -4,16 +4,16 @@
 
 #include "CoreMinimal.h"
 #include "GameFramework/Actor.h"
-#include "WeaponActor.generated.h"
+#include "Projectile.generated.h"
 
 UCLASS()
-class SPACESHIP_API AWeaponActor : public AActor
+class SPACESHIP_API AProjectile : public AActor
 {
 	GENERATED_BODY()
 	
 public:	
 	// Sets default values for this actor's properties
-	AWeaponActor();
+	AProjectile();
 
 protected:
 	// Called when the game starts or when spawned
@@ -23,26 +23,11 @@ public:
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;
 
-	/*
-	 *	TODO
-	 */
-	void AimAt(FVector Location);
-
-	/*
-	 *	Fires this weapons projectile if possible
-	 */
-	void Fire();
-
 private:
 	UPROPERTY(VisibleAnywhere)
-	UStaticMeshComponent * Turret;
+	class UProjectileMovementComponent * ProjectileMovementComponent;
 
 	UPROPERTY(VisibleAnywhere)
-	UStaticMeshComponent * Barrel;
+	class USphereComponent * SphereCollider;
 
-	UPROPERTY(VisibleAnywhere, meta = (AllowPrivateAccess = "true"))
-	USceneComponent * ProjectileSpawnPoint;
-
-	UPROPERTY(EditAnywhere)
-	TSubclassOf<class AProjectile> Projectile;
 };

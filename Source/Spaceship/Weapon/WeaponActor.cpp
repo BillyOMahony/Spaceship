@@ -2,6 +2,9 @@
 
 #include "WeaponActor.h"
 #include "Components/StaticMeshComponent.h"
+#include "Engine/World.h"
+#include "Projectile.h"
+
 
 // Sets default values
 AWeaponActor::AWeaponActor()
@@ -14,6 +17,10 @@ AWeaponActor::AWeaponActor()
 	Barrel = CreateDefaultSubobject<UStaticMeshComponent>(FName("Barrel"));
 	Barrel->AttachToComponent(Turret, FAttachmentTransformRules::KeepRelativeTransform);
 	Barrel->SetupAttachment(Turret);
+
+	ProjectileSpawnPoint = CreateDefaultSubobject<USceneComponent>(FName("ProjectileSpawnPoint"));
+	ProjectileSpawnPoint->AttachToComponent(Barrel, FAttachmentTransformRules::KeepRelativeTransform);
+	ProjectileSpawnPoint->SetupAttachment(Barrel);
 }
 
 // Called when the game starts or when spawned
@@ -32,5 +39,16 @@ void AWeaponActor::Tick(float DeltaTime)
 void AWeaponActor::AimAt(FVector Location)
 {
 
+}
+
+void AWeaponActor::Fire()
+{
+	if(Projectile)
+	{
+		FVector SpawnLocation = ProjectileSpawnPoint->GetComponentLocation();
+		FRotator SpawnRotation = ProjectileSpawnPoint->GetComponentRotation();
+		FActorSpawnParameters SpawnParams;
+		GetWorld()->SpawnActor(Projectile, &SpawnLocation, &SpawnRotation, SpawnParams);
+	}
 }
 
