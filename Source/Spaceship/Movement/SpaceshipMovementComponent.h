@@ -142,7 +142,7 @@ private:
 	UPROPERTY(EditAnywhere)
 	float DegPerSecond = 20;
 
-	float MainThrottle;
+	float MainThrottle = 0;
 	
 	TArray<UMainThruster *> MainThrusters;
 

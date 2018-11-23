@@ -69,7 +69,7 @@ private:
 	void AimTowardsCrosshair();
 
 	UPROPERTY(EditAnywhere)
-	float LineTraceRange = 10000.f;
+	float LineTraceRange = 50000.f;
 
 	UPROPERTY(EditAnywhere)
 	float MousePositionTolerance = .2;

@@ -45,4 +45,31 @@ private:
 
 	UPROPERTY(EditAnywhere)
 	TSubclassOf<class AProjectile> Projectile;
+
+	UPROPERTY(EditAnywhere)
+	float MaxTurretDegPerSec = 90;
+
+	UPROPERTY(EditAnywhere)
+	float MaxTurretSwivel = 30;
+
+	UPROPERTY(EditAnywhere)
+	float MaxBarrelDegPerSec = 90;
+
+	UPROPERTY(EditAnywhere)
+	float MaxBarrelElevation = 60;
+
+	UPROPERTY(EditAnywhere)
+	float MinBarrelElevation = -30;
+
+	/*
+	 *	Rotates the turret
+	 *	@param RelativeSpeed - Decides the direction of rotation
+	 */
+	void RotateTurret(float RelativeSpeed);
+
+	/*
+	 *	Rotates the barrel
+	 *	@param RelativeSpeed - Decides the direction of rotation
+	 */
+	void RotateBarrel(float RelativeSpeed);
 };

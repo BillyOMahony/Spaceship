@@ -30,32 +30,26 @@ void USecondaryThruster::ActivateThruster(EThrustDirection ThrustDirection, floa
 		switch (ThrustDirection) {
 		case EThrustDirection::Up:
 			Direction = SpaceshipHull->GetUpVector();
-			UE_LOG(LogTemp, Warning, TEXT("Up"));
 			break;
 
 		case EThrustDirection::Down:
 			Direction = SpaceshipHull->GetUpVector() * -1;
-			UE_LOG(LogTemp, Warning, TEXT("Down"));
 			break;
 
 		case EThrustDirection::Left:
 			Direction = SpaceshipHull->GetRightVector() * -1;
-			UE_LOG(LogTemp, Warning, TEXT("Left"));
 			break;
 
 		case EThrustDirection::Right:
 			Direction = SpaceshipHull->GetRightVector();
-			UE_LOG(LogTemp, Warning, TEXT("Right"));
 			break;
 		}
 
 		if (!bIsStabilizing) {
-			UE_LOG(LogTemp, Warning, TEXT("Thrusting"));
 			ThrustInDirection(Direction, DeltaTime);
 		}
 		else
 		{
-			UE_LOG(LogTemp, Warning, TEXT("Stabilizing"));
 			Stabilize(Direction, DeltaTime);
 		}
 	}
@@ -83,7 +77,6 @@ void USecondaryThruster::Stabilize(FVector Direction, float DeltaTime)
 	
 	if (ForceToAdd.Equals(Comparison, 100))return;
 
-	UE_LOG(LogTemp, Error, TEXT("%s"), *ForceBeingAdded);
 	SpaceshipHull->AddForce(ForceToAdd);
 
 	// TODO Particles

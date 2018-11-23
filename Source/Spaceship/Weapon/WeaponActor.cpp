@@ -2,6 +2,7 @@
 
 #include "WeaponActor.h"
 #include "Components/StaticMeshComponent.h"
+#include "Components/SceneComponent.h"
 #include "Engine/World.h"
 #include "Projectile.h"
 
@@ -38,7 +39,27 @@ void AWeaponActor::Tick(float DeltaTime)
 
 void AWeaponActor::AimAt(FVector Location)
 {
+	if (!ensure(Turret && Barrel)) return;
 
+	FVector AimDirection = (Location - ProjectileSpawnPoint->GetComponentLocation()).GetSafeNormal();
+	
+	auto BarrelRotator = ProjectileSpawnPoint->GetForwardVector().Rotation();
+	auto AimAsRotator = AimDirection.Rotation();
+	auto DeltaRotator = AimAsRotator - BarrelRotator;
+	/*
+	UE_LOG(LogTemp, Error, TEXT("BarrelRotator %s"), *(BarrelRotator.ToString()));
+	UE_LOG(LogTemp, Error, TEXT("AimAsRotator %s"), *(AimAsRotator.ToString()));
+	UE_LOG(LogTemp, Warning, TEXT("DeltaRotator %s"), *(DeltaRotator.ToString()));
+	*/
+
+	if (DeltaRotator.Yaw > 180 || DeltaRotator.Yaw < -180)
+	{
+		RotateTurret(-DeltaRotator.Yaw);
+	}
+	else
+	{
+		RotateTurret(DeltaRotator.Yaw);
+	}
 }
 
 void AWeaponActor::Fire()
@@ -50,5 +71,35 @@ void AWeaponActor::Fire()
 		FActorSpawnParameters SpawnParams;
 		GetWorld()->SpawnActor(Projectile, &SpawnLocation, &SpawnRotation, SpawnParams);
 	}
+}
+
+void AWeaponActor::RotateTurret(float RelativeSpeed)
+{
+	float RotationSpeed = FMath::Clamp(RelativeSpeed, -1.f, 1.f);
+
+	auto RotationChange = RotationSpeed * MaxTurretDegPerSec * GetWorld()->DeltaTimeSeconds;
+
+	float RelYaw = Turret->GetRelativeTransform().GetRotation().Rotator().Yaw;
+	
+	auto NewRotation = RelYaw + RotationChange;
+
+	NewRotation = FMath::Clamp(NewRotation, -MaxTurretSwivel, MaxTurretSwivel);
+
+	Turret->SetRelativeRotation(FRotator(0, NewRotation, 0));
+}
+
+void AWeaponActor::RotateBarrel(float RelativeSpeed)
+{
+	float RotationSpeed = FMath::Clamp(RelativeSpeed, -1.f, 1.f);
+
+	auto RotationChange = RotationSpeed * MaxBarrelDegPerSec * GetWorld()->DeltaTimeSeconds;
+
+	float RelPitch = Barrel->GetRelativeTransform().GetRotation().Rotator().Pitch;
+
+	auto NewRotation = RelPitch + RotationChange;
+
+	//NewRotation = FMath::Clamp(NewRotation, MinBarrelElevation, MaxBarrelElevation);
+
+	Barrel->SetRelativeRotation(FRotator(NewRotation, 0, 0));
 }
 
