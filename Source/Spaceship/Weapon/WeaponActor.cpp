@@ -41,16 +41,12 @@ void AWeaponActor::AimAt(FVector Location)
 {
 	if (!ensure(Turret && Barrel)) return;
 
-	FVector AimDirection = (Location - ProjectileSpawnPoint->GetComponentLocation()).GetSafeNormal();
-	
-	auto BarrelRotator = ProjectileSpawnPoint->GetForwardVector().Rotation();
-	auto AimAsRotator = AimDirection.Rotation();
-	auto DeltaRotator = AimAsRotator - BarrelRotator;
-	/*
-	UE_LOG(LogTemp, Error, TEXT("BarrelRotator %s"), *(BarrelRotator.ToString()));
-	UE_LOG(LogTemp, Error, TEXT("AimAsRotator %s"), *(AimAsRotator.ToString()));
-	UE_LOG(LogTemp, Warning, TEXT("DeltaRotator %s"), *(DeltaRotator.ToString()));
-	*/
+	FTransform BarrelTipTransform = ProjectileSpawnPoint->GetComponentTransform();
+	FVector AimDirection = BarrelTipTransform.InverseTransformPosition(Location).GetSafeNormal();
+
+	auto DeltaRotator = AimDirection.Rotation();
+
+	RotateBarrel(DeltaRotator.Pitch);
 
 	if (DeltaRotator.Yaw > 180 || DeltaRotator.Yaw < -180)
 	{
@@ -60,6 +56,7 @@ void AWeaponActor::AimAt(FVector Location)
 	{
 		RotateTurret(DeltaRotator.Yaw);
 	}
+	
 }
 
 void AWeaponActor::Fire()
@@ -71,6 +68,11 @@ void AWeaponActor::Fire()
 		FActorSpawnParameters SpawnParams;
 		GetWorld()->SpawnActor(Projectile, &SpawnLocation, &SpawnRotation, SpawnParams);
 	}
+}
+
+void AWeaponActor::SetOwningActor(AActor * OwningActor)
+{
+	this->OwningActor = OwningActor;
 }
 
 void AWeaponActor::RotateTurret(float RelativeSpeed)
@@ -98,7 +100,7 @@ void AWeaponActor::RotateBarrel(float RelativeSpeed)
 
 	auto NewRotation = RelPitch + RotationChange;
 
-	//NewRotation = FMath::Clamp(NewRotation, MinBarrelElevation, MaxBarrelElevation);
+	NewRotation = FMath::Clamp(NewRotation, MinBarrelElevation, MaxBarrelElevation);
 
 	Barrel->SetRelativeRotation(FRotator(NewRotation, 0, 0));
 }

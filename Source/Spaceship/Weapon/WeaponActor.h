@@ -24,7 +24,8 @@ public:
 	virtual void Tick(float DeltaTime) override;
 
 	/*
-	 *	TODO
+	 *	Rotates Turret and Barrel so if they fire the projectiles will hit Location
+	 *	@param Location - The Vector to aim at
 	 */
 	void AimAt(FVector Location);
 
@@ -32,6 +33,11 @@ public:
 	 *	Fires this weapons projectile if possible
 	 */
 	void Fire();
+
+	/*
+	 *	@param OwningActor - The Actor that spawned this Actor
+	 */
+	void SetOwningActor(AActor * OwningActor);
 
 private:
 	UPROPERTY(VisibleAnywhere)
@@ -60,6 +66,8 @@ private:
 
 	UPROPERTY(EditAnywhere)
 	float MinBarrelElevation = -30;
+
+	AActor * OwningActor;
 
 	/*
 	 *	Rotates the turret

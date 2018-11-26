@@ -29,12 +29,13 @@ public:
 	void SpawnWeapon();
 
 	/*
-	 *	TODO
-	 */
+	*	Instructs weapon to aim at location so if it fires the projectiles will hit Location
+	*	@param Location - The Vector to aim at
+	*/
 	void AimWeaponAt(FVector Location);
 
 	/*
-	 *	TODO
+	 *	Instructs weapon to fire
 	 */
 	void Fire();
 
