@@ -46,11 +46,19 @@ void UHardpointComponent::AimWeaponAt(FVector Location)
 	}
 }
 
-void UHardpointComponent::Fire()
+void UHardpointComponent::EndFireWeapon()
 {
 	if(SpawnedWeapon)
 	{
-		SpawnedWeapon->Fire();
+		SpawnedWeapon->EndFireWeapon();
+	}
+}
+
+void UHardpointComponent::BeginFireWeapon()
+{
+	if(SpawnedWeapon)
+	{
+		SpawnedWeapon->BeginFireWeapon();
 	}
 }
 

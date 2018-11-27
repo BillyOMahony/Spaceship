@@ -24,19 +24,6 @@ AWeaponActor::AWeaponActor()
 	MunitionSpawnPoint->SetupAttachment(Barrel);
 }
 
-// Called when the game starts or when spawned
-void AWeaponActor::BeginPlay()
-{
-	Super::BeginPlay();
-	
-}
-
-// Called every frame
-void AWeaponActor::Tick(float DeltaTime)
-{
-	Super::Tick(DeltaTime);
-}
-
 void AWeaponActor::AimAt(FVector Location)
 {
 	if (!ensure(Turret && Barrel)) return;
@@ -59,9 +46,14 @@ void AWeaponActor::AimAt(FVector Location)
 	
 }
 
-void AWeaponActor::Fire()
+void AWeaponActor::BeginFireWeapon()
 {
-	
+	bAttemptingToFire = true;
+}
+
+void AWeaponActor::EndFireWeapon()
+{
+	bAttemptingToFire = false;
 }
 
 void AWeaponActor::RotateTurret(float RelativeSpeed)

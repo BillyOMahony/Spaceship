@@ -46,11 +46,19 @@ void USpaceshipWeaponsComponent::AimAt(FVector Location)
 	}
 }
 
-void USpaceshipWeaponsComponent::Fire()
+void USpaceshipWeaponsComponent::BeginFireWeapons()
 {
 	for (int32 i = 0; i < Hardpoints.Num(); i++)
 	{
-		Hardpoints[i]->Fire();
+		Hardpoints[i]->BeginFireWeapon();
+	}
+}
+
+void USpaceshipWeaponsComponent::EndFireWeapons()
+{
+	for (int32 i = 0; i < Hardpoints.Num(); i++)
+	{
+		Hardpoints[i]->EndFireWeapon();
 	}
 }
 

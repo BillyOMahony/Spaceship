@@ -16,15 +16,12 @@ public:
 	AWeaponActor();
 
 protected:
-	// Called when the game starts or when spawned
-	virtual void BeginPlay() override;
-
 	UPROPERTY(VisibleAnywhere, meta = (AllowPrivateAccess = "true"))
 	USceneComponent * MunitionSpawnPoint;
 
+	bool bAttemptingToFire = false;
+
 public:	
-	// Called every frame
-	virtual void Tick(float DeltaTime) override;
 
 	/*
 	 *	Rotates Turret and Barrel so if they fire the projectiles will hit Location
@@ -33,9 +30,14 @@ public:
 	void AimAt(FVector Location);
 
 	/*
-	 *	Fires this weapons projectile if possible
+	 *	Sets this weapon to automatically fire when possible
 	 */
-	virtual void Fire();
+	void BeginFireWeapon();
+
+	/*
+	 *	Stops this weapon from firing
+	 */
+	void EndFireWeapon();
 
 private:
 	UPROPERTY(VisibleAnywhere)

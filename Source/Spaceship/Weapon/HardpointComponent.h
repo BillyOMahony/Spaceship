@@ -37,7 +37,12 @@ public:
 	/*
 	 *	Instructs weapon to fire
 	 */
-	void Fire();
+	void BeginFireWeapon();
+
+	/*
+	 *	Instructs weapon to stop firing
+	 */
+	void EndFireWeapon();
 
 private:
 

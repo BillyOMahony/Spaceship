@@ -34,7 +34,13 @@ public:
 	 *	TODO
 	 */
 	UFUNCTION(BlueprintCallable)
-	void Fire();
+	void BeginFireWeapons();
+
+	/*
+	 *	TODO
+	 */
+	UFUNCTION(BlueprintCallable)
+	void EndFireWeapons();
 
 private:
 

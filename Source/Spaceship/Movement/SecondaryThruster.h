@@ -63,6 +63,9 @@ public:
 	// Called every frame
 	virtual void TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction) override;
 
+	/*
+	 *	TODO
+	 */
 	void SetThrottle(float Throttle);
 
 	/*
