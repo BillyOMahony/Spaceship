@@ -19,6 +19,9 @@ protected:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
 
+	UPROPERTY(VisibleAnywhere, meta = (AllowPrivateAccess = "true"))
+	USceneComponent * MunitionSpawnPoint;
+
 public:	
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;
@@ -32,12 +35,7 @@ public:
 	/*
 	 *	Fires this weapons projectile if possible
 	 */
-	void Fire();
-
-	/*
-	 *	@param OwningActor - The Actor that spawned this Actor
-	 */
-	void SetOwningActor(AActor * OwningActor);
+	virtual void Fire();
 
 private:
 	UPROPERTY(VisibleAnywhere)
@@ -45,12 +43,6 @@ private:
 
 	UPROPERTY(VisibleAnywhere)
 	UStaticMeshComponent * Barrel;
-
-	UPROPERTY(VisibleAnywhere, meta = (AllowPrivateAccess = "true"))
-	USceneComponent * ProjectileSpawnPoint;
-
-	UPROPERTY(EditAnywhere)
-	TSubclassOf<class AProjectile> Projectile;
 
 	UPROPERTY(EditAnywhere)
 	float MaxTurretDegPerSec = 90;
@@ -66,8 +58,6 @@ private:
 
 	UPROPERTY(EditAnywhere)
 	float MinBarrelElevation = -30;
-
-	AActor * OwningActor;
 
 	/*
 	 *	Rotates the turret

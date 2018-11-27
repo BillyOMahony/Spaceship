@@ -19,9 +19,9 @@ AWeaponActor::AWeaponActor()
 	Barrel->AttachToComponent(Turret, FAttachmentTransformRules::KeepRelativeTransform);
 	Barrel->SetupAttachment(Turret);
 
-	ProjectileSpawnPoint = CreateDefaultSubobject<USceneComponent>(FName("ProjectileSpawnPoint"));
-	ProjectileSpawnPoint->AttachToComponent(Barrel, FAttachmentTransformRules::KeepRelativeTransform);
-	ProjectileSpawnPoint->SetupAttachment(Barrel);
+	MunitionSpawnPoint = CreateDefaultSubobject<USceneComponent>(FName("MunitionSpawnPoint"));
+	MunitionSpawnPoint->AttachToComponent(Barrel, FAttachmentTransformRules::KeepRelativeTransform);
+	MunitionSpawnPoint->SetupAttachment(Barrel);
 }
 
 // Called when the game starts or when spawned
@@ -41,7 +41,7 @@ void AWeaponActor::AimAt(FVector Location)
 {
 	if (!ensure(Turret && Barrel)) return;
 
-	FTransform BarrelTipTransform = ProjectileSpawnPoint->GetComponentTransform();
+	FTransform BarrelTipTransform = MunitionSpawnPoint->GetComponentTransform();
 	FVector AimDirection = BarrelTipTransform.InverseTransformPosition(Location).GetSafeNormal();
 
 	auto DeltaRotator = AimDirection.Rotation();
@@ -61,18 +61,7 @@ void AWeaponActor::AimAt(FVector Location)
 
 void AWeaponActor::Fire()
 {
-	if(Projectile)
-	{
-		FVector SpawnLocation = ProjectileSpawnPoint->GetComponentLocation();
-		FRotator SpawnRotation = ProjectileSpawnPoint->GetComponentRotation();
-		FActorSpawnParameters SpawnParams;
-		GetWorld()->SpawnActor(Projectile, &SpawnLocation, &SpawnRotation, SpawnParams);
-	}
-}
-
-void AWeaponActor::SetOwningActor(AActor * OwningActor)
-{
-	this->OwningActor = OwningActor;
+	
 }
 
 void AWeaponActor::RotateTurret(float RelativeSpeed)

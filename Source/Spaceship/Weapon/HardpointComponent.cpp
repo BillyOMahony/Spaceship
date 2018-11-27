@@ -36,8 +36,6 @@ void UHardpointComponent::SpawnWeapon()
 	FActorSpawnParameters SpawnParams;
 	SpawnedWeapon = GetWorld()->SpawnActor<AWeaponActor>(Weapon, FVector(0), FRotator(0));
 	SpawnedWeapon->AttachToComponent(this, FAttachmentTransformRules::KeepRelativeTransform);
-	SpawnedWeapon->SetOwningActor(GetOwner());
-	//SpawnedWeapon->SetupAttachment();
 }
 
 void UHardpointComponent::AimWeaponAt(FVector Location)
