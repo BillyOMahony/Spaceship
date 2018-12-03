@@ -119,7 +119,7 @@ private:
 	void MoveForward(float DeltaTime);
 
 	/*
-	 *
+	 *	Automatically fires thrusters to stabalize the spaceship on the left/right and up/down axes if there is no current input for those axes.
 	 */
 	void Stabilize(float DeltaTime);
 

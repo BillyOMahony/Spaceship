@@ -3,11 +3,11 @@
 #pragma once
 
 #include "CoreMinimal.h"
-#include "Components/ActorComponent.h"
+#include "Components/StaticMeshComponent.h"
 #include "SpaceshipThrusterComponent.generated.h"
 
 UCLASS( ClassGroup=(Custom), meta=(BlueprintSpawnableComponent) )
-class SPACESHIP_API USpaceshipThrusterComponent : public UActorComponent
+class SPACESHIP_API USpaceshipThrusterComponent : public UStaticMeshComponent
 {
 	GENERATED_BODY()
 
@@ -37,18 +37,19 @@ protected:
 	float Throttle = 0.f;
 
 	UPROPERTY(EditAnywhere)
-	float MaxVelocity = 10000.f;
+	float MaxVelocity = 2500.f;
 
 	UPROPERTY(EditAnywhere)
-	float AccelerationForce = 5000000000.f;
+	float AccelerationForce = 1500000000.f;
 
 	UPROPERTY(EditAnywhere)
 	float DecelerationMultiplier = 2.5f;
 
+	UPROPERTY(EditAnywhere)
+	UParticleSystem * ParticleSystem;
+
 	UStaticMeshComponent * SpaceshipHull;
 
 private:	
-
-
 		
 };
