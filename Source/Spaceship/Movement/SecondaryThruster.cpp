@@ -2,6 +2,8 @@
 
 #include "SecondaryThruster.h"
 #include "Components/StaticMeshComponent.h"
+#include "Particles/ParticleSystemComponent.h"
+
 
 void USecondaryThruster::BeginPlay() {
 	Super::BeginPlay();
@@ -10,7 +12,13 @@ void USecondaryThruster::BeginPlay() {
 
 void USecondaryThruster::TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction * ThisTickFunction)
 {
-
+	if (ParticleSystem && bThrusterIsActive)
+	{
+		ParticleSystem->ActivateSystem();
+	}
+	else {
+		ParticleSystem->DeactivateSystem();
+	}
 }
 
 void USecondaryThruster::SetThrottle(float Throttle)
@@ -24,8 +32,11 @@ void USecondaryThruster::ActivateThruster(EThrustDirection ThrustDirection, floa
 		UE_LOG(LogTemp, Error, TEXT("USecondaryThruster::ActivateThruster - SpaceshipHull not assigned"));
 		return;
 	}
+
 	if (this->ThrustDirection == ThrustDirection) {
 		FVector Direction;
+
+		bThrusterIsActive = true;
 
 		switch (ThrustDirection) {
 		case EThrustDirection::Up:
@@ -55,6 +66,11 @@ void USecondaryThruster::ActivateThruster(EThrustDirection ThrustDirection, floa
 	}
 }
 
+void USecondaryThruster::SetThrusterIsActive(EThrustDirection ThrustDirection, bool IsActive)
+{
+	if (this->ThrustDirection == ThrustDirection) bThrusterIsActive = IsActive;
+}
+
 void USecondaryThruster::Stabilize(FVector Direction, float DeltaTime)
 {
 	
@@ -73,13 +89,19 @@ void USecondaryThruster::Stabilize(FVector Direction, float DeltaTime)
 
 	FString ForceBeingAdded = ForceToAdd.ToString();
 
-	FVector Comparison(0);
-	
-	if (ForceToAdd.Equals(Comparison, 100))return;
+	float Length = ForceToAdd.Size();
+
+	if (Length < AccelerationForce / 5000.f)
+	{
+		bThrusterIsActive = false;
+	}
+
+	if (Length <  AccelerationForce / 5000000.f)
+	{
+		return;
+	}
 
 	SpaceshipHull->AddForce(ForceToAdd);
-
-	// TODO Particles
 }
 
 void USecondaryThruster::ThrustInDirection(FVector Direction, float DeltaTime)
@@ -96,7 +118,5 @@ void USecondaryThruster::ThrustInDirection(FVector Direction, float DeltaTime)
 	if (DesiredDirectionVelocity < MaxVelocity) {
 		FVector ForceToAdd = Direction * AccelerationForce * DeltaTime;
 		SpaceshipHull->AddForce(ForceToAdd);
-
-		// TODO Particles
 	}
 }

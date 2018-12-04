@@ -75,6 +75,13 @@ public:
 	 */
 	void ActivateThruster(EThrustDirection ThrustDirection, float DeltaTime, bool bIsStabilizing);
 
+	/*
+	*	Sets whether of not this thruster is active this frame
+	*	@param ThrustDirection - Used to identify if this instruction is relevant to this thruster
+	*	@param IsActive - Whether or not this thruster is active this frame
+	*/
+	void SetThrusterIsActive(EThrustDirection ThrustDirection, bool IsActive);
+
 private:
 	
 	/*
@@ -102,4 +109,6 @@ private:
 
 	UPROPERTY(EditAnywhere)
 	EThrustDirection ThrustDirection;
+
+	bool bThrusterIsActive = false;
 };

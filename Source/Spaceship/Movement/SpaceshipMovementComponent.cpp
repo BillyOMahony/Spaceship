@@ -191,16 +191,28 @@ void USpaceshipMovementComponent::Stabilize(float DeltaTime)
 
 		if(RightVelocity > 0)
 		{
+			// Activate all thrusters which thrust left
 			for (int32 i = 0; i < SecondaryThrusters.Num(); i++)
 			{
 				SecondaryThrusters[i]->ActivateThruster(EThrustDirection::Left, DeltaTime, true);
 			}
+			// Deactivate all thrusters which thrust right
+			for (int32 i = 0; i < SecondaryThrusters.Num(); i++)
+			{
+				SecondaryThrusters[i]->SetThrusterIsActive(EThrustDirection::Right, false);
+			}
 		}
 		else if(RightVelocity < 0)
 		{
+			// Activate all thrusters which thrust right
 			for (int32 i = 0; i < SecondaryThrusters.Num(); i++)
 			{
 				SecondaryThrusters[i]->ActivateThruster(EThrustDirection::Right, DeltaTime, true);
+			}
+			// Deactivate all thrusters which thrust left
+			for (int32 i = 0; i < SecondaryThrusters.Num(); i++)
+			{
+				SecondaryThrusters[i]->SetThrusterIsActive(EThrustDirection::Left, false);
 			}
 		}
 	}
@@ -220,16 +232,28 @@ void USpaceshipMovementComponent::Stabilize(float DeltaTime)
 
 		if (UpVector > 0)
 		{
+			// Activate all thrusters which thrust down
 			for (int32 i = 0; i < SecondaryThrusters.Num(); i++)
 			{
 				SecondaryThrusters[i]->ActivateThruster(EThrustDirection::Down, DeltaTime, true);
 			}
+			// Deactivate all thrusters which thrust up
+			for (int32 i = 0; i < SecondaryThrusters.Num(); i++)
+			{
+				SecondaryThrusters[i]->SetThrusterIsActive(EThrustDirection::Up, false);
+			}
 		}
 		else if (UpVector < 0)
 		{
+			// Activate all thrusters which thrust up
 			for (int32 i = 0; i < SecondaryThrusters.Num(); i++)
 			{
 				SecondaryThrusters[i]->ActivateThruster(EThrustDirection::Up, DeltaTime, true);
+			}
+			// Deactivate all thrusters which thrust down
+			for (int32 i = 0; i < SecondaryThrusters.Num(); i++)
+			{
+				SecondaryThrusters[i]->SetThrusterIsActive(EThrustDirection::Down, false);
 			}
 		}
 	}

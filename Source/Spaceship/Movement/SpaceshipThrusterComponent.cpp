@@ -1,6 +1,8 @@
 // Fill out your copyright notice in the Description page of Project Settings.
 
 #include "SpaceshipThrusterComponent.h"
+#include "Components/StaticMeshComponent.h"
+#include "Particles/ParticleSystemComponent.h"
 
 // Sets default values for this component's properties
 USpaceshipThrusterComponent::USpaceshipThrusterComponent()
@@ -9,9 +11,10 @@ USpaceshipThrusterComponent::USpaceshipThrusterComponent()
 	// off to improve performance if you don't need them.
 	PrimaryComponentTick.bCanEverTick = true;
 
-	// ...
+	ParticleSystem = CreateDefaultSubobject<UParticleSystemComponent>(FName("ParticleSystem"));
+	ParticleSystem->AttachToComponent(this, FAttachmentTransformRules::KeepRelativeTransform);
+	ParticleSystem->SetupAttachment(this);
 }
-
 
 // Called when the game starts
 void USpaceshipThrusterComponent::BeginPlay()

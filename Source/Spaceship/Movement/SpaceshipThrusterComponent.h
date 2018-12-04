@@ -24,12 +24,6 @@ public:
 	UFUNCTION(BlueprintCallable)
 	void SetSpaceshipHull(UStaticMeshComponent * Hull);
 
-	/*
-	 *	Plays the particle effect for this thruster
-	 *	@param Strength - The strength of this particle effect, should be between 0 and 1
-	 */
-	void PlayParticleEffect(float Strength);
-
 protected:
 	// Called when the game starts
 	virtual void BeginPlay() override;
@@ -45,11 +39,10 @@ protected:
 	UPROPERTY(EditAnywhere)
 	float DecelerationMultiplier = 2.5f;
 
-	UPROPERTY(EditAnywhere)
-	UParticleSystem * ParticleSystem;
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly)
+	UParticleSystemComponent * ParticleSystem;
 
 	UStaticMeshComponent * SpaceshipHull;
-
 private:	
 		
 };
