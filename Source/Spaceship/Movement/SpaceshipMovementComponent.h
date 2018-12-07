@@ -80,6 +80,7 @@ public:
 	 *	@param DeltaTime - Time since last frame
 	 *	@param Multiplier - controls direction of pitch and acts as a multiplier
 	 */
+	UFUNCTION(BlueprintCallable)
 	void Pitch(float DeltaTime, float Multiplier);
 
 	/*
@@ -87,6 +88,7 @@ public:
 	 *	@param DeltaTime - Time since last frame
 	 *	@param Multiplier - controls direction of yaw and acts as a multiplier
 	*/
+	UFUNCTION(BlueprintCallable)
 	void Yaw(float DeltaTime, float Multiplier);
 
 	/*
@@ -94,6 +96,7 @@ public:
 	*	@param DeltaTime - Time since last frame
 	*	@param Multiplier - controls direction of roll and acts as a multiplier
 	*/
+	UFUNCTION(BlueprintCallable)
 	void Roll(float DeltaTime, float Multiplier);
 
 	/*

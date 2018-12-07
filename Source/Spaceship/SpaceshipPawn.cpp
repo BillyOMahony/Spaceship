@@ -10,11 +10,15 @@ ASpaceshipPawn::ASpaceshipPawn()
 
 }
 
+void ASpaceshipPawn::ToggleFirstPerson()
+{
+	bFirstPerson = !bFirstPerson;
+}
+
 // Called when the game starts or when spawned
 void ASpaceshipPawn::BeginPlay()
 {
 	Super::BeginPlay();
-	
 }
 
 // Called every frame

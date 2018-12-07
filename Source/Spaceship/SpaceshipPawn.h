@@ -15,12 +15,15 @@ public:
 	// Sets default values for this pawn's properties
 	ASpaceshipPawn();
 
+	UFUNCTION(BlueprintCallable)
+	void ToggleFirstPerson();
+
 protected:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
 
 	UPROPERTY(EditAnywhere, BlueprintReadOnly)
-	bool bCameraIsFirstPerson = true;
+	bool bFirstPerson = true;	
 
 public:	
 	// Called every frame
