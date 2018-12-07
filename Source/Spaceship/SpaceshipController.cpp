@@ -146,7 +146,7 @@ void ASpaceshipController::GetLookVectorHitLocation(FVector LookDirection, FVect
 	if (GetWorld()->LineTraceSingleByChannel(HitResult, StartLocation, StartLocation + (LookDirection * LineTraceRange), ECollisionChannel::ECC_Camera)) {
 		//Set Hit Location
 		HitLocation = HitResult.Location;
-		return;
+		if (HitResult.GetActor() != GetPawn()) return;
 	}
 	HitLocation = StartLocation + (LookDirection * LineTraceRange);
 }
