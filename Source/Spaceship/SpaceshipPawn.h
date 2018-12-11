@@ -18,12 +18,18 @@ public:
 	UFUNCTION(BlueprintCallable)
 	void ToggleFirstPerson();
 
+	UFUNCTION(BlueprintCallable)
+	void SetIsVirtualReality(bool VirtualReality);
+
 protected:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
 
 	UPROPERTY(EditAnywhere, BlueprintReadOnly)
 	bool bFirstPerson = true;	
+
+	UPROPERTY(EditAnywhere, BlueprintReadOnly)
+	bool bVirtualReality = true;
 
 public:	
 	// Called every frame
