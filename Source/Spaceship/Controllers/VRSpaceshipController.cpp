@@ -2,3 +2,7 @@
 
 #include "VRSpaceshipController.h"
 
+void AVRSpaceshipController::SetHandMeshes(UStaticMeshComponent * LeftHandMesh, UStaticMeshComponent * RightHandMesh)
+{
+	
+}

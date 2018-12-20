@@ -14,7 +14,11 @@ class SPACESHIP_API AVRSpaceshipController : public APlayerController
 {
 	GENERATED_BODY()
 	
+public:
+	UFUNCTION(BlueprintCallable)
+	void SetHandMeshes(UStaticMeshComponent * LeftHandMesh, UStaticMeshComponent * RightHandMesh);
+
 private:
-	UStaticMeshComponent * LeftHandMesh, RightHandMesh;
+	UStaticMeshComponent * LeftHandMesh, * RightHandMesh;
 
 };
