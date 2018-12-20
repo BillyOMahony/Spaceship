@@ -14,4 +14,7 @@ class SPACESHIP_API AVRSpaceshipController : public APlayerController
 {
 	GENERATED_BODY()
 	
+private:
+	UStaticMeshComponent * LeftHandMesh, RightHandMesh;
+
 };

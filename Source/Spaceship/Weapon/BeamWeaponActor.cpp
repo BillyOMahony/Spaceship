@@ -44,5 +44,5 @@ void ABeamWeaponActor::Fire()
 		(HitResult.ImpactPoint - LaserMeshComponent->GetComponentLocation()).ToDirectionAndLength(Direction, BeamLength);
 	}
 
-	LaserMeshComponent->SetWorldScale3D(FVector(BeamLength, 3.f, 3.f));
+	LaserMeshComponent->SetWorldScale3D(FVector(BeamLength, 10.f, 10.f));
 }
