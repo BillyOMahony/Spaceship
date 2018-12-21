@@ -28,12 +28,6 @@ public:
 	virtual void TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction) override;
 
 	/*
-	 *	Tick Function designed to be called directly from blueprint
-	 */
-	UFUNCTION(BlueprintCallable)
-	void TickSubstitute(float DeltaTime);
-
-	/*
 	 *	@param SpaceshipHull - The spaceship hull which forces will be applied to
 	 */
 	UFUNCTION(BlueprintCallable)
@@ -98,6 +92,18 @@ public:
 	*/
 	UFUNCTION(BlueprintCallable)
 	void Roll(float DeltaTime, float Multiplier);
+
+	/*
+	 *	@return Current Throttle of spaceship
+	 */
+	UFUNCTION(BlueprintCallable)
+	float GetMainThrottle();
+
+	/*
+	 *	@return Velocity of spaceship
+	 */
+	UFUNCTION(BlueprintCallable)
+	float GetForwardVelocity();
 
 	/*
 	 *	Rolls the spaceship, but will not roll beyond a certain angle

@@ -30,7 +30,7 @@ void USpaceshipMovementComponent::BeginPlay()
 void USpaceshipMovementComponent::TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction)
 {
 	Super::TickComponent(DeltaTime, TickType, ThisTickFunction);
-	/*
+
 	HandleThrottle(DeltaTime);
 
 	HandleThrustInputs(DeltaTime);
@@ -38,19 +38,7 @@ void USpaceshipMovementComponent::TickComponent(float DeltaTime, ELevelTick Tick
 	MoveForward(DeltaTime);
 
 	Stabilize(DeltaTime);
-	*/
-}
-
-void USpaceshipMovementComponent::TickSubstitute(float DeltaTime)
-{
-	HandleThrottle(DeltaTime);
-
-	HandleThrustInputs(DeltaTime);
-
-	MoveForward(DeltaTime);
-
-	Stabilize(DeltaTime);
-
+	
 }
 
 void USpaceshipMovementComponent::HandleThrustInputs(float DeltaTime)
@@ -126,8 +114,24 @@ void USpaceshipMovementComponent::Roll(float DeltaTime, float Multiplier)
 	}
 }
 
+float USpaceshipMovementComponent::GetMainThrottle()
+{
+	return MainThrottle;
+}
+
+float USpaceshipMovementComponent::GetForwardVelocity()
+{
+	FVector OutDir;
+	float OutVel;
+
+	SpaceshipHull->GetComponentVelocity().ToDirectionAndLength(OutDir, OutVel);
+
+	return OutVel * OutDir.X;
+}
+
 void USpaceshipMovementComponent::CappedRoll(float DeltaTime, float RollPosition)
 {
+	// TODO Implement
 }
 
 void USpaceshipMovementComponent::AddMainThrottle(float ThrottleToAdd)
