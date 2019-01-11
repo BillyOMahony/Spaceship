@@ -27,12 +27,13 @@ public:
 	void OnCompHit(UPrimitiveComponent* HitComp, AActor* OtherActor, UPrimitiveComponent* OtherComp, FVector NormalImpulse, const FHitResult& Hit);
 
 	void LaunchProjectile();
-
-
 private:
 	UPROPERTY(VisibleAnywhere)
 	class UProjectileMovementComponent * ProjectileMovementComponent;
 
 	UPROPERTY(VisibleAnywhere)
 	UStaticMeshComponent * Mesh = nullptr;
+
+	UPROPERTY(EditAnywhere, Category = "Damage")
+	float Damage = 10.f;
 };
