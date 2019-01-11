@@ -12,7 +12,8 @@ void AProjectileWeaponActor::Fire()
 		FVector SpawnLocation = MunitionSpawnPoint->GetComponentLocation();
 		FRotator SpawnRotation = MunitionSpawnPoint->GetComponentRotation();
 		FActorSpawnParameters SpawnParams;
-		GetWorld()->SpawnActor(Projectile, &SpawnLocation, &SpawnRotation, SpawnParams);
+		auto SpawnedProjectile = GetWorld()->SpawnActor<AProjectile>(Projectile, SpawnLocation, SpawnRotation);
+		SpawnedProjectile->LaunchProjectile();
 		bCanFireProjectile = false;
 		GetWorld()->GetTimerManager().SetTimer(
 			RateOfFireTimerHandle,

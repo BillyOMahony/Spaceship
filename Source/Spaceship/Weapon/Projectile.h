@@ -23,11 +23,16 @@ public:
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;
 
+	UFUNCTION()
+	void OnCompHit(UPrimitiveComponent* HitComp, AActor* OtherActor, UPrimitiveComponent* OtherComp, FVector NormalImpulse, const FHitResult& Hit);
+
+	void LaunchProjectile();
+
+
 private:
 	UPROPERTY(VisibleAnywhere)
 	class UProjectileMovementComponent * ProjectileMovementComponent;
 
 	UPROPERTY(VisibleAnywhere)
-	class USphereComponent * SphereCollider;
-
+	UStaticMeshComponent * Mesh = nullptr;
 };
