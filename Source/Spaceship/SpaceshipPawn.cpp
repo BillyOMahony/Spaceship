@@ -1,6 +1,8 @@
 // Fill out your copyright notice in the Description page of Project Settings.
 
 #include "SpaceshipPawn.h"
+#include "Kismet/KismetMathLibrary.h"
+#include "Movement/SpaceshipMovementComponent.h"
 
 // Sets default values
 ASpaceshipPawn::ASpaceshipPawn()
@@ -13,12 +15,22 @@ ASpaceshipPawn::ASpaceshipPawn()
 void ASpaceshipPawn::BeginPlay()
 {
 	Super::BeginPlay();
+
+	MovementComponent = FindComponentByClass<USpaceshipMovementComponent>();
+}
+
+// Called every frame
+void ASpaceshipPawn::Tick(float DeltaTime)
+{
+	Super::Tick(DeltaTime);
+
+	this->DeltaTime = DeltaTime;
 }
 
 void ASpaceshipPawn::OnDeath()
 {
 	//TODO Implement
-	UE_LOG(LogTemp, Error, TEXT("ASpaceshipPawn::OnDeath() - DEADDDDDD"));
+	UE_LOG(LogTemp, Error, TEXT("ASpaceshipPawn::OnDeath() - DEAD"));
 		
 }
 
@@ -52,10 +64,30 @@ float ASpaceshipPawn::GetHealth()
 	return Health;
 }
 
-// Called every frame
-void ASpaceshipPawn::Tick(float DeltaTime)
+void ASpaceshipPawn::MoveTowardsWaypoint()
 {
-	Super::Tick(DeltaTime);
+	if(WaypointActor && MovementComponent)
+	{
+		// Get relative vector of waypoint compared to spaceship
+		FVector Direction = WaypointActor->GetActorLocation() - GetActorLocation();
+		FVector DirectionToTurn = UKismetMathLibrary::InverseTransformDirection(GetActorTransform(), Direction).GetSafeNormal();
+
+		UE_LOG(LogTemp, Error, TEXT("Pawn::MoveTowardsWaypoint. Direction: %s"), *(DirectionToTurn.ToString()));
+
+		// DirectionToTurn.Y = Roll. We want to aim for 0.
+		MovementComponent->Roll(DeltaTime, DirectionToTurn.Y);
+
+		MovementComponent->Pitch(DeltaTime, DirectionToTurn.Z);
+
+		MovementComponent->SetThrottleUpPressed(true);
+
+		MovementComponent->GetMainThrottle();
+		UE_LOG(LogTemp, Error, TEXT("Pawn::MoveTowardsWaypoint. Direction: %f"), MovementComponent->GetMainThrottle());
+		// Roll and Pitch in direction of waypoint
+
+		// Meanwhile Set Throttle based on distance to waypoint
+
+	}
 }
 
 // Called to bind functionality to input

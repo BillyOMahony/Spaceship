@@ -31,7 +31,12 @@ private:
 	UPROPERTY(VisibleAnywhere)
 	UStaticMeshComponent * LaserMeshComponent;
 
-	UPROPERTY(EditAnywhere)
-	float BeamMaxLength = 10000.f;
+	UPROPERTY(EditAnywhere, Category = "Beam")
+	float DamagePerSecond = 30.f;
+
+	UPROPERTY(EditAnywhere, Category = "Beam")
+	float BeamMaxLength = 100000.f;
+
+	float DeltaTime;
 
 };

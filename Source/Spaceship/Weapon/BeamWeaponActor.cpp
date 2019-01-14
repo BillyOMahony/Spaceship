@@ -2,6 +2,9 @@
 
 #include "BeamWeaponActor.h"
 #include "Components/StaticMeshComponent.h"
+#include "Kismet/GameplayStatics.h"
+#include "Runtime/Engine/Classes/GameFramework/DamageType.h"
+
 
 ABeamWeaponActor::ABeamWeaponActor()
 {
@@ -14,6 +17,7 @@ ABeamWeaponActor::ABeamWeaponActor()
 
 void ABeamWeaponActor::Tick(float DeltaTime)
 {
+	this->DeltaTime = DeltaTime;
 	if (LaserMeshComponent) {
 		if (bAttemptingToFire) {
 			Fire();
@@ -32,8 +36,8 @@ void ABeamWeaponActor::Fire()
 		HitResult,
 		LaserMeshComponent->GetComponentLocation(),
 		LaserMeshComponent->GetComponentLocation() + (LaserMeshComponent->GetForwardVector().GetSafeNormal() * BeamMaxLength),
-		ECollisionChannel::ECC_Visibility,
-		FCollisionQueryParams(ECollisionChannel::ECC_Visibility)
+		ECollisionChannel::ECC_Camera,
+		FCollisionQueryParams(ECollisionChannel::ECC_Camera)
 	);
 
 	float BeamLength = BeamMaxLength;
@@ -42,6 +46,9 @@ void ABeamWeaponActor::Fire()
 	{
 		FVector Direction;
 		(HitResult.ImpactPoint - LaserMeshComponent->GetComponentLocation()).ToDirectionAndLength(Direction, BeamLength);
+
+		FHitResult HitInfo;
+		UGameplayStatics::ApplyDamage(HitResult.GetActor(), DamagePerSecond * DeltaTime, GetInstigatorController(), this, UDamageType::StaticClass());
 	}
 
 	LaserMeshComponent->SetWorldScale3D(FVector(BeamLength, 10.f, 10.f));

@@ -39,6 +39,11 @@ public:
 	UFUNCTION(BlueprintCallable)
 	float GetHealth();
 
+	/*
+	 *	Moves this pawn towards the waypoint
+	 */
+	void MoveTowardsWaypoint();
+
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;
 
@@ -61,4 +66,13 @@ protected:
 	bool bVirtualReality = true;
 
 	float Health = 100.f;
+
+private:
+
+	UPROPERTY(EditAnywhere)
+	AActor * WaypointActor;
+
+	class USpaceshipMovementComponent * MovementComponent;
+
+	float DeltaTime = 0;
 };
