@@ -23,7 +23,6 @@ void ASpaceshipPawn::BeginPlay()
 
 void ASpaceshipPawn::AimTowardsAndFireAtTargetActor()
 {
-	UE_LOG(LogTemp, Error, TEXT("ASpaceshipPawn::AimTowardsAndFireAtTargetActor()"));
 	if (TargetActor && WeaponsComponent) {
 		WeaponsComponent->AimAt(TargetActor->GetActorLocation());
 		// TODO If Aim Solution Found (If aiming accurately)

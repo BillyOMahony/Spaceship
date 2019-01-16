@@ -39,6 +39,11 @@ public:
 	 */
 	void EndFireWeapon();
 
+	/*
+	 *	Sets the Target Actor
+	 */
+	void SetTargetActor(AActor * TargetActor);
+
 private:
 	UPROPERTY(VisibleAnywhere)
 	UStaticMeshComponent * Turret;
@@ -60,6 +65,8 @@ private:
 
 	UPROPERTY(EditAnywhere)
 	float MinBarrelElevation = -30;
+
+	AActor * TargetActor = nullptr;
 
 	/*
 	 *	Rotates the turret

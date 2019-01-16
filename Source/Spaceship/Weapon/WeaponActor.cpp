@@ -56,6 +56,11 @@ void AWeaponActor::EndFireWeapon()
 	bAttemptingToFire = false;
 }
 
+void AWeaponActor::SetTargetActor(AActor * TargetActor)
+{
+	this->TargetActor = TargetActor;
+}
+
 void AWeaponActor::RotateTurret(float RelativeSpeed)
 {
 	float RotationSpeed = FMath::Clamp(RelativeSpeed, -1.f, 1.f);
