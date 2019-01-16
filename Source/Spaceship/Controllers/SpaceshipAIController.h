@@ -27,5 +27,10 @@ private:
 	 */
 	void MoveTowardsWaypointActor();
 
+	/*
+	 *	Aims towards and fires at an actor
+	 */
+	void AimTowardAndFireAtTargetActor();
+
 	class ASpaceshipPawn * ControlledPawn = nullptr;
 };

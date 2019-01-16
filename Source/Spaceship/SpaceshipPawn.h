@@ -44,6 +44,11 @@ public:
 	 */
 	void MoveTowardsWaypoint();
 
+	/*
+	 *	Aims towards TargetActor and fires at it if aiming at it
+	 */
+	void AimTowardsAndFireAtTargetActor();
+
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;
 
@@ -72,7 +77,12 @@ private:
 	UPROPERTY(EditAnywhere)
 	AActor * WaypointActor;
 
+	UPROPERTY(EditAnywhere)
+	AActor * TargetActor;
+
 	class USpaceshipMovementComponent * MovementComponent;
+
+	class USpaceshipWeaponsComponent * WeaponsComponent;
 
 	float DeltaTime = 0;
 };

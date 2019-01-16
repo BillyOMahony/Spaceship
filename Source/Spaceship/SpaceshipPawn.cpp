@@ -3,6 +3,7 @@
 #include "SpaceshipPawn.h"
 #include "Kismet/KismetMathLibrary.h"
 #include "Movement/SpaceshipMovementComponent.h"
+#include "Weapon/SpaceshipWeaponsComponent.h"
 
 // Sets default values
 ASpaceshipPawn::ASpaceshipPawn()
@@ -17,6 +18,17 @@ void ASpaceshipPawn::BeginPlay()
 	Super::BeginPlay();
 
 	MovementComponent = FindComponentByClass<USpaceshipMovementComponent>();
+	WeaponsComponent = FindComponentByClass<USpaceshipWeaponsComponent>();
+}
+
+void ASpaceshipPawn::AimTowardsAndFireAtTargetActor()
+{
+	UE_LOG(LogTemp, Error, TEXT("ASpaceshipPawn::AimTowardsAndFireAtTargetActor()"));
+	if (TargetActor && WeaponsComponent) {
+		WeaponsComponent->AimAt(TargetActor->GetActorLocation());
+		// TODO If Aim Solution Found (If aiming accurately)
+		WeaponsComponent->BeginFireWeapons();
+	}
 }
 
 // Called every frame
@@ -30,7 +42,6 @@ void ASpaceshipPawn::Tick(float DeltaTime)
 void ASpaceshipPawn::OnDeath()
 {
 	//TODO Implement
-	UE_LOG(LogTemp, Error, TEXT("ASpaceshipPawn::OnDeath() - DEAD"));
 		
 }
 
@@ -72,8 +83,6 @@ void ASpaceshipPawn::MoveTowardsWaypoint()
 		FVector Direction = WaypointActor->GetActorLocation() - GetActorLocation();
 		FVector DirectionToTurn = UKismetMathLibrary::InverseTransformDirection(GetActorTransform(), Direction).GetSafeNormal();
 
-		UE_LOG(LogTemp, Error, TEXT("Pawn::MoveTowardsWaypoint. Direction: %s"), *(DirectionToTurn.ToString()));
-
 		// DirectionToTurn.Y = Roll. We want to aim for 0.
 		MovementComponent->Roll(DeltaTime, DirectionToTurn.Y);
 
@@ -82,7 +91,6 @@ void ASpaceshipPawn::MoveTowardsWaypoint()
 		MovementComponent->SetThrottleUpPressed(true);
 
 		MovementComponent->GetMainThrottle();
-		UE_LOG(LogTemp, Error, TEXT("Pawn::MoveTowardsWaypoint. Direction: %f"), MovementComponent->GetMainThrottle());
 		// Roll and Pitch in direction of waypoint
 
 		// Meanwhile Set Throttle based on distance to waypoint
