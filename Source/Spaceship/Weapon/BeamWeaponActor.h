@@ -20,6 +20,8 @@ public:
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;
 
+	virtual void FireIfOnTarget(AActor* Target) override;
+
 protected:
 
 private:

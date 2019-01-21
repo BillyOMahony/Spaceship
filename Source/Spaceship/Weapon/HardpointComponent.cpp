@@ -54,6 +54,14 @@ void UHardpointComponent::EndFireWeapon()
 	}
 }
 
+void UHardpointComponent::FireIfOnTarget(AActor * Target)
+{
+	if (SpawnedWeapon)
+	{
+		SpawnedWeapon->FireIfOnTarget(Target);
+	}
+}
+
 void UHardpointComponent::BeginFireWeapon()
 {
 	if(SpawnedWeapon)

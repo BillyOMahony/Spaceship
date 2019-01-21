@@ -5,6 +5,27 @@
 #include "TimerManager.h"
 #include "Projectile.h"
 
+void AProjectileWeaponActor::FireIfOnTarget(AActor * Target)
+{
+	// Raycast
+	FHitResult HitResult;
+
+	bool HitFound = GetWorld()->LineTraceSingleByChannel(
+		HitResult,
+		MunitionSpawnPoint->GetComponentLocation(),
+		MunitionSpawnPoint->GetComponentLocation() + (MunitionSpawnPoint->GetForwardVector() * TraceRange),
+		ECollisionChannel::ECC_Camera
+	);
+
+	if(HitResult.GetActor())
+	{
+		if(HitResult.GetActor() == Target)
+		{
+			Fire();
+		}
+	}
+}
+
 void AProjectileWeaponActor::Fire()
 {
 	if(bCanFireProjectile && Projectile)

@@ -26,7 +26,7 @@ void ASpaceshipPawn::AimTowardsAndFireAtTargetActor()
 	if (TargetActor && WeaponsComponent) {
 		WeaponsComponent->AimAt(TargetActor->GetActorLocation());
 		// TODO If Aim Solution Found (If aiming accurately)
-		WeaponsComponent->BeginFireWeapons();
+		WeaponsComponent->FireIfOnTarget(TargetActor);
 	}
 }
 

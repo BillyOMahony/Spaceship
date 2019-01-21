@@ -44,6 +44,11 @@ public:
 	 */
 	void EndFireWeapon();
 
+	/*
+	 *	TODO
+	 */
+	void FireIfOnTarget(AActor * Target);
+
 private:
 
 	UPROPERTY(EditAnywhere, Category = "Setup")

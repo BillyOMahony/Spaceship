@@ -29,6 +29,35 @@ void ABeamWeaponActor::Tick(float DeltaTime)
 	}
 }
 
+void ABeamWeaponActor::FireIfOnTarget(AActor * Target)
+{
+	// Raycast
+	FHitResult HitResult;
+
+	bool HitFound = GetWorld()->LineTraceSingleByChannel(
+		HitResult,
+		MunitionSpawnPoint->GetComponentLocation(),
+		MunitionSpawnPoint->GetComponentLocation() + (MunitionSpawnPoint->GetForwardVector() * TraceRange),
+		ECollisionChannel::ECC_Camera
+	);
+
+	if (HitResult.GetActor())
+	{
+		if (HitResult.GetActor() == Target)
+		{
+			bAttemptingToFire = true;
+		}
+		else
+		{
+			bAttemptingToFire = false;
+		}
+	}
+	else
+	{
+		bAttemptingToFire = false;
+	}
+}
+
 void ABeamWeaponActor::Fire()
 {
 	FHitResult HitResult;
@@ -51,5 +80,11 @@ void ABeamWeaponActor::Fire()
 		UGameplayStatics::ApplyDamage(HitResult.GetActor(), DamagePerSecond * DeltaTime, GetInstigatorController(), this, UDamageType::StaticClass());
 	}
 
-	LaserMeshComponent->SetWorldScale3D(FVector(BeamLength, 10.f, 10.f));
+	FVector BeamVector = FVector(BeamLength, 15.f, 15.f);
+
+	UE_LOG(LogTemp, Error, TEXT("LMC: %s"), *(LaserMeshComponent->GetComponentScale().ToString()));
+
+	LaserMeshComponent->SetWorldScale3D(BeamVector);
+
+	UE_LOG(LogTemp, Error, TEXT("LMC: %s"), *(LaserMeshComponent->GetComponentScale().ToString()));
 }

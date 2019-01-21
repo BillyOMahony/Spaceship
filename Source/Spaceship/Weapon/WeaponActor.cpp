@@ -56,6 +56,11 @@ void AWeaponActor::EndFireWeapon()
 	bAttemptingToFire = false;
 }
 
+void AWeaponActor::FireIfOnTarget(AActor * Target)
+{
+	
+}
+
 void AWeaponActor::SetTargetActor(AActor * TargetActor)
 {
 	this->TargetActor = TargetActor;

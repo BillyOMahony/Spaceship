@@ -19,6 +19,9 @@ protected:
 	UPROPERTY(VisibleAnywhere, meta = (AllowPrivateAccess = "true"))
 	USceneComponent * MunitionSpawnPoint;
 
+	UPROPERTY(EditAnywhere)
+	float TraceRange = 50000.f;
+
 	bool bAttemptingToFire = false;
 
 public:	
@@ -38,6 +41,13 @@ public:
 	 *	Stops this weapon from firing
 	 */
 	void EndFireWeapon();
+
+	/*
+	 *	This method if for use with AI
+	 *	Fires only if aiming at Target
+	 *	@param Target - The actor to check if aimed at
+	 */
+	virtual void FireIfOnTarget(AActor* Target);
 
 	/*
 	 *	Sets the Target Actor

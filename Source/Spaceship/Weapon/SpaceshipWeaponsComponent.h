@@ -42,6 +42,12 @@ public:
 	UFUNCTION(BlueprintCallable)
 	void EndFireWeapons();
 
+	/*
+	 * 
+	 */
+	UFUNCTION(BlueprintCallable)
+	void FireIfOnTarget(AActor * Target);
+
 private:
 
 	TArray<UHardpointComponent *> Hardpoints;

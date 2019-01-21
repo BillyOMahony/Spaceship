@@ -62,3 +62,11 @@ void USpaceshipWeaponsComponent::EndFireWeapons()
 	}
 }
 
+void USpaceshipWeaponsComponent::FireIfOnTarget(AActor * Target)
+{
+	for (int32 i = 0; i < Hardpoints.Num(); i++)
+	{
+		Hardpoints[i]->FireIfOnTarget(Target);
+	}
+}
+
