@@ -90,6 +90,8 @@ void USpaceshipMovementComponent::HandleThrottle(float DeltaTime)
 
 void USpaceshipMovementComponent::Pitch(float DeltaTime, float Multiplier)
 {
+	Multiplier = FMath::Clamp<float>(Multiplier, -1, 1);
+
 	if (SpaceshipHull) {
 		FRotator PitchToAdd = FRotator(DeltaTime * DegPerSecond * Multiplier, 0, 0);
 		SpaceshipHull->AddLocalRotation(PitchToAdd);
@@ -98,6 +100,8 @@ void USpaceshipMovementComponent::Pitch(float DeltaTime, float Multiplier)
 
 void USpaceshipMovementComponent::Yaw(float DeltaTime, float Multiplier)
 {
+	Multiplier = FMath::Clamp<float>(Multiplier, -1, 1);
+
 	if(SpaceshipHull)
 	{
 		FRotator YawToAdd = FRotator(0, DeltaTime * DegPerSecond * Multiplier, 0);
@@ -107,6 +111,8 @@ void USpaceshipMovementComponent::Yaw(float DeltaTime, float Multiplier)
 
 void USpaceshipMovementComponent::Roll(float DeltaTime, float Multiplier)
 {
+	Multiplier = FMath::Clamp<float>(Multiplier, -1, 1);
+
 	if (SpaceshipHull)
 	{
 		FRotator RollToAdd = FRotator(0, 0, DeltaTime * DegPerSecond * Multiplier);
