@@ -21,11 +21,16 @@ void ASpaceshipPawn::BeginPlay()
 	WeaponsComponent = FindComponentByClass<USpaceshipWeaponsComponent>();
 }
 
-void ASpaceshipPawn::AimTowardsAndFireAtTargetActor()
+void ASpaceshipPawn::AimTowardsTarget()
 {
 	if (TargetActor && WeaponsComponent) {
 		WeaponsComponent->AimAt(TargetActor->GetActorLocation());
-		// TODO If Aim Solution Found (If aiming accurately)
+	}
+}
+
+void ASpaceshipPawn::FireAtTarget()
+{
+	if (TargetActor && WeaponsComponent) {
 		WeaponsComponent->FireIfOnTarget(TargetActor);
 	}
 }
@@ -74,12 +79,12 @@ float ASpaceshipPawn::GetHealth()
 	return Health;
 }
 
-void ASpaceshipPawn::MoveTowardsWaypoint()
+void ASpaceshipPawn::MoveTowardsPoint(FVector Point)
 {
-	if(WaypointActor && MovementComponent)
+	if(MovementComponent)
 	{
 		// Get relative vector of waypoint compared to spaceship
-		FVector Direction = WaypointActor->GetActorLocation() - GetActorLocation();
+		FVector Direction = Point - GetActorLocation();
 		FVector DirectionToTurn = UKismetMathLibrary::InverseTransformDirection(GetActorTransform(), Direction).GetSafeNormal();
 
 		// DirectionToTurn.Y = Roll. We want to aim for 0.
@@ -89,10 +94,8 @@ void ASpaceshipPawn::MoveTowardsWaypoint()
 
 		MovementComponent->SetThrottleUpPressed(true);
 
-		MovementComponent->GetMainThrottle();
-		// Roll and Pitch in direction of waypoint
-
-		// Meanwhile Set Throttle based on distance to waypoint
+		// TODO Set Throttle based on distance to waypoint
+		// Consider doing that elsewhere (Behaviour Tree)
 
 	}
 }

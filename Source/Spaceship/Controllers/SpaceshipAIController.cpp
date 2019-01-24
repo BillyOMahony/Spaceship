@@ -8,7 +8,6 @@ void ASpaceshipAIController::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
 
-	MoveTowardsWaypointActor();
 	AimTowardAndFireAtTargetActor();
 }
 
@@ -19,11 +18,11 @@ void ASpaceshipAIController::BeginPlay()
 	ControlledPawn = Cast<ASpaceshipPawn>(GetPawn());
 }
 
-void ASpaceshipAIController::MoveTowardsWaypointActor()
+void ASpaceshipAIController::MoveTowardsPoint(FVector Point)
 {
 	if(ControlledPawn)
 	{
-		ControlledPawn->MoveTowardsWaypoint();
+		ControlledPawn->MoveTowardsPoint(Point);
 	}
 }
 
@@ -31,6 +30,6 @@ void ASpaceshipAIController::AimTowardAndFireAtTargetActor()
 {
 	if (ControlledPawn)
 	{
-		ControlledPawn->AimTowardsAndFireAtTargetActor();
+		ControlledPawn->AimTowardsTarget();
 	}
 }

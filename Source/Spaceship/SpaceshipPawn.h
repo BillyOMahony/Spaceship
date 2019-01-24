@@ -42,12 +42,17 @@ public:
 	/*
 	 *	Moves this pawn towards the waypoint
 	 */
-	void MoveTowardsWaypoint();
+	void MoveTowardsPoint(FVector Point);
 
 	/*
 	 *	Aims towards TargetActor and fires at it if aiming at it
 	 */
-	void AimTowardsAndFireAtTargetActor();
+	void AimTowardsTarget();
+
+	/*
+	 *	Fires at the target if the weapon is on target
+	 */
+	void FireAtTarget();
 
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;
@@ -73,9 +78,6 @@ protected:
 	float Health = 100.f;
 
 private:
-
-	UPROPERTY(EditAnywhere)
-	AActor * WaypointActor;
 
 	UPROPERTY(EditAnywhere)
 	AActor * TargetActor;
