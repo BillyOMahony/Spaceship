@@ -22,15 +22,15 @@ public:
 	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
 
 	/*
-	 *	Sets whether the AI controls this pawn
-	 *	TODO Look for better solution to this dirt
-	 */
-	void SetAIControlsPawn(bool AIControlsPawn);
-
-	/*
 	 *	Applies damage to this spaceship
 	 */
 	virtual float TakeDamage(float DamageAmount, struct FDamageEvent const & DamageEvent, class AController * EventInstigator, AActor * DamageCauser) override;
+
+	/*
+	 *	@return Spaceship health value
+	 */
+	UFUNCTION(BlueprintCallable)
+	float GetHealth();
 
 	/*
 	 *	Toggles the camera
@@ -44,12 +44,6 @@ public:
 	 */
 	UFUNCTION(BlueprintCallable)
 	void SetIsVirtualReality(bool VirtualReality);
-
-	/*
-	 *	@return Spaceship health value
-	 */
-	UFUNCTION(BlueprintCallable)
-	float GetHealth();
 
 	/*
 	 *	Moves this pawn towards the waypoint
@@ -81,9 +75,20 @@ protected:
 	virtual void BeginPlay() override;
 
 	/*
+	 *	Handles AI Movement Input
+	 */
+	void HandleAIMovement();
+
+	/*
 	 *	Handles death of a pawn
 	 */
 	void OnDeath();
+
+	/*
+	 *	Sets whether the AI controls this pawn
+	 *	TODO Look for better solution to this dirt
+	 */
+	void SetAIControlsPawn(bool AIControlsPawn);
 
 	UPROPERTY(EditAnywhere, BlueprintReadOnly)
 	bool bFirstPerson = true;	
@@ -95,14 +100,14 @@ protected:
 
 private:
 
+	UPROPERTY(EditAnywhere)
+	AActor * TargetActor;
+
 	bool bAIControlsPawn = false;
 
 	FVector WayPoint;
 
 	bool bMovingTowardsWayPoint = false;
-
-	UPROPERTY(EditAnywhere)
-	AActor * TargetActor;
 
 	class USpaceshipMovementComponent * MovementComponent;
 

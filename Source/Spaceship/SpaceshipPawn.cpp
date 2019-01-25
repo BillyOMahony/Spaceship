@@ -4,6 +4,7 @@
 #include "Kismet/KismetMathLibrary.h"
 #include "Movement/SpaceshipMovementComponent.h"
 #include "Weapon/SpaceshipWeaponsComponent.h"
+#include "AIController.h"
 
 // Sets default values
 ASpaceshipPawn::ASpaceshipPawn()
@@ -19,6 +20,17 @@ void ASpaceshipPawn::BeginPlay()
 
 	MovementComponent = FindComponentByClass<USpaceshipMovementComponent>();
 	WeaponsComponent = FindComponentByClass<USpaceshipWeaponsComponent>();
+
+	if(Cast<AAIController>(GetController()))
+	{
+		SetAIControlsPawn(true); 
+	}
+}
+
+// Called to bind functionality to input
+void ASpaceshipPawn::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent)
+{
+	Super::SetupPlayerInputComponent(PlayerInputComponent);
 }
 
 // Called every frame
@@ -29,16 +41,70 @@ void ASpaceshipPawn::Tick(float DeltaTime)
 	this->DeltaTime = DeltaTime;
 
 	if (bAIControlsPawn) {
-		if (bMovingTowardsWayPoint)
-		{
-			MoveTowardsWayPoint();
-		}
-		else
-		{
-			// TODO Movement Component should have better system for interacting with AI
-			MovementComponent->SetThrottleDownPressed(true);
-			MovementComponent->SetThrottleUpPressed(false);
-		}
+		HandleAIMovement();
+	}
+}
+
+float ASpaceshipPawn::TakeDamage(float DamageAmount, FDamageEvent const & DamageEvent, AController * EventInstigator, AActor * DamageCauser)
+{
+	Health -= DamageAmount;
+
+	if(Health <= 0)
+	{
+		Health = 0;
+		OnDeath();
+	}
+
+	return DamageAmount;
+}
+
+void ASpaceshipPawn::OnDeath()
+{
+	//TODO Implement
+
+}
+
+float ASpaceshipPawn::GetHealth()
+{
+	return Health;
+}
+
+void ASpaceshipPawn::MoveTowardsWayPoint()
+{
+	if(MovementComponent)
+	{
+		// Get relative vector of waypoint compared to spaceship
+		FVector Direction = WayPoint - GetActorLocation();
+		FVector DirectionToTurn = UKismetMathLibrary::InverseTransformDirection(GetActorTransform(), Direction).GetSafeNormal();
+
+		// DirectionToTurn.Y = Roll. We want to aim for 0.
+		MovementComponent->Roll(DeltaTime, DirectionToTurn.Y);
+
+		MovementComponent->Pitch(DeltaTime, DirectionToTurn.Z);
+
+		MovementComponent->SetThrottleUpPressed(true);
+
+		// TODO Consider Adding in Vertical/ Horizontal movement
+
+		// TODO Set Throttle based on distance to waypoint?? 
+		// if close and throttle > x:
+		//	  Throttle Down
+		// else:
+		//	  Throttle Up
+	}
+}
+
+void ASpaceshipPawn::HandleAIMovement()
+{
+	if (bMovingTowardsWayPoint)
+	{
+		MoveTowardsWayPoint();
+	}
+	else
+	{
+		// TODO Movement Component should have better system for interacting with AI
+		MovementComponent->SetThrottleDownPressed(true);
+		MovementComponent->SetThrottleUpPressed(false);
 	}
 }
 
@@ -66,26 +132,6 @@ void ASpaceshipPawn::SetMovingTowardsWayPoint(bool MovingTowardsWayPoint)
 	bMovingTowardsWayPoint = MovingTowardsWayPoint;
 }
 
-
-void ASpaceshipPawn::OnDeath()
-{
-	//TODO Implement
-		
-}
-
-float ASpaceshipPawn::TakeDamage(float DamageAmount, FDamageEvent const & DamageEvent, AController * EventInstigator, AActor * DamageCauser)
-{
-	Health -= DamageAmount;
-
-	if(Health <= 0)
-	{
-		Health = 0;
-		OnDeath();
-	}
-
-	return DamageAmount;
-}
-
 void ASpaceshipPawn::ToggleFirstPerson()
 {
 	bFirstPerson = !bFirstPerson;
@@ -96,38 +142,6 @@ void ASpaceshipPawn::SetIsVirtualReality(bool VirtualReality)
 {
 	bVirtualReality = VirtualReality;
 	if (bVirtualReality) ToggleFirstPerson();
-}
-
-float ASpaceshipPawn::GetHealth()
-{
-	return Health;
-}
-
-void ASpaceshipPawn::MoveTowardsWayPoint()
-{
-	if(MovementComponent)
-	{
-		// Get relative vector of waypoint compared to spaceship
-		FVector Direction = WayPoint - GetActorLocation();
-		FVector DirectionToTurn = UKismetMathLibrary::InverseTransformDirection(GetActorTransform(), Direction).GetSafeNormal();
-
-		// DirectionToTurn.Y = Roll. We want to aim for 0.
-		MovementComponent->Roll(DeltaTime, DirectionToTurn.Y);
-
-		MovementComponent->Pitch(DeltaTime, DirectionToTurn.Z);
-
-		MovementComponent->SetThrottleUpPressed(true);
-
-		// TODO Set Throttle based on distance to waypoint
-		// Consider doing that elsewhere (Behaviour Tree)
-
-	}
-}
-
-// Called to bind functionality to input
-void ASpaceshipPawn::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent)
-{
-	Super::SetupPlayerInputComponent(PlayerInputComponent);
 }
 
 void ASpaceshipPawn::SetAIControlsPawn(bool AIControlsPawn)

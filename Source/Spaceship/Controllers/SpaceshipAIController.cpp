@@ -16,7 +16,6 @@ void ASpaceshipAIController::BeginPlay()
 	Super::BeginPlay();
 
 	ControlledPawn = Cast<ASpaceshipPawn>(GetPawn());
-	ControlledPawn->SetAIControlsPawn(true);
 }
 
 void ASpaceshipAIController::AimTowardAndFireAtTargetActor()
