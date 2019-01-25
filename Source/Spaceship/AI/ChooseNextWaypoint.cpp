@@ -4,6 +4,7 @@
 #include "AIController.h"
 #include "PatrolRoute.h"
 #include "BehaviorTree/BlackboardComponent.h"
+#include "SpaceshipPawn.h"
 
 EBTNodeResult::Type UChooseNextWaypoint::ExecuteTask(UBehaviorTreeComponent& OwnerComp, uint8* NodeMemory)
 {
@@ -30,8 +31,18 @@ EBTNodeResult::Type UChooseNextWaypoint::ExecuteTask(UBehaviorTreeComponent& Own
 
 	int Index = BlackboardComponent->GetValueAsInt(IndexKey.SelectedKeyName);
 
-	// Set Waypoint
+	// Set Waypoint on blackboard
 	BlackboardComponent->SetValueAsVector(WaypointKey.SelectedKeyName, PatrolPoints[Index]->GetActorLocation());
+
+	// Set WayPoint on Spaceship
+	ASpaceshipPawn * ControlledSpaceship = Cast<ASpaceshipPawn>(OwnerComp.GetAIOwner()->GetPawn());
+
+	if (!ensure(ControlledSpaceship))
+	{
+		return EBTNodeResult::Failed;
+	}
+
+	ControlledSpaceship->SetWayPoint(BlackboardComponent->GetValueAsVector(WaypointKey.SelectedKeyName));
 
 	// Cycle Index
 	Index++;

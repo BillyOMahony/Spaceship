@@ -21,6 +21,27 @@ void ASpaceshipPawn::BeginPlay()
 	WeaponsComponent = FindComponentByClass<USpaceshipWeaponsComponent>();
 }
 
+// Called every frame
+void ASpaceshipPawn::Tick(float DeltaTime)
+{
+	Super::Tick(DeltaTime);
+
+	this->DeltaTime = DeltaTime;
+
+	if (bAIControlsPawn) {
+		if (bMovingTowardsWayPoint)
+		{
+			MoveTowardsWayPoint();
+		}
+		else
+		{
+			// TODO Movement Component should have better system for interacting with AI
+			MovementComponent->SetThrottleDownPressed(true);
+			MovementComponent->SetThrottleUpPressed(false);
+		}
+	}
+}
+
 void ASpaceshipPawn::AimTowardsTarget()
 {
 	if (TargetActor && WeaponsComponent) {
@@ -35,13 +56,16 @@ void ASpaceshipPawn::FireAtTarget()
 	}
 }
 
-// Called every frame
-void ASpaceshipPawn::Tick(float DeltaTime)
+void ASpaceshipPawn::SetWayPoint(FVector WayPoint)
 {
-	Super::Tick(DeltaTime);
-
-	this->DeltaTime = DeltaTime;
+	this->WayPoint = WayPoint;
 }
+
+void ASpaceshipPawn::SetMovingTowardsWayPoint(bool MovingTowardsWayPoint)
+{
+	bMovingTowardsWayPoint = MovingTowardsWayPoint;
+}
+
 
 void ASpaceshipPawn::OnDeath()
 {
@@ -79,12 +103,12 @@ float ASpaceshipPawn::GetHealth()
 	return Health;
 }
 
-void ASpaceshipPawn::MoveTowardsPoint(FVector Point)
+void ASpaceshipPawn::MoveTowardsWayPoint()
 {
 	if(MovementComponent)
 	{
 		// Get relative vector of waypoint compared to spaceship
-		FVector Direction = Point - GetActorLocation();
+		FVector Direction = WayPoint - GetActorLocation();
 		FVector DirectionToTurn = UKismetMathLibrary::InverseTransformDirection(GetActorTransform(), Direction).GetSafeNormal();
 
 		// DirectionToTurn.Y = Roll. We want to aim for 0.
@@ -104,5 +128,10 @@ void ASpaceshipPawn::MoveTowardsPoint(FVector Point)
 void ASpaceshipPawn::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent)
 {
 	Super::SetupPlayerInputComponent(PlayerInputComponent);
+}
+
+void ASpaceshipPawn::SetAIControlsPawn(bool AIControlsPawn)
+{
+	bAIControlsPawn = AIControlsPawn;
 }
 

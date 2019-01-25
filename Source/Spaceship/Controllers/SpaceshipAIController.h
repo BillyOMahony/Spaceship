@@ -17,11 +17,6 @@ class SPACESHIP_API ASpaceshipAIController : public AAIController
 public:
 	virtual void Tick(float DeltaTime) override;
 
-	/*
-	 *	Moves the pawn towards a point in space
-	 */
-	void MoveTowardsPoint(FVector Point);
-
 protected:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;

@@ -15,6 +15,18 @@ public:
 	// Sets default values for this pawn's properties
 	ASpaceshipPawn();
 
+	// Called every frame
+	virtual void Tick(float DeltaTime) override;
+
+	// Called to bind functionality to input
+	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
+
+	/*
+	 *	Sets whether the AI controls this pawn
+	 *	TODO Look for better solution to this dirt
+	 */
+	void SetAIControlsPawn(bool AIControlsPawn);
+
 	/*
 	 *	Applies damage to this spaceship
 	 */
@@ -42,7 +54,7 @@ public:
 	/*
 	 *	Moves this pawn towards the waypoint
 	 */
-	void MoveTowardsPoint(FVector Point);
+	void MoveTowardsWayPoint();
 
 	/*
 	 *	Aims towards TargetActor and fires at it if aiming at it
@@ -54,11 +66,15 @@ public:
 	 */
 	void FireAtTarget();
 
-	// Called every frame
-	virtual void Tick(float DeltaTime) override;
+	/*
+	 *	Sets the Waypoint for this Spaceship to follow
+	 */
+	void SetWayPoint(FVector WayPoint);
 
-	// Called to bind functionality to input
-	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
+	/*
+	 *	Sets whether this Spaceship should fly towards its current waypoint
+	 */
+	void SetMovingTowardsWayPoint(bool MovingTowardsWayPoint);
 
 protected:
 	// Called when the game starts or when spawned
@@ -78,6 +94,12 @@ protected:
 	float Health = 100.f;
 
 private:
+
+	bool bAIControlsPawn = false;
+
+	FVector WayPoint;
+
+	bool bMovingTowardsWayPoint = false;
 
 	UPROPERTY(EditAnywhere)
 	AActor * TargetActor;
