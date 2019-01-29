@@ -5,6 +5,8 @@
 #include "Movement/SpaceshipMovementComponent.h"
 #include "Weapon/SpaceshipWeaponsComponent.h"
 #include "AIController.h"
+#include "Engine/World.h"
+#include "SpaceshipGameModeBase.h"
 
 // Sets default values
 ASpaceshipPawn::ASpaceshipPawn()
@@ -17,6 +19,17 @@ ASpaceshipPawn::ASpaceshipPawn()
 void ASpaceshipPawn::BeginPlay()
 {
 	Super::BeginPlay();
+
+	// Register Pawn with GameMode RadarDetectablePawns
+	auto GameMode = Cast<ASpaceshipGameModeBase>(GetWorld()->GetAuthGameMode());
+	if(GameMode)
+	{
+		GameMode->RegisterWithRadarDetectablePawns(this);
+		GameMode->GetRadarDetectablePawns();
+	}else
+	{
+		UE_LOG(LogTemp, Error, TEXT("ASpaceshipPawn::BeginPlay"));
+	}
 
 	MovementComponent = FindComponentByClass<USpaceshipMovementComponent>();
 	WeaponsComponent = FindComponentByClass<USpaceshipWeaponsComponent>();

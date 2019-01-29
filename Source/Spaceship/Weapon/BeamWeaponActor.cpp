@@ -82,9 +82,5 @@ void ABeamWeaponActor::Fire()
 
 	FVector BeamVector = FVector(BeamLength, 15.f, 15.f);
 
-	UE_LOG(LogTemp, Error, TEXT("LMC: %s"), *(LaserMeshComponent->GetComponentScale().ToString()));
-
 	LaserMeshComponent->SetWorldScale3D(BeamVector);
-
-	UE_LOG(LogTemp, Error, TEXT("LMC: %s"), *(LaserMeshComponent->GetComponentScale().ToString()));
 }
