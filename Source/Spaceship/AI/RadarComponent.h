@@ -19,8 +19,17 @@ public:
 	// Called every frame
 	virtual void TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction) override;
 
+	/*
+	 *	@return the DetectedPawns array
+	 */
 	UFUNCTION(BlueprintCallable)
-	TArray<APawn*> GetDetectedPawns();
+	TArray<APawn*> GetDetectedPawns() const;
+
+	/*
+	 * @return the closest pawn in DetectedPawns to the owner actor
+	 */
+	UFUNCTION(BlueprintCallable)
+	APawn* GetClosestPawn();
 
 protected:
 	// Called when the game starts
@@ -38,7 +47,7 @@ private:
 	 *	@param Pawn - The Pawn to check the distance to
 	 *	@return whether the pawn is within range
 	 */
-	bool IsPawnWithinRange(APawn * Pawn);
+	bool IsPawnWithinRange(APawn * Pawn) const;
 
 	/*
 	 *	Checks if the pawn can be seen by the radar
@@ -46,7 +55,7 @@ private:
 	 *	@param Pawn - The Pawn to check
 	 *	@return whether the pawn is visible or not
 	 */
-	bool IsPawnRadarVisible(APawn * Pawn);
+	bool IsPawnRadarVisible(APawn * Pawn) const;
 
 	UPROPERTY(EditAnywhere, Category = "Radar")
 	bool bRadarEnabled = true;
@@ -58,4 +67,6 @@ private:
 	float RadarBurstRate = 1.f;
 
 	TArray<APawn*> DetectedPawns;
+
+
 };

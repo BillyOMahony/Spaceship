@@ -20,6 +20,38 @@ URadarComponent::URadarComponent()
 }
 
 
+APawn * URadarComponent::GetClosestPawn()
+{
+	if(DetectedPawns.Num() > 0)
+	{
+		int32 ClosestIndex = 0;
+
+		FVector RadarLoc = GetOwner()->GetActorLocation();
+		FVector PawnLoc = DetectedPawns[0]->GetActorLocation();
+
+		FVector OutDir;
+		float OutLen;
+
+		(RadarLoc - PawnLoc).ToDirectionAndLength(OutDir, OutLen);
+		float ClosestDst = OutLen;
+
+		for(int32 i = 1; i < DetectedPawns.Num(); i++)
+		{
+			PawnLoc = DetectedPawns[i]->GetActorLocation();
+			(RadarLoc - PawnLoc).ToDirectionAndLength(OutDir, OutLen);
+			if(OutLen < ClosestDst)
+			{
+				ClosestDst = OutLen;
+				ClosestIndex = i;
+			}
+		}
+
+		return DetectedPawns[ClosestIndex];
+	}
+
+	return nullptr;
+}
+
 // Called when the game starts
 void URadarComponent::BeginPlay()
 {
@@ -44,7 +76,7 @@ void URadarComponent::TickComponent(float DeltaTime, ELevelTick TickType, FActor
 	}
 }
 
-TArray<APawn*> URadarComponent::GetDetectedPawns()
+TArray<APawn*> URadarComponent::GetDetectedPawns() const
 {
 	return DetectedPawns;
 }
@@ -74,7 +106,7 @@ void URadarComponent::RadarBurst()
 	}
 }
 
-bool URadarComponent::IsPawnWithinRange(APawn * Pawn)
+bool URadarComponent::IsPawnWithinRange(APawn * Pawn) const
 {
 	FVector RadarLoc = GetOwner()->GetActorLocation();
 	FVector PawnLoc = Pawn->GetActorLocation();
@@ -87,7 +119,7 @@ bool URadarComponent::IsPawnWithinRange(APawn * Pawn)
 	return OutLen < RadarRange;
 }
 
-bool URadarComponent::IsPawnRadarVisible(APawn * Pawn)
+bool URadarComponent::IsPawnRadarVisible(APawn * Pawn) const
 {
 	FHitResult OutHit;
 	FVector StartLoc = GetOwner()->GetActorLocation();
