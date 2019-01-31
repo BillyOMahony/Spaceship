@@ -3,9 +3,11 @@
 #include "RadarComponent.h"
 #include "Components/SphereComponent.h"
 #include "SpaceshipGameModeBase.h"
+#include "BehaviorTree/BlackboardComponent.h"
 
 #include "GameFramework/Pawn.h"
 #include "Controllers/SpaceshipAIController.h"
+
 
 // Sets default values for this component's properties
 URadarComponent::URadarComponent()
@@ -28,8 +30,6 @@ void URadarComponent::BeginPlay()
 		bRadarEnabled = false;
 	}
 
-	// ...
-	
 }
 
 // Called every frame
@@ -39,9 +39,14 @@ void URadarComponent::TickComponent(float DeltaTime, ELevelTick TickType, FActor
 
 	// ...
 
-	if(bRadarEnabled)RadarBurst();
+	if (bRadarEnabled) {
+		RadarBurst();
+	}
+}
 
-
+TArray<APawn*> URadarComponent::GetDetectedPawns()
+{
+	return DetectedPawns;
 }
 
 void URadarComponent::RadarBurst()
@@ -52,8 +57,6 @@ void URadarComponent::RadarBurst()
 	// Get Singleton List (GameMode)
 	auto GameMode = Cast<ASpaceshipGameModeBase>(GetWorld()->GetAuthGameMode());
 	TArray<APawn*> DetectablePawns = GameMode->GetRadarDetectablePawns();
-
-	UE_LOG(LogTemp, Error, TEXT("PAWN: %s"), *(GetOwner()->GetName()));
 
 	for(int32 i = 0; i < DetectablePawns.Num(); i++)
 	{
@@ -66,14 +69,8 @@ void URadarComponent::RadarBurst()
 			if (IsPawnWithinRange(DetectablePawns[i]) && IsPawnRadarVisible(DetectablePawns[i]))
 			{
 				DetectedPawns.Add(DetectablePawns[i]);
-				UE_LOG(LogTemp, Warning, TEXT("%s"), *(DetectablePawns[i]->GetName()));
 			}
 		}
-	}
-
-	for(int32 i = 0; i < DetectedPawns.Num(); i++)
-	{
-		UE_LOG(LogTemp, Error, TEXT("%s"), *(DetectedPawns[i]->GetName()));
 	}
 }
 
@@ -117,4 +114,3 @@ bool URadarComponent::IsPawnRadarVisible(APawn * Pawn)
 
 	return false;
 }
-

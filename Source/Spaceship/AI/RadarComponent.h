@@ -19,6 +19,9 @@ public:
 	// Called every frame
 	virtual void TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction) override;
 
+	UFUNCTION(BlueprintCallable)
+	TArray<APawn*> GetDetectedPawns();
+
 protected:
 	// Called when the game starts
 	virtual void BeginPlay() override;
@@ -55,6 +58,4 @@ private:
 	float RadarBurstRate = 1.f;
 
 	TArray<APawn*> DetectedPawns;
-
-
 };
