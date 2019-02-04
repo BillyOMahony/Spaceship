@@ -113,11 +113,54 @@ void ASpaceshipPawn::HandleAIMovement()
 	{
 		MoveTowardsWayPoint();
 	}
+	else if(TargetActor)
+	{
+		MoveTowardsTargetActor();
+	}
 	else
 	{
 		// TODO Movement Component should have better system for interacting with AI
 		MovementComponent->SetThrottleDownPressed(true);
 		MovementComponent->SetThrottleUpPressed(false);
+	}
+}
+
+void ASpaceshipPawn::MoveTowardsTargetActor()
+{
+	if(MovementComponent && TargetActor)
+	{
+		// Get relative vector of TargetActor compared to spaceship
+		FVector Direction = TargetActor->GetActorLocation() - GetActorLocation();
+		FVector DirectionToTurn = UKismetMathLibrary::InverseTransformDirection(GetActorTransform(), Direction).GetSafeNormal();
+
+		// Pitch and Roll
+		MovementComponent->Roll(DeltaTime, DirectionToTurn.Y);
+
+		MovementComponent->Pitch(DeltaTime, DirectionToTurn.Z);
+
+		// Accelerate or Decelerate ?
+		float Throttle = MovementComponent->GetMainThrottle();
+
+		FVector OutDir;
+		float OutLen;
+
+		Direction.ToDirectionAndLength(OutDir, OutLen);
+
+		// TODO Remove Magic Numbers
+		float IdealThrottle = (OutLen - 10000) / (30000 - 10000);
+		float ClampedIdealThrottle = FMath::Clamp(IdealThrottle, 0.f, 1.f);
+
+		// Set Throttle
+		if(Throttle > ClampedIdealThrottle)
+		{
+			MovementComponent->SetThrottleDownPressed(true);
+			MovementComponent->SetThrottleUpPressed(false);
+		}
+		else
+		{
+			MovementComponent->SetThrottleDownPressed(false);
+			MovementComponent->SetThrottleUpPressed(true);
+		}
 	}
 }
 
@@ -143,6 +186,11 @@ void ASpaceshipPawn::SetWayPoint(FVector WayPoint)
 void ASpaceshipPawn::SetMovingTowardsWayPoint(bool MovingTowardsWayPoint)
 {
 	bMovingTowardsWayPoint = MovingTowardsWayPoint;
+}
+
+void ASpaceshipPawn::SetTargetActor(AActor* Target)
+{
+	TargetActor = Target;
 }
 
 void ASpaceshipPawn::ToggleFirstPerson()

@@ -51,6 +51,12 @@ public:
 	void MoveTowardsWayPoint();
 
 	/*
+	 *	Moves this pawn towards the TargetActor.
+	 *	This pawn will slow down the closer it is to the target actor
+	 */
+	void MoveTowardsTargetActor();
+
+	/*
 	 *	Aims towards TargetActor and fires at it if aiming at it
 	 */
 	void AimTowardsTarget();
@@ -69,6 +75,11 @@ public:
 	 *	Sets whether this Spaceship should fly towards its current waypoint
 	 */
 	void SetMovingTowardsWayPoint(bool MovingTowardsWayPoint);
+
+	/*
+	 *	@param Target - the Target Actor to set
+	 */
+	void SetTargetActor(AActor * Target);
 
 protected:
 	// Called when the game starts or when spawned
@@ -100,7 +111,6 @@ protected:
 
 private:
 
-	UPROPERTY(EditAnywhere)
 	AActor * TargetActor;
 
 	bool bAIControlsPawn = false;

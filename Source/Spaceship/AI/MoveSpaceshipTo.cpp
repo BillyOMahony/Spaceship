@@ -7,8 +7,6 @@
 
 EBTNodeResult::Type UMoveSpaceshipTo::ExecuteTask(UBehaviorTreeComponent& OwnerComp, uint8* NodeMemory)
 {
-	bNotifyTick = true;
-
 	// Get the Pawn and convert to Spaceship
 	ControlledSpaceship = Cast<ASpaceshipPawn>(OwnerComp.GetAIOwner()->GetPawn());
 

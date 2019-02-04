@@ -16,9 +16,7 @@ URadarComponent::URadarComponent()
 	// off to improve performance if you don't need them.
 	PrimaryComponentTick.bCanEverTick = true;
 
-	
 }
-
 
 APawn * URadarComponent::GetClosestPawn()
 {
@@ -126,7 +124,7 @@ bool URadarComponent::IsPawnRadarVisible(APawn * Pawn) const
 	FVector EndLoc = Pawn->GetActorLocation();
 	
 	const FName TraceTag("MyTraceTag");
-	GetWorld()->DebugDrawTraceTag = TraceTag;
+	//GetWorld()->DebugDrawTraceTag = TraceTag;
 
 	FCollisionQueryParams QueryParams;
 	QueryParams.TraceTag = TraceTag;
