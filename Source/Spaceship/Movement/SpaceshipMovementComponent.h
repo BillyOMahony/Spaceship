@@ -149,7 +149,13 @@ private:
 	float MainThrottleChangeMultiplier = 0.25;
 
 	UPROPERTY(EditAnywhere)
-	float DegPerSecond = 20;
+	float RollPerSec = 75;
+
+	UPROPERTY(EditAnywhere)
+	float PitchPerSec = 45;
+
+	UPROPERTY(EditAnywhere)
+	float YawPerSec = 20;
 
 	float MainThrottle = 0;
 	
