@@ -13,14 +13,12 @@ UHardpointComponent::UHardpointComponent()
 	
 }
 
-
 // Called when the game starts
 void UHardpointComponent::BeginPlay()
 {
 	Super::BeginPlay();
 	
 }
-
 
 // Called every frame
 void UHardpointComponent::TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction)
@@ -59,6 +57,14 @@ void UHardpointComponent::FireIfOnTarget(AActor * Target)
 	if (SpawnedWeapon)
 	{
 		SpawnedWeapon->FireIfOnTarget(Target);
+	}
+}
+
+void UHardpointComponent::DestroyWeapon()
+{
+	if(SpawnedWeapon)
+	{
+		SpawnedWeapon->Destroy();
 	}
 }
 

@@ -25,10 +25,9 @@ void ASpaceshipPawn::BeginPlay()
 	if(GameMode)
 	{
 		GameMode->RegisterWithRadarDetectablePawns(this);
-		GameMode->GetRadarDetectablePawns();
 	}else
 	{
-		UE_LOG(LogTemp, Error, TEXT("ASpaceshipPawn::BeginPlay"));
+		UE_LOG(LogTemp, Error, TEXT("ASpaceshipPawn::BeginPlay - Cannot find GameMode"));
 	}
 
 	MovementComponent = FindComponentByClass<USpaceshipMovementComponent>();
@@ -55,6 +54,10 @@ void ASpaceshipPawn::Tick(float DeltaTime)
 
 	if (bAIControlsPawn) {
 		HandleAIMovement();
+		if(!TargetActor)
+		{
+			WeaponsComponent->EndFireWeapons();
+		}
 	}
 }
 
@@ -73,8 +76,20 @@ float ASpaceshipPawn::TakeDamage(float DamageAmount, FDamageEvent const & Damage
 
 void ASpaceshipPawn::OnDeath()
 {
-	//TODO Implement
+	// Register Pawn with GameMode RadarDetectablePawns
+	auto GameMode = Cast<ASpaceshipGameModeBase>(GetWorld()->GetAuthGameMode());
+	if (GameMode)
+	{
+		GameMode->DeRegisterFromRadarDetectablePawns(this);
+	}
+	else
+	{
+		UE_LOG(LogTemp, Error, TEXT("ASpaceshipPawn::OnDeath - Cannot Find GameMode"));
+	}
 
+	WeaponsComponent->DestroyAllWeapons();
+
+	Destroy();
 }
 
 float ASpaceshipPawn::GetHealth()

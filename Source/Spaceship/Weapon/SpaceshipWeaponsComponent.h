@@ -26,27 +26,36 @@ public:
 	virtual void TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction) override;
 
 	/*
-	 * TODO
+	 *  Aims all weapons towards Location
+	 *  @param Location - the vector to aim towards
 	 */
 	void AimAt(FVector Location);
 
 	/*
-	 *	TODO
+	 *	Starts firing weapons
 	 */
 	UFUNCTION(BlueprintCallable)
 	void BeginFireWeapons();
 
 	/*
-	 *	TODO
+	 *	Stops firing weapons
 	 */
 	UFUNCTION(BlueprintCallable)
 	void EndFireWeapons();
 
 	/*
-	 * 
+	 *  Used by AI controllers
+	 *  Fires weapons if the weapon is aiming at the target
+	 *  Stops the AI firing when off target
+	 *  @param Target - the Actor which will be checked if weapons are aiming at
 	 */
 	UFUNCTION(BlueprintCallable)
 	void FireIfOnTarget(AActor * Target);
+
+	/*
+	 *	Should be called upon death of spaceship. Destroys all weapon actors of this spaceship.
+	 */
+	void DestroyAllWeapons();
 
 private:
 

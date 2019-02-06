@@ -29,7 +29,6 @@ void USpaceshipWeaponsComponent::BeginPlay()
 	
 }
 
-
 // Called every frame
 void USpaceshipWeaponsComponent::TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction)
 {
@@ -67,6 +66,14 @@ void USpaceshipWeaponsComponent::FireIfOnTarget(AActor * Target)
 	for (int32 i = 0; i < Hardpoints.Num(); i++)
 	{
 		Hardpoints[i]->FireIfOnTarget(Target);
+	}
+}
+
+void USpaceshipWeaponsComponent::DestroyAllWeapons()
+{
+	for(int i = 0; i < Hardpoints.Num(); i++)
+	{
+		Hardpoints[i]->DestroyWeapon();
 	}
 }
 

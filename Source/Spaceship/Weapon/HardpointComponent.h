@@ -49,6 +49,11 @@ public:
 	 */
 	void FireIfOnTarget(AActor * Target);
 
+	/*
+	 *  Destroys the weapon associated with this hardpoint
+	 */
+	void DestroyWeapon();
+
 private:
 
 	UPROPERTY(EditAnywhere, Category = "Setup")
