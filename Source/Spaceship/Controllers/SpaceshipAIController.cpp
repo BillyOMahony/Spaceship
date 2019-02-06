@@ -7,8 +7,6 @@
 void ASpaceshipAIController::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
-
-	//AimTowardAndFireAtTargetActor();
 }
 
 void ASpaceshipAIController::BeginPlay()

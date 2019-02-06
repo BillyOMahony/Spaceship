@@ -6,6 +6,13 @@
 #include "GameFramework/GameModeBase.h"
 #include "SpaceshipGameModeBase.generated.h"
 
+UENUM(BlueprintType)
+enum class EFactionEnum : uint8
+{
+	FE_Good	UMETA(DisplayName = "Good Guys"),
+	FE_Bad	UMETA(DisplayName = "Bad Guys")
+};
+
 /**
  * 
  */
@@ -18,7 +25,7 @@ public:
 	/*
 	 *	@param Pawn - the Pawn being added to RadarDetectablePawns
 	 */
-	void RegisterWithRadarDetectablePawns(APawn* Pawn);
+	void RegisterWithRadarDetectablePawns(APawn* Pawn, EFactionEnum Faction);
 
 	/*
 	 *	@param Pawn - the Pawn being removed from Radar DetectablePawns
@@ -28,9 +35,15 @@ public:
 	/*
 	 *  @return The RadarDetectablePawns array
 	 */
-	TArray<APawn *> GetRadarDetectablePawns();
+	TArray<APawn *> GetAllRadarDetectablePawns();
+
+	/*
+	 *  @return RadarDetectablePawns in opposing Factions
+	 */
+	TArray<APawn *> GetOpposingRadarDetectablePawns(EFactionEnum MyFaction);
 
 private:
-	TArray<APawn *> RadarDetectablePawns;
+	TMap<APawn *, EFactionEnum> RadarDetectablePawns;
+
 
 };

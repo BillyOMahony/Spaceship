@@ -4,7 +4,7 @@
 #include "Components/SphereComponent.h"
 #include "SpaceshipGameModeBase.h"
 #include "BehaviorTree/BlackboardComponent.h"
-
+#include "SpaceshipPawn.h"
 #include "GameFramework/Pawn.h"
 #include "Controllers/SpaceshipAIController.h"
 
@@ -81,12 +81,14 @@ TArray<APawn*> URadarComponent::GetDetectedPawns() const
 
 void URadarComponent::RadarBurst()
 {
+	EFactionEnum MyFaction = Cast<ASpaceshipPawn>(GetOwner())->GetFaction();
+
 	// Clear DetectedPawns
 	DetectedPawns.Empty();
 
 	// Get Singleton List (GameMode)
 	auto GameMode = Cast<ASpaceshipGameModeBase>(GetWorld()->GetAuthGameMode());
-	TArray<APawn*> DetectablePawns = GameMode->GetRadarDetectablePawns();
+	TArray<APawn*> DetectablePawns = GameMode->GetOpposingRadarDetectablePawns(MyFaction);
 
 	for(int32 i = 0; i < DetectablePawns.Num(); i++)
 	{

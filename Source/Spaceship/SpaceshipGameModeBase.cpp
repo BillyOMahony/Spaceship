@@ -2,9 +2,9 @@
 
 #include "SpaceshipGameModeBase.h"
 
-void ASpaceshipGameModeBase::RegisterWithRadarDetectablePawns(APawn* Pawn)
+void ASpaceshipGameModeBase::RegisterWithRadarDetectablePawns(APawn* Pawn, EFactionEnum Faction)
 {
-	RadarDetectablePawns.Add(Pawn);
+	RadarDetectablePawns.Add(Pawn, Faction);
 }
 
 void ASpaceshipGameModeBase::DeRegisterFromRadarDetectablePawns(APawn* Pawn)
@@ -12,15 +12,28 @@ void ASpaceshipGameModeBase::DeRegisterFromRadarDetectablePawns(APawn* Pawn)
 	RadarDetectablePawns.Remove(Pawn);
 }
 
-TArray<APawn*> ASpaceshipGameModeBase::GetRadarDetectablePawns()
+TArray<APawn*> ASpaceshipGameModeBase::GetAllRadarDetectablePawns()
 {
+	TArray<APawn *> AllRadarDetectablePawns;
 
-	for(int32 i = 0; i < RadarDetectablePawns.Num(); i++)
+	for (const TPair<APawn *, EFactionEnum>& pair : RadarDetectablePawns)
 	{
-		FString Name = RadarDetectablePawns[i]->GetName();
+		AllRadarDetectablePawns.Add(pair.Key);
 	}
 
-	return RadarDetectablePawns;
+	return AllRadarDetectablePawns;
 }
 
+TArray<APawn*> ASpaceshipGameModeBase::GetOpposingRadarDetectablePawns(EFactionEnum MyFaction)
+{
+	TArray<APawn *> OpposingRadarDetectablePawns;
 
+	for (const TPair<APawn *, EFactionEnum>& pair : RadarDetectablePawns)
+	{
+		if (pair.Value != MyFaction) {
+			OpposingRadarDetectablePawns.Add(pair.Key);
+		}
+	}
+
+	return OpposingRadarDetectablePawns;
+}

@@ -6,6 +6,8 @@
 #include "GameFramework/Pawn.h"
 #include "SpaceshipPawn.generated.h"
 
+enum class EFactionEnum : uint8;
+
 UCLASS()
 class SPACESHIP_API ASpaceshipPawn : public APawn
 {
@@ -79,7 +81,13 @@ public:
 	/*
 	 *	@param Target - the Target Actor to set
 	 */
+	UFUNCTION(BlueprintCallable)
 	void SetTargetActor(AActor * Target);
+
+	/*
+	 *	@return this spaceships faction
+	 */
+	EFactionEnum GetFaction();
 
 protected:
 	// Called when the game starts or when spawned
@@ -111,6 +119,10 @@ protected:
 
 private:
 
+	UPROPERTY(EditAnywhere, Category = "Faction")
+	EFactionEnum Faction;
+
+	UPROPERTY(EditAnywhere)
 	AActor * TargetActor;
 
 	bool bAIControlsPawn = false;

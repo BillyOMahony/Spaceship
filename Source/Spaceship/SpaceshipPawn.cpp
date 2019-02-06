@@ -24,7 +24,7 @@ void ASpaceshipPawn::BeginPlay()
 	auto GameMode = Cast<ASpaceshipGameModeBase>(GetWorld()->GetAuthGameMode());
 	if(GameMode)
 	{
-		GameMode->RegisterWithRadarDetectablePawns(this);
+		GameMode->RegisterWithRadarDetectablePawns(this, Faction);
 	}else
 	{
 		UE_LOG(LogTemp, Error, TEXT("ASpaceshipPawn::BeginPlay - Cannot find GameMode"));
@@ -153,6 +153,9 @@ void ASpaceshipPawn::MoveTowardsTargetActor()
 
 		MovementComponent->Pitch(DeltaTime, DirectionToTurn.Z);
 
+		MovementComponent->SetThrottleUpPressed(true);
+
+		/*
 		// Accelerate or Decelerate ?
 		float Throttle = MovementComponent->GetMainThrottle();
 
@@ -161,6 +164,7 @@ void ASpaceshipPawn::MoveTowardsTargetActor()
 
 		Direction.ToDirectionAndLength(OutDir, OutLen);
 
+		
 		// TODO Remove Magic Numbers
 		float IdealThrottle = (OutLen - 10000) / (30000 - 10000);
 		float ClampedIdealThrottle = FMath::Clamp(IdealThrottle, 0.f, 1.f);
@@ -176,6 +180,7 @@ void ASpaceshipPawn::MoveTowardsTargetActor()
 			MovementComponent->SetThrottleDownPressed(false);
 			MovementComponent->SetThrottleUpPressed(true);
 		}
+		*/
 	}
 }
 
@@ -225,3 +230,7 @@ void ASpaceshipPawn::SetAIControlsPawn(bool AIControlsPawn)
 	bAIControlsPawn = AIControlsPawn;
 }
 
+EFactionEnum ASpaceshipPawn::GetFaction()
+{
+	return Faction;
+}
