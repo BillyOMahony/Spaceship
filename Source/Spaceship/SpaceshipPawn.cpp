@@ -56,7 +56,7 @@ void ASpaceshipPawn::Tick(float DeltaTime)
 		HandleAIMovement();
 		if(!TargetActor)
 		{
-			WeaponsComponent->EndFireWeapons();
+			DoNotFire();
 		}
 	}
 }
@@ -211,6 +211,12 @@ void ASpaceshipPawn::SetMovingTowardsWayPoint(bool MovingTowardsWayPoint)
 void ASpaceshipPawn::SetTargetActor(AActor* Target)
 {
 	TargetActor = Target;
+}
+
+void ASpaceshipPawn::DoNotFire()
+{
+	if (!ensure(WeaponsComponent)) return;
+	WeaponsComponent->EndFireWeapons();
 }
 
 void ASpaceshipPawn::ToggleFirstPerson()

@@ -85,6 +85,12 @@ public:
 	void SetTargetActor(AActor * Target);
 
 	/*
+	 *	Tells the weapons component not to fire at targets
+	 */
+	UFUNCTION(BlueprintCallable)
+	void DoNotFire();
+
+	/*
 	 *	@return this spaceships faction
 	 */
 	EFactionEnum GetFaction();
