@@ -24,6 +24,9 @@ protected:
 	UPROPERTY(EditAnywhere, Category = "Blackboard")
 	struct FBlackboardKeySelector WaypointKey;
 
+	UPROPERTY(EditAnywhere, Category = "Blackboard")
+	struct FBlackboardKeySelector NotifyBoolKey;
+
 	UPROPERTY(EditAnywhere, Category = "Setup")
 	float AcceptanceRadius = 500.f;
 

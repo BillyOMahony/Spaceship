@@ -22,6 +22,8 @@ EBTNodeResult::Type UMoveSpaceshipTo::ExecuteTask(UBehaviorTreeComponent& OwnerC
 
 	Waypoint = BlackboardComponent->GetValueAsVector(WaypointKey.SelectedKeyName);
 
+	ControlledSpaceship->SetWayPoint(Waypoint);
+
 	bNotifyTick = true;
 
 	return EBTNodeResult::InProgress;
@@ -48,5 +50,10 @@ void UMoveSpaceshipTo::TickTask(UBehaviorTreeComponent & OwnerComp, uint8 * Node
 void UMoveSpaceshipTo::OnTaskFinished(UBehaviorTreeComponent & OwnerComp, uint8 * NodeMemory, EBTNodeResult::Type TaskResult)
 {
 	ControlledSpaceship->SetMovingTowardsWayPoint(false);
+
+	UBlackboardComponent * BlackboardComponent = OwnerComp.GetBlackboardComponent();
+
+	// Notify that we no longer have a waypoint
+	BlackboardComponent->SetValueAsBool(NotifyBoolKey.SelectedKeyName, false);
 }
 

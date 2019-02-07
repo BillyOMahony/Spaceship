@@ -13,6 +13,13 @@ enum class EFactionEnum : uint8
 	FE_Bad	UMETA(DisplayName = "Bad Guys")
 };
 
+UENUM(BlueprintType)
+enum class EOperationEnum : uint8
+{
+	OE_GreaterThan	UMETA(DisplayName = "Greater Than"),
+	OE_LessThan		UMETA(DisplayName = "Less Than")
+};
+
 /**
  * 
  */
@@ -25,11 +32,13 @@ public:
 	/*
 	 *	@param Pawn - the Pawn being added to RadarDetectablePawns
 	 */
+	UFUNCTION(BlueprintCallable)
 	void RegisterWithRadarDetectablePawns(APawn* Pawn, EFactionEnum Faction);
 
 	/*
 	 *	@param Pawn - the Pawn being removed from Radar DetectablePawns
 	 */
+	UFUNCTION(BlueprintCallable)
 	void DeRegisterFromRadarDetectablePawns(APawn * Pawn);
 
 	/*

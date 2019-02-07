@@ -121,6 +121,7 @@ protected:
 	UPROPERTY(EditAnywhere, BlueprintReadOnly)
 	bool bVirtualReality = true;
 
+	UPROPERTY(EditAnywhere)
 	float Health = 100.f;
 
 private:
