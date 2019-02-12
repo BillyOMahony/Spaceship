@@ -110,7 +110,7 @@ void ASpaceshipPawn::MoveTowardsWayPoint()
 
 		MovementComponent->Pitch(DeltaTime, DirectionToTurn.Z);
 
-		MovementComponent->SetThrottleUpPressed(true);
+		MovementComponent->ThrottleUp(DeltaTime, 1);
 
 		// TODO Consider Adding in Vertical/ Horizontal movement
 
@@ -134,9 +134,7 @@ void ASpaceshipPawn::HandleAIMovement()
 	}
 	else
 	{
-		// TODO Movement Component should have better system for interacting with AI
-		MovementComponent->SetThrottleDownPressed(true);
-		MovementComponent->SetThrottleUpPressed(false);
+		MovementComponent->ThrottleDown(DeltaTime, 1);
 	}
 }
 
@@ -153,7 +151,7 @@ void ASpaceshipPawn::MoveTowardsTargetActor()
 
 		MovementComponent->Pitch(DeltaTime, DirectionToTurn.Z);
 
-		MovementComponent->SetThrottleUpPressed(true);
+		MovementComponent->ThrottleUp(DeltaTime, 1);
 
 		/*
 		// Accelerate or Decelerate ?

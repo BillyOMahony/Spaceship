@@ -34,16 +34,18 @@ public:
 	void SetSpaceshipHull(UStaticMeshComponent * SpaceshipHull);
 
 	/*
-	 *  @param ThrottleUpPressed - Whether or not the ThrottleUp input key is pressed 
+	 *	Accelerates the Spaceship if possible
+	 *	@param DeltaTime - Time since last frame
 	 */
 	UFUNCTION(BlueprintCallable)
-	void SetThrottleUpPressed(bool ThrottleUpPressed);
+	void ThrottleUp(float DeltaTime, float Multiplier);
 
 	/*
-	 *  @param ThrottleUpPressed - Whether or not the ThrottleDown input key is pressed 
+	 *	Decelerated the spaceship if possible
+	 *	@param DeltaTime - Time since last frame
 	 */
 	UFUNCTION(BlueprintCallable)
-	void SetThrottleDownPressed(bool ThrottleDownPressed);
+	void ThrottleDown(float DeltaTime, float Multiplier);
 
 	/*
 	*  @param ThrustUpPressed - Whether or not the ThrustUp input key is pressed
@@ -138,12 +140,6 @@ private:
 	 *	@param ThrottleToAdd - the throttle to add to MainThrottle
 	 */
 	void AddMainThrottle(float ThrottleToAdd);
-
-	/*
-	 *	Increases or decreases Throttle if the relevant input key is pressed
-	 *	@param DeltaTime - Time since last frame
-	 */
-	void HandleThrottle(float DeltaTime);
 
 	UPROPERTY(EditAnywhere)
 	float MainThrottleChangeMultiplier = 0.25;

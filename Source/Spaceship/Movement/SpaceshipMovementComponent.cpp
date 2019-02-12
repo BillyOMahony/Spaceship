@@ -31,8 +31,6 @@ void USpaceshipMovementComponent::TickComponent(float DeltaTime, ELevelTick Tick
 {
 	Super::TickComponent(DeltaTime, TickType, ThisTickFunction);
 
-	HandleThrottle(DeltaTime);
-
 	HandleThrustInputs(DeltaTime);
 
 	MoveForward(DeltaTime);
@@ -73,18 +71,6 @@ void USpaceshipMovementComponent::HandleThrustInputs(float DeltaTime)
 		{
 			SecondaryThrusters[i]->ActivateThruster(EThrustDirection::Right, DeltaTime, false);
 		}
-	}
-}
-
-void USpaceshipMovementComponent::HandleThrottle(float DeltaTime)
-{
-	if (ThrottleUpPressed) {
-		float MainThrottleToAdd = DeltaTime * MainThrottleChangeMultiplier;
-		AddMainThrottle(MainThrottleToAdd);
-	}
-	else if (ThrottleDownPressed) {
-		float MainThrottleToAdd = DeltaTime * MainThrottleChangeMultiplier * -1;
-		AddMainThrottle(MainThrottleToAdd);
 	}
 }
 
@@ -269,14 +255,16 @@ void USpaceshipMovementComponent::Stabilize(float DeltaTime)
 	}
 }
 
-void USpaceshipMovementComponent::SetThrottleUpPressed(bool ThrottleUpPressed)
+void USpaceshipMovementComponent::ThrottleUp(float DeltaTime, float Multiplier)
 {
-	this->ThrottleUpPressed = ThrottleUpPressed;
+	float MainThrottleToAdd = DeltaTime * MainThrottleChangeMultiplier * Multiplier;
+	AddMainThrottle(MainThrottleToAdd);
 }
 
-void USpaceshipMovementComponent::SetThrottleDownPressed(bool ThrottleDownPressed)
+void USpaceshipMovementComponent::ThrottleDown(float DeltaTime, float Multiplier)
 {
-	this->ThrottleDownPressed = ThrottleDownPressed;
+	float MainThrottleToAdd = DeltaTime * MainThrottleChangeMultiplier * -Multiplier;
+	AddMainThrottle(MainThrottleToAdd);
 }
 
 void USpaceshipMovementComponent::SetThrustUpPressed(bool ThrustUpPressed)
