@@ -48,6 +48,9 @@ private:
 	UPROPERTY(EditAnywhere)
 	float RateOfFire = 20.f;
 
+	UPROPERTY(EditAnywhere)
+	float AngleOffset = 0.f;
+
 	bool bCanFireProjectile = true;
 
 	FTimerHandle RateOfFireTimerHandle;

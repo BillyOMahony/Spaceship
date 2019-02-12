@@ -30,8 +30,14 @@ void AProjectileWeaponActor::Fire()
 {
 	if(bCanFireProjectile && Projectile)
 	{
+		float PitchOffset = FMath::RandRange(-AngleOffset, AngleOffset);
+		float YawOffset = FMath::RandRange(-AngleOffset, AngleOffset);
+
+		FRotator AngleOffset = FRotator(PitchOffset, 0, YawOffset);
+
 		FVector SpawnLocation = MunitionSpawnPoint->GetComponentLocation();
 		FRotator SpawnRotation = MunitionSpawnPoint->GetComponentRotation();
+		SpawnRotation += AngleOffset;
 		FActorSpawnParameters SpawnParams;
 		auto SpawnedProjectile = GetWorld()->SpawnActor<AProjectile>(Projectile, SpawnLocation, SpawnRotation);
 		SpawnedProjectile->LaunchProjectile();
