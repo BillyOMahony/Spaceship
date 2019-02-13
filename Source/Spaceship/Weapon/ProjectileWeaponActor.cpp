@@ -4,6 +4,7 @@
 #include "Engine/World.h"
 #include "TimerManager.h"
 #include "Projectile.h"
+#include "Particles/ParticleSystemComponent.h"
 
 void AProjectileWeaponActor::FireIfOnTarget(AActor * Target)
 {
@@ -30,6 +31,11 @@ void AProjectileWeaponActor::Fire()
 {
 	if(bCanFireProjectile && Projectile)
 	{
+		if(MuzzleFlash)
+		{
+			MuzzleFlash->Activate();
+		}
+
 		float PitchOffset = FMath::RandRange(-AngleOffset, AngleOffset);
 		float YawOffset = FMath::RandRange(-AngleOffset, AngleOffset);
 

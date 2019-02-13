@@ -5,7 +5,7 @@
 #include "Components/SceneComponent.h"
 #include "Engine/World.h"
 #include "Projectile.h"
-
+#include "Particles/ParticleSystemComponent.h"
 
 // Sets default values
 AWeaponActor::AWeaponActor()
@@ -22,6 +22,11 @@ AWeaponActor::AWeaponActor()
 	MunitionSpawnPoint = CreateDefaultSubobject<USceneComponent>(FName("MunitionSpawnPoint"));
 	MunitionSpawnPoint->AttachToComponent(Barrel, FAttachmentTransformRules::KeepRelativeTransform);
 	MunitionSpawnPoint->SetupAttachment(Barrel);
+
+	MuzzleFlash = CreateDefaultSubobject<UParticleSystemComponent>(FName("MuzzleFlash"));
+	MuzzleFlash->AttachToComponent(MunitionSpawnPoint, FAttachmentTransformRules::KeepRelativeTransform);
+	MuzzleFlash->SetupAttachment(MunitionSpawnPoint);
+	MuzzleFlash->bAutoActivate = false;
 }
 
 void AWeaponActor::AimAt(FVector Location)

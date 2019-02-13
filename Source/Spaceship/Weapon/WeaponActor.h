@@ -19,6 +19,9 @@ protected:
 	UPROPERTY(VisibleAnywhere, meta = (AllowPrivateAccess = "true"))
 	USceneComponent * MunitionSpawnPoint;
 
+	UPROPERTY(VisibleAnywhere)
+	class UParticleSystemComponent * MuzzleFlash = nullptr;
+
 	UPROPERTY(EditAnywhere)
 	float TraceRange = 50000.f;
 
