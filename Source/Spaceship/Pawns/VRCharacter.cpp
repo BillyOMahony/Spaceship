@@ -6,6 +6,7 @@
 #include "Engine/World.h"
 #include "Camera/PlayerCameraManager.h"
 #include "TimerManager.h"
+#include "SpaceshipGameModeBase.h"
 
 
 // Sets default values
@@ -26,6 +27,16 @@ void AVRCharacter::BeginPlay()
 {
 	Super::BeginPlay();
 
+	// Register Pawn with GameMode RadarDetectablePawns
+	auto GameMode = Cast<ASpaceshipGameModeBase>(GetWorld()->GetAuthGameMode());
+	if (GameMode)
+	{
+		GameMode->RegisterWithRadarDetectablePawns(this, Faction);
+	}
+	else
+	{
+		UE_LOG(LogTemp, Error, TEXT("ASpaceshipPawn::BeginPlay - Cannot find GameMode"));
+	}
 	// TODO Set Faction in GameMode
 }
 

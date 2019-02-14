@@ -9,9 +9,19 @@
 /**
  * 
  */
-UCLASS()
+UCLASS(ClassGroup = (Custom), meta = (BlueprintSpawnableComponent))
 class SPACESHIP_API UVRMotionControllerComponent : public UMotionControllerComponent
 {
 	GENERATED_BODY()
-	
+
+public:
+	UVRMotionControllerComponent();
+
+protected:
+	// Called when the game starts or when spawned
+	virtual void BeginPlay() override;
+
+private:
+	UPROPERTY(VisibleAnywhere)
+	UStaticMeshComponent * HandMesh;
 };
