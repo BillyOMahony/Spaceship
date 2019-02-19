@@ -4,17 +4,16 @@
 
 #include "CoreMinimal.h"
 #include "GameFramework/Actor.h"
-#include "Pickupable/VRPickupableActor.h"
-#include "VRGun.generated.h"
+#include "VRPickupableActor.generated.h"
 
 UCLASS()
-class SPACESHIP_API AVRGun : public AVRPickupableActor
+class SPACESHIP_API AVRPickupableActor : public AActor
 {
 	GENERATED_BODY()
 	
 public:	
 	// Sets default values for this actor's properties
-	AVRGun();
+	AVRPickupableActor();
 
 protected:
 	// Called when the game starts or when spawned
@@ -23,15 +22,5 @@ protected:
 public:	
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;
-
-	void Fire();
-
-	void PickUp(UActorComponent * Component);
-
-private:
-	USceneComponent * SceneRoot;
-
-	UPROPERTY(VisibleAnywhere, Category = "Setup")
-	UStaticMeshComponent * GunMesh;
 
 };
