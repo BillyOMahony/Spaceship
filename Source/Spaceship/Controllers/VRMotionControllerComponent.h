@@ -6,6 +6,39 @@
 #include "MotionControllerComponent.h"
 #include "VRMotionControllerComponent.generated.h"
 
+USTRUCT()
+struct FHeldActorInfo
+{
+	GENERATED_BODY()
+
+	UPROPERTY()
+	AActor * HeldActor;
+
+	UPROPERTY()
+	bool bWasSimulatingPhysics;
+
+	void SetHeldActor(AActor * NewHeldActor) {
+		HeldActor = NewHeldActor;
+	}
+
+	void SetWasSimulatingPhysics(bool WasSimulatingPhysics) {
+		bWasSimulatingPhysics = WasSimulatingPhysics;
+	}
+
+	AActor * GetHeldActor() {
+		return HeldActor;
+	}
+
+	bool GetWasSimulatingPhysics() {
+		return bWasSimulatingPhysics;
+	}
+
+	FHeldActorInfo() {
+		HeldActor = nullptr;
+		bWasSimulatingPhysics = false;
+	}
+};
+
 /**
  * 
  */
@@ -23,6 +56,8 @@ public:
 	UFUNCTION(BlueprintCallable)
 	void Drop();
 
+	UFUNCTION(BlueprintCallable)
+	void Fire();
 
 protected:
 	// Called when the game starts or when spawned
@@ -35,7 +70,7 @@ private:
 	UPROPERTY(VisibleAnywhere)
 	class USphereComponent * PickupSphereCollider;
 
-	AActor * HeldActor = nullptr;
-
 	class AVRCharacter * OwnerCharacter;
+
+	FHeldActorInfo HeldActorInfo;
 };

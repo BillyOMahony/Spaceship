@@ -29,9 +29,6 @@ public:
 	void PickUp(UActorComponent * Component);
 
 private:
-	USceneComponent * SceneRoot;
 
-	UPROPERTY(VisibleAnywhere, Category = "Setup")
-	UStaticMeshComponent * GunMesh;
 
 };

@@ -7,14 +7,6 @@ AVRGun::AVRGun()
 {
  	// Set this actor to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
 	PrimaryActorTick.bCanEverTick = true;
-
-	SceneRoot = CreateDefaultSubobject<USceneComponent>(FName("Scene Root"));
-	SetRootComponent(SceneRoot);
-
-	GunMesh = CreateDefaultSubobject<UStaticMeshComponent>(FName("Gun Mesh"));
-	GunMesh->AttachToComponent(SceneRoot, FAttachmentTransformRules::KeepRelativeTransform);
-	GunMesh->SetupAttachment(SceneRoot);
-
 }
 
 // Called when the game starts or when spawned
