@@ -29,6 +29,13 @@ public:
 	void PickUp(UActorComponent * Component);
 
 private:
+	UPROPERTY(VisibleAnywhere)
+	USceneComponent * ProjectileSpawnPoint;
 
+	/*
+	 *	The class of projectile which will be spawned
+	*/
+	UPROPERTY(EditAnywhere)
+	TSubclassOf<class AHomingGrenadeProjectile> Projectile;
 
 };

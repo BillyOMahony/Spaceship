@@ -27,6 +27,7 @@ public:
 	void OnCompHit(UPrimitiveComponent* HitComp, AActor* OtherActor, UPrimitiveComponent* OtherComp, FVector NormalImpulse, const FHitResult& Hit);
 
 	void LaunchProjectile();
+
 private:
 	UPROPERTY(VisibleAnywhere)
 	class UProjectileMovementComponent * ProjectileMovementComponent;

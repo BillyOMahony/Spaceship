@@ -36,10 +36,11 @@ void AProjectileWeaponActor::Fire()
 			MuzzleFlash->Activate();
 		}
 
+		// Angle offset to reduce accuracy
 		float PitchOffset = FMath::RandRange(-AngleOffset, AngleOffset);
 		float YawOffset = FMath::RandRange(-AngleOffset, AngleOffset);
 
-		FRotator AngleOffset = FRotator(PitchOffset, 0, YawOffset);
+		FRotator AngleOffset = FRotator(PitchOffset, YawOffset, 0);
 
 		FVector SpawnLocation = MunitionSpawnPoint->GetComponentLocation();
 		FRotator SpawnRotation = MunitionSpawnPoint->GetComponentRotation();
