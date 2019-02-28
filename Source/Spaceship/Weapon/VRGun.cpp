@@ -3,6 +3,8 @@
 #include "VRGun.h"
 #include "Engine/World.h"
 #include "Weapon/Projectiles/HomingGrenadeProjectile.h"
+#include "Weapon/Projectile.h"
+#include "Components/StaticMeshComponent.h"
 
 // Sets default values
 AVRGun::AVRGun()
@@ -11,9 +13,8 @@ AVRGun::AVRGun()
 	PrimaryActorTick.bCanEverTick = true;
 
 	ProjectileSpawnPoint = CreateDefaultSubobject<USceneComponent>(FName("Projectile Spawn Point"));
-	ProjectileSpawnPoint->AttachToComponent(RootComponent, FAttachmentTransformRules::KeepRelativeTransform);
-	ProjectileSpawnPoint->SetupAttachment(RootComponent);
-
+	ProjectileSpawnPoint->AttachToComponent(PickupableMesh, FAttachmentTransformRules::KeepRelativeTransform);
+	ProjectileSpawnPoint->SetupAttachment(PickupableMesh);
 }
 
 // Called when the game starts or when spawned
@@ -36,6 +37,9 @@ void AVRGun::Fire()
 		FVector SpawnLocation = ProjectileSpawnPoint->GetComponentLocation();
 		FRotator SpawnRotation = ProjectileSpawnPoint->GetComponentRotation();
 		FActorSpawnParameters SpawnParams;
+
+		UE_LOG(LogTemp, Error, TEXT("C++: Loc: %s, Rot: %s"), *(SpawnLocation.ToString()), *(SpawnRotation.ToString()));
+
 		auto SpawnedProjectile = GetWorld()->SpawnActor<AHomingGrenadeProjectile>(Projectile, SpawnLocation, SpawnRotation);
 		SpawnedProjectile->LaunchProjectile(nullptr, nullptr);
 	}

@@ -36,6 +36,7 @@ private:
 	 *	The class of projectile which will be spawned
 	*/
 	UPROPERTY(EditAnywhere)
+	//TSubclassOf<class AProjectile> Projectile;
 	TSubclassOf<class AHomingGrenadeProjectile> Projectile;
 
 };
