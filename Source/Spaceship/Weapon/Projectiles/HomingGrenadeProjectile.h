@@ -34,9 +34,6 @@ private:
 	class UProjectileMovementComponent * ProjectileMovementComponent;
 
 	UPROPERTY(VisibleAnywhere)
-	USceneComponent * SceneRoot;
-
-	UPROPERTY(VisibleAnywhere)
 	UStaticMeshComponent * Mesh = nullptr;
 
 	UPROPERTY(EditAnywhere, Category = "Damage")
