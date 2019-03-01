@@ -4,7 +4,6 @@
 
 #include "CoreMinimal.h"
 #include "GameFramework/Actor.h"
-#include "GameFramework/Character.h"
 #include "HomingGrenadeProjectile.generated.h"
 
 UCLASS()
@@ -27,19 +26,45 @@ public:
 	UFUNCTION()
 	void OnCompHit(UPrimitiveComponent* HitComp, AActor* OtherActor, UPrimitiveComponent* OtherComp, FVector NormalImpulse, const FHitResult& Hit);
 
+	/*
+	 *	Sets variables and activates the movement components of this projectile
+	 */
 	void LaunchProjectile(ACharacter * OwningCharacter, AActor * TargetActor);
 
 private:
+	/*
+	 *	TODO Plays sounds/ particles related to the explosion of this projectile
+	 *	TODO Applies damage to nearby actors
+	 */
+	void ExplodeProjectile();
+
+	/*
+	 *	Activates homing for this component
+	 */
+	void ActivateHoming();
+
 	UPROPERTY(VisibleAnywhere)
 	class UProjectileMovementComponent * ProjectileMovementComponent;
 
-	UPROPERTY(VisibleAnywhere)
+	UPROPERTY(VisibleAnywhere, Category = "Setup")
 	UStaticMeshComponent * Mesh = nullptr;
 
 	UPROPERTY(EditAnywhere, Category = "Damage")
 	float Damage = 10.f;
 
-	ACharacter * OwnerCharacter;
+	UPROPERTY(EditAnywhere, Category = "Setup")
+	float ProjectileAliveTime = 10.f;
+
+	UPROPERTY(EditAnywhere, Category = "Tracking")
+	float DelayedHomingActivationTime = .5f;
+
+	UPROPERTY(EditAnywhere, Category = "Tracking")
+	float InitialHomingMagnitude = 1000.f;
+
+	UPROPERTY(EditAnywhere, Category = "Tracking")
+	float HomingMagnitudeMultiplierPerSecond = 3.f;
+
+	class ACharacter * OwnerCharacter;
 	
 	AActor * TargetActor;
 

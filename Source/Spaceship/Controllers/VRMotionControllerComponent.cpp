@@ -66,7 +66,6 @@ void UVRMotionControllerComponent::Drop()
 
 void UVRMotionControllerComponent::Fire()
 {
-	UE_LOG(LogTemp, Error, TEXT("UVRMotionControllerComponent::Fire"));
 	if (HeldActorInfo.GetHeldActor()) {
 		AVRGun * Gun = Cast<AVRGun>(HeldActorInfo.GetHeldActor());
 		if (Gun) {

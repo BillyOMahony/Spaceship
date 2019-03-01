@@ -21,7 +21,7 @@ AVRGun::AVRGun()
 void AVRGun::BeginPlay()
 {
 	Super::BeginPlay();
-	
+
 }
 
 // Called every frame
@@ -38,14 +38,12 @@ void AVRGun::Fire()
 		FRotator SpawnRotation = ProjectileSpawnPoint->GetComponentRotation();
 		FActorSpawnParameters SpawnParams;
 
-		UE_LOG(LogTemp, Error, TEXT("C++: Loc: %s, Rot: %s"), *(SpawnLocation.ToString()), *(SpawnRotation.ToString()));
-
 		auto SpawnedProjectile = GetWorld()->SpawnActor<AHomingGrenadeProjectile>(Projectile, SpawnLocation, SpawnRotation);
-		SpawnedProjectile->LaunchProjectile(nullptr, nullptr);
+		SpawnedProjectile->LaunchProjectile(nullptr, TargetActorTEST);
 	}
 }
 
-void AVRGun::PickUp(UActorComponent * Component)
+void AVRGun::PickUp(ACharacter * Character)
 {
 	
 }

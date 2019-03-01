@@ -2,7 +2,10 @@
 
 #include "HomingGrenadeProjectile.h"
 #include "GameFramework/ProjectileMovementComponent.h"
+#include "GameFramework/Character.h"
 #include "Components/StaticMeshComponent.h"
+#include "Engine/World.h"
+#include "TimerManager.h"
 
 // Sets default values
 AHomingGrenadeProjectile::AHomingGrenadeProjectile()
@@ -24,18 +27,32 @@ AHomingGrenadeProjectile::AHomingGrenadeProjectile()
 void AHomingGrenadeProjectile::BeginPlay()
 {
 	Super::BeginPlay();
-	
+
+	// Automatically destroy this projectile after a certain amount of time
+	FTimerHandle ProjectileTimeOutTimer;
+	GetWorld()->GetTimerManager().SetTimer(
+		ProjectileTimeOutTimer,
+		this,
+		&AHomingGrenadeProjectile::ExplodeProjectile,
+		ProjectileAliveTime,
+		false
+	);
+
 }
 
 // Called every frame
 void AHomingGrenadeProjectile::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
+
+	ProjectileMovementComponent->HomingAccelerationMagnitude += ProjectileMovementComponent->HomingAccelerationMagnitude * HomingMagnitudeMultiplierPerSecond * DeltaTime;
 }
 
 void AHomingGrenadeProjectile::OnCompHit(UPrimitiveComponent * HitComp, AActor * OtherActor, UPrimitiveComponent * OtherComp, FVector NormalImpulse, const FHitResult & Hit)
 {
+	UE_LOG(LogTemp, Warning, TEXT("AHomingGrenadeProjectile::OnCompHit"));
 
+	ExplodeProjectile();
 }
 
 void AHomingGrenadeProjectile::LaunchProjectile(ACharacter * OwningCharacter, AActor * TargetActor)
@@ -43,6 +60,33 @@ void AHomingGrenadeProjectile::LaunchProjectile(ACharacter * OwningCharacter, AA
 	OwnerCharacter = OwningCharacter;
 	
 	ProjectileMovementComponent->Activate();
-	if(TargetActor)	ProjectileMovementComponent->HomingTargetComponent = TargetActor->GetRootComponent();
+	if (TargetActor) {
+		// TODO Only activate this x time after launch
+		this->TargetActor = TargetActor;
+		
+		FTimerHandle DelayedHomingActivationTimer;
+		GetWorld()->GetTimerManager().SetTimer(
+			DelayedHomingActivationTimer,
+			this,
+			&AHomingGrenadeProjectile::ActivateHoming,
+			DelayedHomingActivationTime,
+			false
+		);
+	}
+}
+
+void AHomingGrenadeProjectile::ExplodeProjectile()
+{
+	UE_LOG(LogTemp, Warning, TEXT("AHomingGrenadeProjectile::ExplodeProjectile - Dead"));
+	// TODO Spawn particle/audio
+	// Consider creating Explosion class which automatically handles particle/explosion stuff
+	Destroy();
+}
+
+void AHomingGrenadeProjectile::ActivateHoming()
+{
+	ProjectileMovementComponent->HomingTargetComponent = TargetActor->GetRootComponent();
+	ProjectileMovementComponent->bIsHomingProjectile = true;
+	ProjectileMovementComponent->HomingAccelerationMagnitude = InitialHomingMagnitude;
 }
 

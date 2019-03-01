@@ -26,11 +26,14 @@ public:
 
 	void Fire();
 
-	void PickUp(UActorComponent * Component);
+	void PickUp(ACharacter * Character);
 
 private:
 	UPROPERTY(VisibleAnywhere)
 	USceneComponent * ProjectileSpawnPoint;
+
+	UPROPERTY(EditAnywhere)
+	AActor * TargetActorTEST;
 
 	/*
 	 *	The class of projectile which will be spawned
