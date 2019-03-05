@@ -31,6 +31,8 @@ public:
 	UFUNCTION(BlueprintCallable)
 	APawn* GetClosestPawn();
 
+	void SetIgnorePlayer(bool IgnorePlayer);
+
 protected:
 	// Called when the game starts
 	virtual void BeginPlay() override;
@@ -61,12 +63,13 @@ private:
 	bool bRadarEnabled = true;
 
 	UPROPERTY(EditAnywhere, Category = "Radar")
-	float RadarRange = 10000.f;
+	float RadarRange = 1000000.f;
 
 	UPROPERTY(EditAnywhere, Category = "Radar")
 	float RadarBurstRate = 1.f;
 
 	TArray<APawn*> DetectedPawns;
 
+	bool bIgnorePlayer = false;
 
 };

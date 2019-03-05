@@ -33,7 +33,9 @@ private:
 	USceneComponent * ProjectileSpawnPoint;
 
 	UPROPERTY(EditAnywhere)
-	AActor * TargetActorTEST;
+	float HomingAimAngleAcceptance = 10.f;
+
+	AActor * TargetedActor = nullptr;
 
 	/*
 	 *	The class of projectile which will be spawned
@@ -41,5 +43,14 @@ private:
 	UPROPERTY(EditAnywhere)
 	//TSubclassOf<class AProjectile> Projectile;
 	TSubclassOf<class AHomingGrenadeProjectile> Projectile;
+
+	class URadarComponent * RadarComponent;
+
+	/*
+	 *	Finds the nearest Radar Detectable Pawn which this gun is being aimed towards
+	 */
+	AActor * FindTargetedActor();
+
+	float GetAngleOfActorFromBarrel(AActor * ActorToCheck);
 
 };

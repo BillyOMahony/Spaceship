@@ -50,14 +50,22 @@ APawn * URadarComponent::GetClosestPawn()
 	return nullptr;
 }
 
+void URadarComponent::SetIgnorePlayer(bool IgnorePlayer)
+{
+	bIgnorePlayer = IgnorePlayer;
+}
+
 // Called when the game starts
 void URadarComponent::BeginPlay()
 {
 	Super::BeginPlay();
 
-	if(!Cast<ASpaceshipAIController>(Cast<APawn>(GetOwner())->GetController()))
-	{
-		bRadarEnabled = false;
+	// TODO First if needs to be replaced
+	if (Cast<APawn>(GetOwner())) {
+		if (!Cast<ASpaceshipAIController>(Cast<APawn>(GetOwner())->GetController()))
+		{
+			bRadarEnabled = false;
+		}
 	}
 
 }
@@ -81,8 +89,16 @@ TArray<APawn*> URadarComponent::GetDetectedPawns() const
 
 void URadarComponent::RadarBurst()
 {
-	EFactionEnum MyFaction = Cast<ASpaceshipPawn>(GetOwner())->GetFaction();
+	EFactionEnum MyFaction;
 
+	// TODO Store EFactionEnum in a better, consistant place
+	// Something like, Cast<APawn>(GetOwner())->GetComponent(FactionComponent)->GetFaction()
+	if (Cast<ASpaceshipPawn>(GetOwner())) {
+		MyFaction = Cast<ASpaceshipPawn>(GetOwner())->GetFaction();
+	}
+	else {
+		MyFaction = EFactionEnum::FE_Good;
+	}
 	// Clear DetectedPawns
 	DetectedPawns.Empty();
 
@@ -131,6 +147,11 @@ bool URadarComponent::IsPawnRadarVisible(APawn * Pawn) const
 	FCollisionQueryParams QueryParams;
 	QueryParams.TraceTag = TraceTag;
 	QueryParams.AddIgnoredActor(GetOwner());
+
+	// TODO Refactor
+	if (bIgnorePlayer) {
+		QueryParams.AddIgnoredActor(GetWorld()->GetFirstPlayerController()->GetPawn());
+	}
 
 	// the first actor hit by the line trace will be the Owner actor so we test against the second
 	if (GetWorld()->LineTraceSingleByChannel(OutHit, StartLoc, EndLoc, ECollisionChannel::ECC_Camera, QueryParams)) {
