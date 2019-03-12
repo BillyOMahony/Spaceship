@@ -76,6 +76,9 @@ private:
 	UPROPERTY(EditAnywhere, Category = "Tracking")
 	float HomingMagnitudeMultiplierPerSecond = 3.f;
 
+	UPROPERTY(EditAnywhere, Category = "Death")
+	TSubclassOf<class AProjectileDeathParticleActor> Explosion;
+
 	class ACharacter * OwnerCharacter;
 	
 	AActor * TargetActor;

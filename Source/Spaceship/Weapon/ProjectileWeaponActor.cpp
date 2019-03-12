@@ -69,4 +69,5 @@ void AProjectileWeaponActor::Tick(float DeltaTime)
 	Super::Tick(DeltaTime);
 
 	if (bAttemptingToFire) Fire();
+	else MuzzleFlash->Deactivate();
 }

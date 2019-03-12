@@ -8,6 +8,7 @@
 #include "Kismet/GameplayStatics.h"
 #include "GameFramework/DamageType.h"
 #include "Engine/World.h"
+#include "ProjectileDeathParticleActor.h"
 #include "TimerManager.h"
 
 // Sets default values
@@ -89,6 +90,10 @@ void AHomingGrenadeProjectile::LaunchProjectile(ACharacter * OwningCharacter, AA
 void AHomingGrenadeProjectile::ExplodeProjectile()
 {
 	TArray<AActor *> IgnoredActors;
+
+	if (Explosion) {
+		GetWorld()->SpawnActor<AProjectileDeathParticleActor>(Explosion, GetActorLocation(), GetActorRotation());
+	}
 
 	UGameplayStatics::ApplyRadialDamageWithFalloff(
 		GetWorld(),
