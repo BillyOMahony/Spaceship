@@ -4,7 +4,8 @@
 #include "GameFramework/ProjectileMovementComponent.h"
 #include "GameFramework/Character.h"
 #include "Components/StaticMeshComponent.h"
-#include "Components/BoxComponent.h"
+#include "Components/AudioComponent.h"
+#include "Particles/ParticleSystemComponent.h"
 #include "Kismet/GameplayStatics.h"
 #include "GameFramework/DamageType.h"
 #include "Engine/World.h"
@@ -23,6 +24,15 @@ AHomingGrenadeProjectile::AHomingGrenadeProjectile()
 	Mesh->SetSimulatePhysics(true);
 	Mesh->SetNotifyRigidBodyCollision(true);
 
+	AudioComponent = CreateDefaultSubobject<UAudioComponent>(FName("Audio Component"));
+	AudioComponent->AttachToComponent(Mesh, FAttachmentTransformRules::KeepRelativeTransform);
+	AudioComponent->SetupAttachment(Mesh);
+
+	TrailComponent = CreateDefaultSubobject<UParticleSystemComponent>(FName("Trail Component"));
+	TrailComponent->AttachToComponent(Mesh, FAttachmentTransformRules::KeepRelativeTransform);
+	TrailComponent->SetupAttachment(Mesh);
+	TrailComponent->SetAutoActivate(false);
+	
 	ProjectileMovementComponent = CreateDefaultSubobject<UProjectileMovementComponent>(FName("Movement Component"));
 	ProjectileMovementComponent->bAutoActivate = false;
 }
@@ -118,5 +128,14 @@ void AHomingGrenadeProjectile::ActivateHoming()
 	ProjectileMovementComponent->HomingTargetComponent = TargetActor->GetRootComponent();
 	ProjectileMovementComponent->bIsHomingProjectile = true;
 	ProjectileMovementComponent->HomingAccelerationMagnitude = InitialHomingMagnitude;
+
+	if (MissileLaunchSound) {
+		AudioComponent->SetSound(MissileLaunchSound);
+		AudioComponent->Play();
+	}
+
+	if (TrailComponent) {
+		TrailComponent->Activate();
+	}
 }
 

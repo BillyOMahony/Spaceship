@@ -5,6 +5,7 @@
 #include "Weapon/Projectiles/HomingGrenadeProjectile.h"
 #include "Weapon/Projectile.h"
 #include "Components/StaticMeshComponent.h"
+#include "Components/AudioComponent.h"
 #include "AI/RadarComponent.h"
 
 // Sets default values
@@ -16,6 +17,11 @@ AVRGun::AVRGun()
 	ProjectileSpawnPoint = CreateDefaultSubobject<USceneComponent>(FName("Projectile Spawn Point"));
 	ProjectileSpawnPoint->AttachToComponent(PickupableMesh, FAttachmentTransformRules::KeepRelativeTransform);
 	ProjectileSpawnPoint->SetupAttachment(PickupableMesh);
+
+	AudioComponent = CreateDefaultSubobject<UAudioComponent>(FName("Audio Component"));
+	AudioComponent->AttachToComponent(ProjectileSpawnPoint, FAttachmentTransformRules::KeepRelativeTransform);
+	AudioComponent->SetupAttachment(ProjectileSpawnPoint);
+	AudioComponent->SetAutoActivate(false);
 
 	RadarComponent = CreateDefaultSubobject<URadarComponent>(FName("Radar Component"));
 	RadarComponent->SetIgnorePlayer(true);
@@ -43,6 +49,8 @@ void AVRGun::Fire()
 
 		auto SpawnedProjectile = GetWorld()->SpawnActor<AHomingGrenadeProjectile>(Projectile, SpawnLocation, SpawnRotation);
 		SpawnedProjectile->LaunchProjectile(nullptr, FindTargetedActor());
+
+		if(AudioComponent->Sound)AudioComponent->Play();
 	}
 }
 

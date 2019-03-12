@@ -49,6 +49,15 @@ private:
 	UPROPERTY(VisibleAnywhere, Category = "Setup")
 	UStaticMeshComponent * Mesh = nullptr;
 
+	UPROPERTY(VisibleAnywhere, Category = "Setup")
+	class UParticleSystemComponent * TrailComponent;
+
+	UPROPERTY(VisibleAnywhere, Category = "Setup")
+	class UAudioComponent * AudioComponent;
+
+	UPROPERTY(EditAnywhere, Category = "Setup")
+	USoundBase * MissileLaunchSound;
+
 	UPROPERTY(EditAnywhere, Category = "Damage")
 	float BaseDamage = 40.f;
 

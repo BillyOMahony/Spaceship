@@ -35,6 +35,9 @@ private:
 	UPROPERTY(EditAnywhere)
 	float HomingAimAngleAcceptance = 10.f;
 
+	UPROPERTY(VisibleAnywhere)
+	class UAudioComponent * AudioComponent;
+
 	AActor * TargetedActor = nullptr;
 
 	/*
