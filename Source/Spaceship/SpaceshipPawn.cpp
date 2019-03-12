@@ -63,6 +63,8 @@ void ASpaceshipPawn::Tick(float DeltaTime)
 
 float ASpaceshipPawn::TakeDamage(float DamageAmount, FDamageEvent const & DamageEvent, AController * EventInstigator, AActor * DamageCauser)
 {
+	UE_LOG(LogTemp, Warning, TEXT("ASpaceshipPawn::TakeDamage - %f"), DamageAmount);
+
 	Health -= DamageAmount;
 
 	if(Health <= 0)

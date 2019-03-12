@@ -50,7 +50,19 @@ private:
 	UStaticMeshComponent * Mesh = nullptr;
 
 	UPROPERTY(EditAnywhere, Category = "Damage")
-	float Damage = 10.f;
+	float BaseDamage = 40.f;
+
+	UPROPERTY(EditAnywhere, Category = "Damage")
+	float MinDamage = 0.f;
+
+	UPROPERTY(EditAnywhere, Category = "Damage")
+	float DamageInnerRadius = 100.f;
+
+	UPROPERTY(EditAnywhere, Category = "Damage")
+	float DamageOuterRadius = 500.f;
+
+	UPROPERTY(EditAnywhere, Category = "Damage")
+	float DamageFalloff = 1.f;
 
 	UPROPERTY(EditAnywhere, Category = "Setup")
 	float ProjectileAliveTime = 10.f;

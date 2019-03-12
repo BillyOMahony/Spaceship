@@ -4,6 +4,9 @@
 #include "GameFramework/ProjectileMovementComponent.h"
 #include "GameFramework/Character.h"
 #include "Components/StaticMeshComponent.h"
+#include "Components/BoxComponent.h"
+#include "Kismet/GameplayStatics.h"
+#include "GameFramework/DamageType.h"
 #include "Engine/World.h"
 #include "TimerManager.h"
 
@@ -16,8 +19,8 @@ AHomingGrenadeProjectile::AHomingGrenadeProjectile()
 	Mesh = CreateDefaultSubobject<UStaticMeshComponent>(FName("Projectile Mesh"));
 	SetRootComponent(Mesh);
 
-	Mesh->SetNotifyRigidBodyCollision(true);
 	Mesh->SetSimulatePhysics(true);
+	Mesh->SetNotifyRigidBodyCollision(true);
 
 	ProjectileMovementComponent = CreateDefaultSubobject<UProjectileMovementComponent>(FName("Movement Component"));
 	ProjectileMovementComponent->bAutoActivate = false;
@@ -27,6 +30,8 @@ AHomingGrenadeProjectile::AHomingGrenadeProjectile()
 void AHomingGrenadeProjectile::BeginPlay()
 {
 	Super::BeginPlay();
+
+	Mesh->OnComponentHit.AddDynamic(this, &AHomingGrenadeProjectile::OnCompHit);
 
 	// Automatically destroy this projectile after a certain amount of time
 	FTimerHandle ProjectileTimeOutTimer;
@@ -52,6 +57,10 @@ void AHomingGrenadeProjectile::OnCompHit(UPrimitiveComponent * HitComp, AActor *
 {
 	UE_LOG(LogTemp, Warning, TEXT("AHomingGrenadeProjectile::OnCompHit"));
 
+	if (OtherActor && (OtherActor != this)) {
+		UE_LOG(LogTemp, Warning, TEXT("AHomingGrenadeProjectile::OnCompHit - %s"),*(OtherActor->GetName()));
+	}
+
 	ExplodeProjectile();
 }
 
@@ -60,6 +69,8 @@ void AHomingGrenadeProjectile::LaunchProjectile(ACharacter * OwningCharacter, AA
 	OwnerCharacter = OwningCharacter;
 	
 	ProjectileMovementComponent->Activate();
+	
+	// If there is a target we want to start tracking the target soon
 	if (TargetActor) {
 		// TODO Only activate this x time after launch
 		this->TargetActor = TargetActor;
@@ -77,7 +88,21 @@ void AHomingGrenadeProjectile::LaunchProjectile(ACharacter * OwningCharacter, AA
 
 void AHomingGrenadeProjectile::ExplodeProjectile()
 {
-	UE_LOG(LogTemp, Warning, TEXT("AHomingGrenadeProjectile::ExplodeProjectile - Dead"));
+	TArray<AActor *> IgnoredActors;
+
+	UGameplayStatics::ApplyRadialDamageWithFalloff(
+		GetWorld(),
+		BaseDamage,
+		MinDamage,
+		GetActorLocation(),
+		DamageInnerRadius,
+		DamageOuterRadius,
+		DamageFalloff,
+		UDamageType::StaticClass(),
+		IgnoredActors,
+		this // TODO Swap this out with player character eventually
+	);
+
 	// TODO Spawn particle/audio
 	// Consider creating Explosion class which automatically handles particle/explosion stuff
 	Destroy();
