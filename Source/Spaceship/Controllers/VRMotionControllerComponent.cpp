@@ -60,8 +60,8 @@ void UVRMotionControllerComponent::Drop()
 
 	if (!HeldActor) return;
 
-	HeldActor->DetachRootComponentFromParent(true);
 	Cast<AVRPickupableActor>(HeldActor)->SetIsPickedUp(false);
+	HeldActor->DetachRootComponentFromParent(true);
 }
 
 void UVRMotionControllerComponent::Fire()

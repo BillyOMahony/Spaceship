@@ -49,4 +49,8 @@ private:
 	bool bShouldCenterToHand = false;
 
 	bool bIsPickedUp = false;
+
+	bool bShouldSimulatePhysics = false;
+
+	FVector PickupableMeshRelativeLoc = FVector(0.f, 0.f, 0.f);
 };

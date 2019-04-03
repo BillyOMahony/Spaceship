@@ -1,6 +1,7 @@
 // Fill out your copyright notice in the Description page of Project Settings.
 
 #include "VRPickupableActor.h"
+#include "Components/StaticMeshComponent.h"
 
 // Sets default values
 AVRPickupableActor::AVRPickupableActor()
@@ -14,7 +15,15 @@ AVRPickupableActor::AVRPickupableActor()
 	PickupableMesh = CreateDefaultSubobject<UStaticMeshComponent>(FName("Pickupable Mesh"));
 	PickupableMesh->AttachToComponent(SceneRoot, FAttachmentTransformRules::KeepRelativeTransform);
 	PickupableMesh->SetupAttachment(SceneRoot);
+}
 
+// Called when the game starts or when spawned
+void AVRPickupableActor::BeginPlay()
+{
+	Super::BeginPlay();
+
+	PickupableMeshRelativeLoc = SceneRoot->GetComponentLocation() - PickupableMesh->GetComponentLocation();
+	bShouldSimulatePhysics = PickupableMesh->IsSimulatingPhysics();
 }
 
 bool AVRPickupableActor::GetShouldCenterToHand()
@@ -25,6 +34,15 @@ bool AVRPickupableActor::GetShouldCenterToHand()
 void AVRPickupableActor::SetIsPickedUp(bool IsPickedUp)
 {
 	bIsPickedUp = IsPickedUp;
+
+	if (bIsPickedUp && bShouldSimulatePhysics) {
+		SceneRoot->SetWorldLocation(PickupableMesh->GetComponentLocation() - PickupableMeshRelativeLoc);
+		PickupableMesh->SetSimulatePhysics(false);
+		PickupableMesh->AttachToComponent(SceneRoot, FAttachmentTransformRules::KeepWorldTransform);
+	}
+	else {
+		PickupableMesh->SetSimulatePhysics(bShouldSimulatePhysics);
+	}
 }
 
 bool AVRPickupableActor::GetIsPickedUp()
@@ -32,17 +50,9 @@ bool AVRPickupableActor::GetIsPickedUp()
 	return bIsPickedUp;
 }
 
-// Called when the game starts or when spawned
-void AVRPickupableActor::BeginPlay()
-{
-	Super::BeginPlay();
-	
-}
-
 // Called every frame
 void AVRPickupableActor::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
-
 }
 
