@@ -39,7 +39,7 @@ protected:
 	virtual void BeginPlay() override;
 
 	UPROPERTY(VisibleAnywhere)
-	USceneComponent * SceneRoot;
+	USceneComponent * RootComp;
 
 	UPROPERTY(VisibleAnywhere)
 	UStaticMeshComponent * PickupableMesh;
@@ -52,5 +52,9 @@ private:
 
 	bool bShouldSimulatePhysics = false;
 
+	UPROPERTY(EditAnywhere, Category = "Offset")
 	FVector PickupableMeshRelativeLoc = FVector(0.f, 0.f, 0.f);
+	
+	UPROPERTY(EditAnywhere, Category = "Offset")
+	FRotator PickupableMeshRelativeRot = FRotator(0.f);
 };
