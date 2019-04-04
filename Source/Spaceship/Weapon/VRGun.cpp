@@ -4,7 +4,9 @@
 #include "Engine/World.h"
 #include "Weapon/Projectiles/HomingGrenadeProjectile.h"
 #include "Weapon/Projectile.h"
+#include "Weapon/Ammo/AmmoActor.h"
 #include "Components/StaticMeshComponent.h"
+#include "Components/BoxComponent.h"
 #include "Components/AudioComponent.h"
 #include "AI/RadarComponent.h"
 
@@ -17,6 +19,11 @@ AVRGun::AVRGun()
 	ProjectileSpawnPoint = CreateDefaultSubobject<USceneComponent>(FName("Projectile Spawn Point"));
 	ProjectileSpawnPoint->AttachToComponent(PickupableMesh, FAttachmentTransformRules::KeepRelativeTransform);
 	ProjectileSpawnPoint->SetupAttachment(PickupableMesh);
+
+	AmmoAttachmentPointCollider = CreateDefaultSubobject<UBoxComponent>(FName("Ammo Attachment Point Collider"));
+	AmmoAttachmentPointCollider->AttachToComponent(PickupableMesh, FAttachmentTransformRules::KeepRelativeTransform);
+	AmmoAttachmentPointCollider->SetupAttachment(PickupableMesh);
+	AmmoAttachmentPointCollider->ComponentTags.Add(FName("AmmoAttachmentPoint"));
 
 	AudioComponent = CreateDefaultSubobject<UAudioComponent>(FName("Audio Component"));
 	AudioComponent->AttachToComponent(ProjectileSpawnPoint, FAttachmentTransformRules::KeepRelativeTransform);
@@ -42,21 +49,39 @@ void AVRGun::Tick(float DeltaTime)
 
 void AVRGun::Fire()
 {
-	if (Projectile) {
-		FVector SpawnLocation = ProjectileSpawnPoint->GetComponentLocation();
-		FRotator SpawnRotation = ProjectileSpawnPoint->GetComponentRotation();
-		FActorSpawnParameters SpawnParams;
+	if (Projectile && AmmoActor) {
+		if (AmmoActor->GetAmmo() > 0) {
+			FVector SpawnLocation = ProjectileSpawnPoint->GetComponentLocation();
+			FRotator SpawnRotation = ProjectileSpawnPoint->GetComponentRotation();
+			FActorSpawnParameters SpawnParams;
 
-		auto SpawnedProjectile = GetWorld()->SpawnActor<AHomingGrenadeProjectile>(Projectile, SpawnLocation, SpawnRotation);
-		SpawnedProjectile->LaunchProjectile(nullptr, FindTargetedActor());
+			auto SpawnedProjectile = GetWorld()->SpawnActor<AHomingGrenadeProjectile>(Projectile, SpawnLocation, SpawnRotation);
+			SpawnedProjectile->LaunchProjectile(nullptr, FindTargetedActor());
 
-		if(AudioComponent->Sound)AudioComponent->Play();
+			if (AudioComponent->Sound)AudioComponent->Play();
+
+			AmmoActor->FireRound();
+		}
 	}
 }
 
 void AVRGun::PickUp(ACharacter * Character)
 {
 	
+}
+
+void AVRGun::AttachAmmoCartridge(AAmmoActor * AmmoCartridge)
+{
+	AmmoActor = AmmoCartridge;
+	AmmoCartridge->AttachToComponent(PickupableMesh, FAttachmentTransformRules::KeepWorldTransform, FName("AmmoAttachmentPoint"));
+	AmmoCartridge->SetActorRelativeLocation(FVector(0.f));
+	AmmoCartridge->SetActorRelativeRotation(FRotator(0.f));
+}
+
+void AVRGun::DetachAmmoCartridge()
+{
+	AmmoActor->DetachFromActor(FDetachmentTransformRules::KeepWorldTransform);
+	AmmoActor = nullptr;
 }
 
 AActor * AVRGun::FindTargetedActor()

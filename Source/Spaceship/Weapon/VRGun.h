@@ -28,9 +28,16 @@ public:
 
 	void PickUp(ACharacter * Character);
 
+	void AttachAmmoCartridge(class AAmmoActor * AmmoCartridge);
+
+	void DetachAmmoCartridge();
+
 private:
 	UPROPERTY(VisibleAnywhere)
 	USceneComponent * ProjectileSpawnPoint;
+
+	UPROPERTY(VisibleAnywhere)
+	class UBoxComponent * AmmoAttachmentPointCollider;
 
 	UPROPERTY(EditAnywhere)
 	float HomingAimAngleAcceptance = 10.f;
@@ -40,20 +47,21 @@ private:
 
 	AActor * TargetedActor = nullptr;
 
-	/*
-	 *	The class of projectile which will be spawned
-	*/
 	UPROPERTY(EditAnywhere)
-	//TSubclassOf<class AProjectile> Projectile;
 	TSubclassOf<class AHomingGrenadeProjectile> Projectile;
 
 	class URadarComponent * RadarComponent;
+
+	AAmmoActor * AmmoActor;
 
 	/*
 	 *	Finds the nearest Radar Detectable Pawn which this gun is being aimed towards
 	 */
 	AActor * FindTargetedActor();
 
+	/*
+	 *	@return the angle in degrees ActorToCheck is from the forward vector of the barrel
+	 */
 	float GetAngleOfActorFromBarrel(AActor * ActorToCheck);
 
 };

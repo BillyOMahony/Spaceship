@@ -22,6 +22,8 @@ void AVRPickupableActor::BeginPlay()
 {
 	Super::BeginPlay();
 
+	PickupableMesh->SetCollisionProfileName("VRPickupable");
+
 	PickupableMeshRelativeLoc = PickupableMesh->GetComponentLocation() - RootComp->GetComponentLocation();
 	PickupableMeshRelativeRot = PickupableMesh->GetComponentRotation() - RootComp->GetComponentRotation();
 
@@ -38,20 +40,29 @@ void AVRPickupableActor::SetIsPickedUp(bool IsPickedUp)
 	bIsPickedUp = IsPickedUp;
 
 	if (bIsPickedUp && bShouldSimulatePhysics && !bShouldCenterToHand) {
-		PickupableMesh->SetSimulatePhysics(false);
-
-		RootComp->SetWorldLocation(PickupableMesh->GetComponentLocation() - PickupableMeshRelativeLoc);
-		RootComp->SetWorldRotation(PickupableMesh->GetComponentRotation() - PickupableMeshRelativeRot);
-		PickupableMesh->AttachToComponent(RootComp, FAttachmentTransformRules::KeepWorldTransform);
+		HandleNotCenteredPickup();
 	}
 	else if (bIsPickedUp && bShouldSimulatePhysics && bShouldCenterToHand) {
-		PickupableMesh->SetSimulatePhysics(false);
-		PickupableMesh->AttachToComponent(RootComp, FAttachmentTransformRules::KeepWorldTransform);
-		PickupableMesh->SetRelativeLocationAndRotation(PickupableMeshRelativeLoc, PickupableMeshRelativeRot);
+		HandleCenteredPickup();
 	}
 	else if(bShouldSimulatePhysics){
 		PickupableMesh->SetSimulatePhysics(bShouldSimulatePhysics);
 	}
+}
+
+void AVRPickupableActor::HandleCenteredPickup()
+{
+	PickupableMesh->SetSimulatePhysics(false);
+	PickupableMesh->AttachToComponent(RootComp, FAttachmentTransformRules::KeepWorldTransform);
+	PickupableMesh->SetRelativeLocationAndRotation(PickupableMeshRelativeLoc, PickupableMeshRelativeRot);
+}
+
+void AVRPickupableActor::HandleNotCenteredPickup()
+{
+	PickupableMesh->SetSimulatePhysics(false);
+	RootComp->SetWorldLocation(PickupableMesh->GetComponentLocation() - PickupableMeshRelativeLoc);
+	RootComp->SetWorldRotation(PickupableMesh->GetComponentRotation() - PickupableMeshRelativeRot);
+	PickupableMesh->AttachToComponent(RootComp, FAttachmentTransformRules::KeepWorldTransform);
 }
 
 bool AVRPickupableActor::GetIsPickedUp()
