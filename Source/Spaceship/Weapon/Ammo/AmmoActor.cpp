@@ -65,9 +65,10 @@ int32 AAmmoActor::GetAmmo()
 	return Ammo;
 }
 
-void AAmmoActor::DecrementAmmo()
+void AAmmoActor::FireRound()
 {
 	Ammo--;
+	AnimateCartridge(AnimationTime);
 }
 
 // Called when the game starts or when spawned

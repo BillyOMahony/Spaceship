@@ -30,15 +30,21 @@ public:
 	/*
 	 *	Decrements the ammo count
 	 */
-	void DecrementAmmo();
+	void FireRound();
 
 protected:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
 
+	UFUNCTION(BlueprintCallable, BlueprintImplementableEvent, Category = "Animation")
+	void AnimateCartridge(float AnimationTime);
+
 private:
 	UPROPERTY(EditDefaultsOnly)
 	int32 Ammo = 6;
+
+	UPROPERTY(EditAnywhere)
+	float AnimationTime =.5f; 
 
 	class AVRGun * AttachedGun;
 };

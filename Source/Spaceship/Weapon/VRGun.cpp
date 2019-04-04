@@ -49,6 +49,8 @@ void AVRGun::Tick(float DeltaTime)
 
 void AVRGun::Fire()
 {
+	// TODO Implement Cooldown
+
 	if (Projectile && AmmoActor) {
 		if (AmmoActor->GetAmmo() > 0) {
 			FVector SpawnLocation = ProjectileSpawnPoint->GetComponentLocation();
