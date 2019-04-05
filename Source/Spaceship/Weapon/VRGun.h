@@ -16,23 +16,24 @@ public:
 	// Sets default values for this actor's properties
 	AVRGun();
 
-protected:
-	// Called when the game starts or when spawned
-	virtual void BeginPlay() override;
-
-public:	
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;
 
 	void Fire();
 
-	void PickUp(ACharacter * Character);
-
 	void AttachAmmoCartridge(class AAmmoActor * AmmoCartridge);
 
 	void DetachAmmoCartridge();
 
-private:
+protected:
+	// Called when the game starts or when spawned
+	virtual void BeginPlay() override;
+
+	/*
+	 *	Sets bCanFire to true
+	 */
+	void AllowFire();
+
 	UPROPERTY(VisibleAnywhere)
 	USceneComponent * ProjectileSpawnPoint;
 
@@ -40,10 +41,21 @@ private:
 	class UBoxComponent * AmmoAttachmentPointCollider;
 
 	UPROPERTY(EditAnywhere)
-	float HomingAimAngleAcceptance = 10.f;
+	float RateOfFire = 0.5f;
+
+	UPROPERTY(EditAnywhere)
+	bool bRequiresAmmo = true;
 
 	UPROPERTY(VisibleAnywhere)
 	class UAudioComponent * AudioComponent;
+
+	AAmmoActor * AmmoActor;
+
+	bool bCanFire = true;
+
+private:
+	UPROPERTY(EditAnywhere)
+	float HomingAimAngleAcceptance = 10.f;
 
 	AActor * TargetedActor = nullptr;
 
@@ -51,8 +63,6 @@ private:
 	TSubclassOf<class AHomingGrenadeProjectile> Projectile;
 
 	class URadarComponent * RadarComponent;
-
-	AAmmoActor * AmmoActor;
 
 	/*
 	 *	Finds the nearest Radar Detectable Pawn which this gun is being aimed towards

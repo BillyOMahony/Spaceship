@@ -2,6 +2,7 @@
 
 #include "VRGun.h"
 #include "Engine/World.h"
+#include "TimerManager.h"
 #include "Weapon/Projectiles/HomingGrenadeProjectile.h"
 #include "Weapon/Projectile.h"
 #include "Weapon/Ammo/AmmoActor.h"
@@ -51,8 +52,8 @@ void AVRGun::Fire()
 {
 	// TODO Implement Cooldown
 
-	if (Projectile && AmmoActor) {
-		if (AmmoActor->GetAmmo() > 0) {
+	if (Projectile && AmmoActor && bCanFire) {
+		if (AmmoActor->GetAmmo() > 0 || !bRequiresAmmo) {
 			FVector SpawnLocation = ProjectileSpawnPoint->GetComponentLocation();
 			FRotator SpawnRotation = ProjectileSpawnPoint->GetComponentRotation();
 			FActorSpawnParameters SpawnParams;
@@ -63,13 +64,18 @@ void AVRGun::Fire()
 			if (AudioComponent->Sound)AudioComponent->Play();
 
 			AmmoActor->FireRound();
+
+			bCanFire = false;
+			FTimerHandle RateOfFireTimerHandle;
+			GetWorld()->GetTimerManager().SetTimer(
+				RateOfFireTimerHandle,
+				this,
+				&AVRGun::AllowFire,
+				1.f / RateOfFire,
+				false
+			);
 		}
 	}
-}
-
-void AVRGun::PickUp(ACharacter * Character)
-{
-	
 }
 
 void AVRGun::AttachAmmoCartridge(AAmmoActor * AmmoCartridge)
@@ -84,6 +90,11 @@ void AVRGun::DetachAmmoCartridge()
 {
 	AmmoActor->DetachFromActor(FDetachmentTransformRules::KeepWorldTransform);
 	AmmoActor = nullptr;
+}
+
+void AVRGun::AllowFire()
+{
+	bCanFire = true;
 }
 
 AActor * AVRGun::FindTargetedActor()
