@@ -59,6 +59,9 @@ public:
 	UFUNCTION(BlueprintCallable)
 	void Fire();
 
+	UFUNCTION(BlueprintCallable)
+	void EndFire();
+
 protected:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;

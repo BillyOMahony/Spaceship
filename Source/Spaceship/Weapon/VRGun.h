@@ -19,7 +19,9 @@ public:
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;
 
-	virtual void Fire();
+	virtual void OnFire();
+
+	virtual void OnStopFire();
 
 	void AttachAmmoCartridge(class AAmmoActor * AmmoCartridge);
 
@@ -34,11 +36,16 @@ protected:
 	 */
 	void AllowFire();
 
+	virtual void Fire();
+
 	UPROPERTY(VisibleAnywhere)
 	USceneComponent * ProjectileSpawnPoint;
 
 	UPROPERTY(VisibleAnywhere)
 	class UBoxComponent * AmmoAttachmentPointCollider;
+
+	UPROPERTY(VisibleAnywhere)
+	class UAudioComponent * AudioComponent;
 
 	UPROPERTY(EditAnywhere)
 	float RateOfFire = 0.5f;
@@ -46,10 +53,12 @@ protected:
 	UPROPERTY(EditAnywhere)
 	bool bRequiresAmmo = true;
 
-	UPROPERTY(VisibleAnywhere)
-	class UAudioComponent * AudioComponent;
+	UPROPERTY(EditAnywhere)
+	bool bIsAutomatic = false;
 
 	AAmmoActor * AmmoActor;
 
 	bool bCanFire = true;
+
+	bool bAutoIsFiring = false;
 };

@@ -14,6 +14,11 @@ AGrenadeLauncher::AGrenadeLauncher()
 	RadarComponent->SetIgnorePlayer(true);
 }
 
+void AGrenadeLauncher::OnFire()
+{
+	Fire();
+}
+
 void AGrenadeLauncher::Fire()
 {
 	if (Projectile && AmmoActor && bCanFire) {

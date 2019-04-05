@@ -7,6 +7,25 @@
 #include "Components/AudioComponent.h"
 #include "Weapon/Projectile.h"
 
+void ARifle::Tick(float DeltaTime)
+{
+	Super::Tick(DeltaTime);
+
+	if (bAutoIsFiring) {
+		Fire();
+	}
+}
+
+void ARifle::OnFire()
+{
+	bAutoIsFiring = true;
+}
+
+void ARifle::OnStopFire()
+{
+	bAutoIsFiring = false;
+}
+
 void ARifle::Fire()
 {
 	if (Projectile && (AmmoActor || !bRequiresAmmo) && bCanFire) {

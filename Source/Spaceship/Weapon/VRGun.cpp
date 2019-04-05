@@ -40,9 +40,18 @@ void AVRGun::Tick(float DeltaTime)
 	Super::Tick(DeltaTime);
 }
 
+void AVRGun::OnFire()
+{
+}
+
 void AVRGun::Fire()
 {
 	
+}
+
+void AVRGun::OnStopFire()
+{
+
 }
 
 void AVRGun::AttachAmmoCartridge(AAmmoActor * AmmoCartridge)

@@ -15,6 +15,13 @@ class SPACESHIP_API ARifle : public AVRGun
 	GENERATED_BODY()
 	
 public:
+	virtual void Tick(float DeltaTime) override;
+
+	void OnFire() override;
+
+	void OnStopFire() override;
+
+protected:
 	void Fire() override;
 
 private:

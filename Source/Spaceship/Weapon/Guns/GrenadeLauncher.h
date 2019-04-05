@@ -17,6 +17,9 @@ class SPACESHIP_API AGrenadeLauncher : public AVRGun
 	AGrenadeLauncher();
 
 public:
+	void OnFire() override;
+
+protected:
 	void Fire() override;
 
 private:

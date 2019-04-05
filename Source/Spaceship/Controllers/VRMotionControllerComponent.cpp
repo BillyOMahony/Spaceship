@@ -2,6 +2,7 @@
 
 #include "VRMotionControllerComponent.h"
 #include "Components/SphereComponent.h"
+#include "Components/StaticMeshComponent.h"
 #include "Pickupable/VRPickupableActor.h"
 #include "Weapon/VRGun.h"
 #include "Pawns/VRCharacter.h"
@@ -71,7 +72,17 @@ void UVRMotionControllerComponent::Fire()
 	if (HeldActorInfo.GetHeldActor()) {
 		AVRGun * Gun = Cast<AVRGun>(HeldActorInfo.GetHeldActor());
 		if (Gun) {
-			Gun->Fire();
+			Gun->OnFire();
+		}
+	}
+}
+
+void UVRMotionControllerComponent::EndFire()
+{
+	if (HeldActorInfo.GetHeldActor()) {
+		AVRGun * Gun = Cast<AVRGun>(HeldActorInfo.GetHeldActor());
+		if (Gun) {
+			Gun->OnStopFire();
 		}
 	}
 }
