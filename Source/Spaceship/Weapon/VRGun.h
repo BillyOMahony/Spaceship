@@ -19,7 +19,7 @@ public:
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;
 
-	void Fire();
+	virtual void Fire();
 
 	void AttachAmmoCartridge(class AAmmoActor * AmmoCartridge);
 
@@ -52,26 +52,4 @@ protected:
 	AAmmoActor * AmmoActor;
 
 	bool bCanFire = true;
-
-private:
-	UPROPERTY(EditAnywhere)
-	float HomingAimAngleAcceptance = 10.f;
-
-	AActor * TargetedActor = nullptr;
-
-	UPROPERTY(EditAnywhere)
-	TSubclassOf<class AHomingGrenadeProjectile> Projectile;
-
-	class URadarComponent * RadarComponent;
-
-	/*
-	 *	Finds the nearest Radar Detectable Pawn which this gun is being aimed towards
-	 */
-	AActor * FindTargetedActor();
-
-	/*
-	 *	@return the angle in degrees ActorToCheck is from the forward vector of the barrel
-	 */
-	float GetAngleOfActorFromBarrel(AActor * ActorToCheck);
-
 };

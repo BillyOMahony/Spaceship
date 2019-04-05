@@ -29,7 +29,7 @@ public:
 	/*
 	 *	Sets variables and activates the movement components of this projectile
 	 */
-	void LaunchProjectile(ACharacter * OwningCharacter, AActor * TargetActor);
+	void LaunchProjectile(class ACharacter * OwningCharacter, AActor * TargetActor);
 
 private:
 	/*
