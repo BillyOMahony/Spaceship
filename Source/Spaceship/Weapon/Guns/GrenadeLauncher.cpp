@@ -49,18 +49,18 @@ void AGrenadeLauncher::Fire()
 
 AActor * AGrenadeLauncher::FindTargetedActor()
 {
-	auto DetectedPawns = RadarComponent->GetDetectedPawns();
+	auto DetectedActors = RadarComponent->GetDetectedActors();
 
-	if (DetectedPawns.Num() > 0) {
-		AActor * ClosestActor = DetectedPawns[0];
+	if (DetectedActors.Num() > 0) {
+		AActor * ClosestActor = DetectedActors[0];
 		float ClosestActorDistance = (ClosestActor->GetActorLocation() - GetActorLocation()).Size();
 
-		for (int32 i = 1; i < DetectedPawns.Num(); i++) {
-			if (GetAngleOfActorFromBarrel(DetectedPawns[i]) < HomingAimAngleAcceptance) {
-				float NewActorDistance = (DetectedPawns[i]->GetActorLocation() - GetActorLocation()).Size();
+		for (int32 i = 1; i < DetectedActors.Num(); i++) {
+			if (GetAngleOfActorFromBarrel(DetectedActors[i]) < HomingAimAngleAcceptance) {
+				float NewActorDistance = (DetectedActors[i]->GetActorLocation() - GetActorLocation()).Size();
 
 				if (NewActorDistance < ClosestActorDistance) {
-					ClosestActor = DetectedPawns[i];
+					ClosestActor = DetectedActors[i];
 					ClosestActorDistance = NewActorDistance;
 				}
 			}

@@ -7,6 +7,8 @@
 #include "SpaceshipPawn.h"
 #include "GameFramework/Pawn.h"
 #include "Controllers/SpaceshipAIController.h"
+#include "GameFramework/Actor.h"
+#include "Components/RadarRegistrarComponent.h"
 
 
 // Sets default values for this component's properties
@@ -18,14 +20,14 @@ URadarComponent::URadarComponent()
 
 }
 
-APawn * URadarComponent::GetClosestPawn()
+AActor * URadarComponent::GetClosestActor()
 {
-	if(DetectedPawns.Num() > 0)
+	if(DetectedActors.Num() > 0)
 	{
 		int32 ClosestIndex = 0;
 
 		FVector RadarLoc = GetOwner()->GetActorLocation();
-		FVector PawnLoc = DetectedPawns[0]->GetActorLocation();
+		FVector PawnLoc = DetectedActors[0]->GetActorLocation();
 
 		FVector OutDir;
 		float OutLen;
@@ -33,9 +35,9 @@ APawn * URadarComponent::GetClosestPawn()
 		(RadarLoc - PawnLoc).ToDirectionAndLength(OutDir, OutLen);
 		float ClosestDst = OutLen;
 
-		for(int32 i = 1; i < DetectedPawns.Num(); i++)
+		for(int32 i = 1; i < DetectedActors.Num(); i++)
 		{
-			PawnLoc = DetectedPawns[i]->GetActorLocation();
+			PawnLoc = DetectedActors[i]->GetActorLocation();
 			(RadarLoc - PawnLoc).ToDirectionAndLength(OutDir, OutLen);
 			if(OutLen < ClosestDst)
 			{
@@ -44,7 +46,7 @@ APawn * URadarComponent::GetClosestPawn()
 			}
 		}
 
-		return DetectedPawns[ClosestIndex];
+		return DetectedActors[ClosestIndex];
 	}
 
 	return nullptr;
@@ -82,9 +84,9 @@ void URadarComponent::TickComponent(float DeltaTime, ELevelTick TickType, FActor
 	}
 }
 
-TArray<APawn*> URadarComponent::GetDetectedPawns() const
+TArray<AActor*> URadarComponent::GetDetectedActors() const
 {
-	return DetectedPawns;
+	return DetectedActors;
 }
 
 void URadarComponent::RadarBurst()
@@ -93,39 +95,38 @@ void URadarComponent::RadarBurst()
 
 	// TODO Store EFactionEnum in a better, consistant place
 	// Something like, Cast<APawn>(GetOwner())->GetComponent(FactionComponent)->GetFaction()
-	if (Cast<ASpaceshipPawn>(GetOwner())) {
-		MyFaction = Cast<ASpaceshipPawn>(GetOwner())->GetFaction();
+	URadarRegistrarComponent * RadarRegistrarComponent = GetOwner()->FindComponentByClass<URadarRegistrarComponent>();
+	if (RadarRegistrarComponent) {
+		MyFaction = RadarRegistrarComponent->GetFaction();
 	}
-	else {
-		MyFaction = EFactionEnum::FE_Good;
-	}
+
 	// Clear DetectedPawns
-	DetectedPawns.Empty();
+	DetectedActors.Empty();
 
 	// Get Singleton List (GameMode)
 	auto GameMode = Cast<ASpaceshipGameModeBase>(GetWorld()->GetAuthGameMode());
-	TArray<APawn*> DetectablePawns = GameMode->GetOpposingRadarDetectablePawns(MyFaction);
+	TArray<AActor*> DetectableActors = GameMode->GetOpposingRadarDetectableActors(MyFaction);
 
-	for(int32 i = 0; i < DetectablePawns.Num(); i++)
+	for(int32 i = 0; i < DetectableActors.Num(); i++)
 	{
-		FString PawnName = DetectablePawns[i]->GetName();
+		FString PawnName = DetectableActors[i]->GetName();
 
 		// If this pawn is not the owner pawn
-		if(DetectablePawns[i] != Cast<APawn>(GetOwner()))
+		if(DetectableActors[i] != Cast<AActor>(GetOwner()))
 		{
-			// Check if Pawn is within range, if so raycast to pawn to check if it is in view
-			if (IsPawnWithinRange(DetectablePawns[i]) && IsPawnRadarVisible(DetectablePawns[i]))
+			// Check if Actor is within range, if so raycast to pawn to check if it is in view
+			if (IsActorWithinRange(DetectableActors[i]) && IsActorRadarVisible(DetectableActors[i]))
 			{
-				DetectedPawns.Add(DetectablePawns[i]);
+				DetectedActors.Add(DetectableActors[i]);
 			}
 		}
 	}
 }
 
-bool URadarComponent::IsPawnWithinRange(APawn * Pawn) const
+bool URadarComponent::IsActorWithinRange(AActor * Actor) const
 {
 	FVector RadarLoc = GetOwner()->GetActorLocation();
-	FVector PawnLoc = Pawn->GetActorLocation();
+	FVector PawnLoc = Actor->GetActorLocation();
 
 	FVector OutDir;
 	float OutLen;
@@ -135,11 +136,11 @@ bool URadarComponent::IsPawnWithinRange(APawn * Pawn) const
 	return OutLen < RadarRange;
 }
 
-bool URadarComponent::IsPawnRadarVisible(APawn * Pawn) const
+bool URadarComponent::IsActorRadarVisible(AActor * Actor) const
 {
 	FHitResult OutHit;
 	FVector StartLoc = GetOwner()->GetActorLocation();
-	FVector EndLoc = Pawn->GetActorLocation();
+	FVector EndLoc = Actor->GetActorLocation();
 	
 	const FName TraceTag("MyTraceTag");
 	//GetWorld()->DebugDrawTraceTag = TraceTag;
@@ -156,12 +157,9 @@ bool URadarComponent::IsPawnRadarVisible(APawn * Pawn) const
 	// the first actor hit by the line trace will be the Owner actor so we test against the second
 	if (GetWorld()->LineTraceSingleByChannel(OutHit, StartLoc, EndLoc, ECollisionChannel::ECC_Camera, QueryParams)) {
 
-		if (Cast<APawn>(OutHit.Actor))
+		if (OutHit.Actor == Actor)
 		{
-			if (Cast<APawn>(OutHit.Actor) == Pawn)
-			{
-				return true;
-			}
+			return true;
 		}
 	}
 

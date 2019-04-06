@@ -13,8 +13,9 @@ EBTNodeResult::Type UChooseNextWaypoint::ExecuteTask(UBehaviorTreeComponent& Own
 
 	UPatrolRoute * PatrolRoute = ControlledPawn->FindComponentByClass<UPatrolRoute>();
 
-	if(!ensure(PatrolRoute))
+	if(!PatrolRoute)
 	{
+		UE_LOG(LogTemp, Error, TEXT("UChooseNextWaypoint::ExecuteTask - No PatrolRoute class found on actor %s"), *(ControlledPawn->GetName()));
 		return EBTNodeResult::Failed;
 	}
 
@@ -22,7 +23,7 @@ EBTNodeResult::Type UChooseNextWaypoint::ExecuteTask(UBehaviorTreeComponent& Own
 
 	if(PatrolPoints.Num() == 0)
 	{
-		UE_LOG(LogTemp, Warning, TEXT("No Patrol Points Found"));
+		UE_LOG(LogTemp, Warning, TEXT("UChooseNextWaypoint::ExecuteTask - No Patrol Points Found"));
 		return EBTNodeResult::Failed;
 	}
 
@@ -37,8 +38,9 @@ EBTNodeResult::Type UChooseNextWaypoint::ExecuteTask(UBehaviorTreeComponent& Own
 	// Set WayPoint on Spaceship
 	ASpaceshipPawn * ControlledSpaceship = Cast<ASpaceshipPawn>(OwnerComp.GetAIOwner()->GetPawn());
 
-	if (!ensure(ControlledSpaceship))
+	if (!ControlledSpaceship)
 	{
+		UE_LOG(LogTemp, Error, TEXT("UChooseNextWaypoint::ExecuteTask - Could not cast %s"), *(ControlledPawn->GetName()));
 		return EBTNodeResult::Failed;
 	}
 

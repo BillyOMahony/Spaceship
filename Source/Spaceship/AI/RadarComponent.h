@@ -23,13 +23,13 @@ public:
 	 *	@return the DetectedPawns array
 	 */
 	UFUNCTION(BlueprintCallable)
-	TArray<APawn*> GetDetectedPawns() const;
+	TArray<AActor*> GetDetectedActors() const;
 
 	/*
 	 * @return the closest pawn in DetectedPawns to the owner actor
 	 */
 	UFUNCTION(BlueprintCallable)
-	APawn* GetClosestPawn();
+	AActor* GetClosestActor();
 
 	void SetIgnorePlayer(bool IgnorePlayer);
 
@@ -45,19 +45,19 @@ private:
 	void RadarBurst();
 
 	/*
-	 *	Checks if the distance between Pawn and the owner of this component is less than RadarRange
-	 *	@param Pawn - The Pawn to check the distance to
-	 *	@return whether the pawn is within range
+	 *	Checks if the distance between Actor and the owner of this component is less than RadarRange
+	 *	@param Actor - The Actor to check the distance to
+	 *	@return whether the actor is within range
 	 */
-	bool IsPawnWithinRange(APawn * Pawn) const;
+	bool IsActorWithinRange(AActor * Pawn) const;
 
 	/*
 	 *	Checks if the pawn can be seen by the radar
 	 *	The Pawn cannot be seen if there is an actor between the radar and pawn
-	 *	@param Pawn - The Pawn to check
-	 *	@return whether the pawn is visible or not
+	 *	@param Actor - The Actor to check
+	 *	@return whether the actor is visible or not
 	 */
-	bool IsPawnRadarVisible(APawn * Pawn) const;
+	bool IsActorRadarVisible(AActor* Actor) const;
 
 	UPROPERTY(EditAnywhere, Category = "Radar")
 	bool bRadarEnabled = true;
@@ -68,7 +68,7 @@ private:
 	UPROPERTY(EditAnywhere, Category = "Radar")
 	float RadarBurstRate = 1.f;
 
-	TArray<APawn*> DetectedPawns;
+	TArray<AActor*> DetectedActors;
 
 	bool bIgnorePlayer = false;
 

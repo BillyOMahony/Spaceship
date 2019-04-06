@@ -4,6 +4,7 @@
 
 #include "CoreMinimal.h"
 #include "GameFramework/Pawn.h"
+#include "SpaceshipGameModeBase.h"
 #include "SpaceshipPawn.generated.h"
 
 enum class EFactionEnum : uint8;
@@ -90,11 +91,6 @@ public:
 	UFUNCTION(BlueprintCallable)
 	void DoNotFire();
 
-	/*
-	 *	@return this spaceships faction
-	 */
-	EFactionEnum GetFaction();
-
 protected:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
@@ -125,9 +121,9 @@ protected:
 	float Health = 100.f;
 
 private:
-
-	UPROPERTY(EditAnywhere, Category = "Faction")
-	EFactionEnum Faction;
+	
+	UPROPERTY(EditAnywhere)
+	class URadarRegistrarComponent * RadarRegistrarComponent;
 
 	UPROPERTY(EditAnywhere)
 	AActor * TargetActor;

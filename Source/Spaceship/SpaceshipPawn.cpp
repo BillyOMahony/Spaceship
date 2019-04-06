@@ -7,28 +7,21 @@
 #include "AIController.h"
 #include "Engine/World.h"
 #include "SpaceshipGameModeBase.h"
+#include "Components/RadarRegistrarComponent.h"
 
 // Sets default values
 ASpaceshipPawn::ASpaceshipPawn()
 {
  	// Set this pawn to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
 	PrimaryActorTick.bCanEverTick = true;
+
+	RadarRegistrarComponent = CreateDefaultSubobject<URadarRegistrarComponent>(FName(TEXT("Radar Registrar Component")));
 }
 
 // Called when the game starts or when spawned
 void ASpaceshipPawn::BeginPlay()
 {
 	Super::BeginPlay();
-
-	// Register Pawn with GameMode RadarDetectablePawns
-	auto GameMode = Cast<ASpaceshipGameModeBase>(GetWorld()->GetAuthGameMode());
-	if(GameMode)
-	{
-		GameMode->RegisterWithRadarDetectablePawns(this, Faction);
-	}else
-	{
-		UE_LOG(LogTemp, Error, TEXT("ASpaceshipPawn::BeginPlay - Cannot find GameMode"));
-	}
 
 	MovementComponent = FindComponentByClass<USpaceshipMovementComponent>();
 	WeaponsComponent = FindComponentByClass<USpaceshipWeaponsComponent>();
@@ -82,7 +75,7 @@ void ASpaceshipPawn::OnDeath()
 	auto GameMode = Cast<ASpaceshipGameModeBase>(GetWorld()->GetAuthGameMode());
 	if (GameMode)
 	{
-		GameMode->DeRegisterFromRadarDetectablePawns(this);
+		GameMode->DeRegisterFromRadarDetectableActors(this);
 	}
 	else
 	{
@@ -234,9 +227,4 @@ void ASpaceshipPawn::SetIsVirtualReality(bool VirtualReality)
 void ASpaceshipPawn::SetAIControlsPawn(bool AIControlsPawn)
 {
 	bAIControlsPawn = AIControlsPawn;
-}
-
-EFactionEnum ASpaceshipPawn::GetFaction()
-{
-	return Faction;
 }

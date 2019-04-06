@@ -2,38 +2,41 @@
 
 #include "SpaceshipGameModeBase.h"
 
-void ASpaceshipGameModeBase::RegisterWithRadarDetectablePawns(APawn* Pawn, EFactionEnum Faction)
+void ASpaceshipGameModeBase::RegisterWithRadarDetectableActors(AActor* Pawn, EFactionEnum Faction, ETargetTypeEnum TargetType)
 {
-	RadarDetectablePawns.Add(Pawn, Faction);
+	FRadarActorInformation PawnInfo;
+	PawnInfo.SetFaction(Faction);
+	PawnInfo.SetTargetType(TargetType);
+	RadarDetectableActors.Add(Pawn, PawnInfo);
+	//UE_LOG(LogTemp, Warning, TEXT("ASpaceshipGameModeBase::RegisterWithRadarDetectableActors - Registering %s"), *(Pawn->GetName()));
 }
 
-void ASpaceshipGameModeBase::DeRegisterFromRadarDetectablePawns(APawn* Pawn)
+void ASpaceshipGameModeBase::DeRegisterFromRadarDetectableActors(AActor * Actor)
 {
-	RadarDetectablePawns.Remove(Pawn);
+	RadarDetectableActors.Remove(Actor);
 }
 
-TArray<APawn*> ASpaceshipGameModeBase::GetAllRadarDetectablePawns()
+TArray<AActor*> ASpaceshipGameModeBase::GetAllRadarDetectableActors()
 {
-	TArray<APawn *> AllRadarDetectablePawns;
+	TArray<AActor *> AllRadarDetectableActors;
 
-	for (const TPair<APawn *, EFactionEnum>& pair : RadarDetectablePawns)
+	for (const TPair<AActor *, FRadarActorInformation>& pair : RadarDetectableActors)
 	{
-		AllRadarDetectablePawns.Add(pair.Key);
+		AllRadarDetectableActors.Add(pair.Key);
 	}
 
-	return AllRadarDetectablePawns;
+	return AllRadarDetectableActors;
 }
 
-TArray<APawn*> ASpaceshipGameModeBase::GetOpposingRadarDetectablePawns(EFactionEnum MyFaction)
+TArray<AActor*> ASpaceshipGameModeBase::GetOpposingRadarDetectableActors(EFactionEnum MyFaction)
 {
-	TArray<APawn *> OpposingRadarDetectablePawns;
+	TArray<AActor *> OpposingRadarDetectableActors;
 
-	for (const TPair<APawn *, EFactionEnum>& pair : RadarDetectablePawns)
+	for (const TPair<AActor *, FRadarActorInformation>& pair : RadarDetectableActors)
 	{
-		if (pair.Value != MyFaction) {
-			OpposingRadarDetectablePawns.Add(pair.Key);
+		if (pair.Value.Faction != MyFaction) {
+			OpposingRadarDetectableActors.Add(pair.Key);
 		}
 	}
-
-	return OpposingRadarDetectablePawns;
+	return OpposingRadarDetectableActors;
 }

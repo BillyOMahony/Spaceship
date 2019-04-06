@@ -14,10 +14,47 @@ enum class EFactionEnum : uint8
 };
 
 UENUM(BlueprintType)
+enum class ETargetTypeEnum : uint8
+{
+	TT_Aerial UMETA(DisplayName = "Aerial"),
+	TT_Ground UMETA(DisplayName = "Ground")
+};
+
+UENUM(BlueprintType)
 enum class EOperationEnum : uint8
 {
 	OE_GreaterThan	UMETA(DisplayName = "Greater Than"),
 	OE_LessThan		UMETA(DisplayName = "Less Than")
+};
+
+USTRUCT()
+struct FRadarActorInformation
+{
+	GENERATED_BODY()
+
+	ETargetTypeEnum TargetType;
+
+	ETargetTypeEnum GetTargetType() {
+		return TargetType;
+	}
+
+	void SetTargetType(ETargetTypeEnum TargetType) {
+		this->TargetType = TargetType;
+	}
+
+	EFactionEnum Faction;
+
+	EFactionEnum GetFaction() {
+		return Faction;
+	}
+
+	void SetFaction(EFactionEnum Faction) {
+		this->Faction = Faction;
+	}
+
+	FRadarActorInformation()
+	{
+	}
 };
 
 /**
@@ -33,26 +70,26 @@ public:
 	 *	@param Pawn - the Pawn being added to RadarDetectablePawns
 	 */
 	UFUNCTION(BlueprintCallable)
-	void RegisterWithRadarDetectablePawns(APawn* Pawn, EFactionEnum Faction);
+	void RegisterWithRadarDetectableActors(AActor* Actor, EFactionEnum Faction, ETargetTypeEnum TargetType);
 
 	/*
 	 *	@param Pawn - the Pawn being removed from Radar DetectablePawns
 	 */
 	UFUNCTION(BlueprintCallable)
-	void DeRegisterFromRadarDetectablePawns(APawn * Pawn);
+	void DeRegisterFromRadarDetectableActors(AActor * Actor);
 
 	/*
 	 *  @return The RadarDetectablePawns array
 	 */
-	TArray<APawn *> GetAllRadarDetectablePawns();
+	TArray<AActor *> GetAllRadarDetectableActors();
 
 	/*
 	 *  @return RadarDetectablePawns in opposing Factions
 	 */
-	TArray<APawn *> GetOpposingRadarDetectablePawns(EFactionEnum MyFaction);
+	TArray<AActor *> GetOpposingRadarDetectableActors(EFactionEnum MyFaction);
 
 private:
-	TMap<APawn *, EFactionEnum> RadarDetectablePawns;
+	TMap<AActor *, FRadarActorInformation> RadarDetectableActors;
 
 
 };

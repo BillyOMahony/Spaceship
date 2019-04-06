@@ -7,6 +7,7 @@
 #include "Camera/PlayerCameraManager.h"
 #include "TimerManager.h"
 #include "SpaceshipGameModeBase.h"
+#include "Components/RadarRegistrarComponent.h"
 
 
 // Sets default values
@@ -20,24 +21,14 @@ AVRCharacter::AVRCharacter()
 	Camera = CreateDefaultSubobject<UCameraComponent>(FName(TEXT("Camera")));
 	Camera->SetupAttachment(VRRoot);
 	Camera->AttachToComponent(VRRoot, FAttachmentTransformRules::KeepRelativeTransform);
+
+	RadarRegistrarComponent = CreateDefaultSubobject<URadarRegistrarComponent>(FName(TEXT("Radar Registrar Component")));
 }
 
 // Called when the game starts or when spawned
 void AVRCharacter::BeginPlay()
 {
 	Super::BeginPlay();
-
-	// Register Pawn with GameMode RadarDetectablePawns
-	auto GameMode = Cast<ASpaceshipGameModeBase>(GetWorld()->GetAuthGameMode());
-	if (GameMode)
-	{
-		GameMode->RegisterWithRadarDetectablePawns(this, Faction);
-	}
-	else
-	{
-		UE_LOG(LogTemp, Error, TEXT("ASpaceshipPawn::BeginPlay - Cannot find GameMode"));
-	}
-	// TODO Set Faction in GameMode
 }
 
 void AVRCharacter::Tick(float DeltaTime)

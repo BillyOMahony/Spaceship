@@ -4,7 +4,6 @@
 
 #include "CoreMinimal.h"
 #include "GameFramework/Character.h"
-#include "SpaceshipGameModeBase.h"
 #include "VRCharacter.generated.h"
 
 class UCameraComponent;
@@ -55,9 +54,7 @@ public:
 	void FadeToColor(float Duration, bool bHoldWhenFinished, FLinearColor Color);
 
 private:
-	UPROPERTY(EditAnywhere, Category = "Faction")
-	EFactionEnum Faction;
-	
+
 	UPROPERTY(EditAnywhere)
 	float SpeedMultiplier = 0.25f;
 
@@ -69,6 +66,9 @@ private:
 
 	UPROPERTY(EditAnywhere)
 	float FadeDuration = .5f;
+
+	UPROPERTY(EditAnywhere)
+	class URadarRegistrarComponent * RadarRegistrarComponent;
 
 	/**
 	 * Moves the character forward or backwards
