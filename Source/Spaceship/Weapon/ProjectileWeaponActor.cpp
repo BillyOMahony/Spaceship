@@ -8,8 +8,10 @@
 
 void AProjectileWeaponActor::FireIfOnTarget(AActor * Target)
 {
-	if (GetAngleToTarget(Target) < AimAcceptanceAngle) {
-		Fire();
+	if (Target) {
+		if (GetAngleToTarget(Target) < AimAcceptanceAngle) {
+			Fire();
+		}
 	}
 }
 
@@ -58,7 +60,9 @@ void AProjectileWeaponActor::Fire()
 		SpawnRotation += AngleOffset;
 		FActorSpawnParameters SpawnParams;
 		auto SpawnedProjectile = GetWorld()->SpawnActor<AProjectile>(Projectile, SpawnLocation, SpawnRotation);
-		SpawnedProjectile->LaunchProjectile(InitialProjectileSpeed);
+		if (SpawnedProjectile) {
+			SpawnedProjectile->LaunchProjectile(InitialProjectileSpeed);
+		}
 		bCanFireProjectile = false;
 		GetWorld()->GetTimerManager().SetTimer(
 			RateOfFireTimerHandle,

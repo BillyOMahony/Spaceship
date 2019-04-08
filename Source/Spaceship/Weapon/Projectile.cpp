@@ -57,6 +57,8 @@ void AProjectile::OnOverlapBegin(UPrimitiveComponent * OverlappedComp, AActor * 
 
 void AProjectile::LaunchProjectile(float LaunchSpeed)
 {
-	ProjectileMovementComponent->InitialSpeed = LaunchSpeed;
-	ProjectileMovementComponent->Activate();
+	if (ProjectileMovementComponent) {
+		ProjectileMovementComponent->InitialSpeed = LaunchSpeed;
+		ProjectileMovementComponent->Activate();
+	}
 }

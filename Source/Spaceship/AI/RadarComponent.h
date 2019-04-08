@@ -4,6 +4,7 @@
 
 #include "CoreMinimal.h"
 #include "Components/ActorComponent.h"
+#include "SpaceshipGameModeBase.h"
 #include "RadarComponent.generated.h"
 
 
@@ -26,10 +27,10 @@ public:
 	TArray<AActor*> GetDetectedActors() const;
 
 	/*
-	 * @return the closest pawn in DetectedPawns to the owner actor
+	 * @return the closest actor in DetectedPawns to the owner actor
 	 */
 	UFUNCTION(BlueprintCallable)
-	AActor* GetClosestActor();
+	AActor* GetClosestActor(ETargetTypeEnum TargetType);
 
 	void SetIgnorePlayer(bool IgnorePlayer);
 

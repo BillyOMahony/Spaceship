@@ -9,6 +9,8 @@
 #include "Controllers/SpaceshipAIController.h"
 #include "GameFramework/Actor.h"
 #include "Components/RadarRegistrarComponent.h"
+#include "Engine/World.h"
+#include "TimerManager.h"
 
 
 // Sets default values for this component's properties
@@ -18,43 +20,6 @@ URadarComponent::URadarComponent()
 	// off to improve performance if you don't need them.
 	PrimaryComponentTick.bCanEverTick = true;
 
-}
-
-AActor * URadarComponent::GetClosestActor()
-{
-	if(DetectedActors.Num() > 0)
-	{
-		int32 ClosestIndex = 0;
-
-		FVector RadarLoc = GetOwner()->GetActorLocation();
-		FVector PawnLoc = DetectedActors[0]->GetActorLocation();
-
-		FVector OutDir;
-		float OutLen;
-
-		(RadarLoc - PawnLoc).ToDirectionAndLength(OutDir, OutLen);
-		float ClosestDst = OutLen;
-
-		for(int32 i = 1; i < DetectedActors.Num(); i++)
-		{
-			PawnLoc = DetectedActors[i]->GetActorLocation();
-			(RadarLoc - PawnLoc).ToDirectionAndLength(OutDir, OutLen);
-			if(OutLen < ClosestDst)
-			{
-				ClosestDst = OutLen;
-				ClosestIndex = i;
-			}
-		}
-
-		return DetectedActors[ClosestIndex];
-	}
-
-	return nullptr;
-}
-
-void URadarComponent::SetIgnorePlayer(bool IgnorePlayer)
-{
-	bIgnorePlayer = IgnorePlayer;
 }
 
 // Called when the game starts
@@ -70,6 +35,18 @@ void URadarComponent::BeginPlay()
 		}
 	}
 
+	FTimerHandle RadarBurstTimerHandle;
+
+	float RandomInitialTimer = FMath::RandRange(0.f, RadarBurstRate);
+
+	GetWorld()->GetTimerManager().SetTimer(
+		RadarBurstTimerHandle,
+		this,
+		&URadarComponent::RadarBurst,
+		RandomInitialTimer,
+		false
+	);
+
 }
 
 // Called every frame
@@ -77,11 +54,55 @@ void URadarComponent::TickComponent(float DeltaTime, ELevelTick TickType, FActor
 {
 	Super::TickComponent(DeltaTime, TickType, ThisTickFunction);
 
-	// ...
+}
 
-	if (bRadarEnabled) {
-		RadarBurst();
+AActor * URadarComponent::GetClosestActor(ETargetTypeEnum TargetType)
+{
+	if (DetectedActors.Num() > 0)
+	{
+		TArray<AActor*> ActorsOfType;
+
+		for (int32 i = 0; i < DetectedActors.Num(); i++) {
+			if (DetectedActors[i]->FindComponentByClass<URadarRegistrarComponent>()->GetTargetType() == TargetType) {
+				ActorsOfType.Add(DetectedActors[i]);
+			}
+		}
+
+		if (ActorsOfType.Num() > 0) {
+			int32 ClosestIndex = 0;
+
+			FVector RadarLoc = GetOwner()->GetActorLocation();
+			FVector PawnLoc = ActorsOfType[0]->GetActorLocation();
+
+			FVector OutDir;
+			float OutLen;
+
+			(RadarLoc - PawnLoc).ToDirectionAndLength(OutDir, OutLen);
+			float ClosestDst = OutLen;
+
+			for (int32 i = 1; i < ActorsOfType.Num(); i++)
+			{
+				if (ActorsOfType[i]->FindComponentByClass<URadarRegistrarComponent>()->GetTargetType() == TargetType) {
+					PawnLoc = ActorsOfType[i]->GetActorLocation();
+					(RadarLoc - PawnLoc).ToDirectionAndLength(OutDir, OutLen);
+					if (OutLen < ClosestDst)
+					{
+						ClosestDst = OutLen;
+						ClosestIndex = i;
+					}
+				}
+			}
+
+			return ActorsOfType[ClosestIndex];
+		}
 	}
+
+	return nullptr;
+}
+
+void URadarComponent::SetIgnorePlayer(bool IgnorePlayer)
+{
+	bIgnorePlayer = IgnorePlayer;
 }
 
 TArray<AActor*> URadarComponent::GetDetectedActors() const
@@ -91,6 +112,8 @@ TArray<AActor*> URadarComponent::GetDetectedActors() const
 
 void URadarComponent::RadarBurst()
 {
+	if (!bRadarEnabled) return;
+
 	EFactionEnum MyFaction;
 
 	// TODO Store EFactionEnum in a better, consistant place
@@ -121,6 +144,16 @@ void URadarComponent::RadarBurst()
 			}
 		}
 	}
+
+	FTimerHandle RadarBurstTimerHandle;
+
+	GetWorld()->GetTimerManager().SetTimer(
+		RadarBurstTimerHandle,
+		this,
+		&URadarComponent::RadarBurst,
+		RadarBurstRate,
+		false
+	);
 }
 
 bool URadarComponent::IsActorWithinRange(AActor * Actor) const
