@@ -35,7 +35,7 @@ void ARifle::Fire()
 			FActorSpawnParameters SpawnParams;
 
 			auto SpawnedProjectile = GetWorld()->SpawnActor<AProjectile>(Projectile, SpawnLocation, SpawnRotation);
-			SpawnedProjectile->LaunchProjectile();
+			SpawnedProjectile->LaunchProjectile(InitialProjectileSpeed);
 
 			if (AudioComponent->Sound)AudioComponent->Play();
 

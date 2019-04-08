@@ -19,5 +19,8 @@ public:
 
 protected:
 
+	UPROPERTY(EditAnywhere, Category = "Blackboard")
+	struct FBlackboardKeySelector TargetActorKey;
+
 	class ASpaceshipPawn * ControlledSpaceship;
 };

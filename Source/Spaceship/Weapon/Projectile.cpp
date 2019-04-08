@@ -20,14 +20,14 @@ AProjectile::AProjectile()
 	Mesh = CreateDefaultSubobject<UStaticMeshComponent>(FName("Collision Mesh"));
 	SetRootComponent(Mesh);
 	Mesh->SetNotifyRigidBodyCollision(true);
-	//Mesh->SetVisibility(false);
 }
 
 // Called when the game starts or when spawned
 void AProjectile::BeginPlay()
 {
 	Super::BeginPlay();
-	Mesh->OnComponentHit.AddDynamic(this, &AProjectile::OnCompHit);
+	//Mesh->OnComponentHit.AddDynamic(this, &AProjectile::OnCompHit);
+	Mesh->OnComponentBeginOverlap.AddDynamic(this, &AProjectile::OnOverlapBegin);
 }
 
 // Called every frame
@@ -37,6 +37,7 @@ void AProjectile::Tick(float DeltaTime)
 
 }
 
+/*
 void AProjectile::OnCompHit(UPrimitiveComponent * HitComp, AActor * OtherActor, UPrimitiveComponent * OtherComp, FVector NormalImpulse, const FHitResult & Hit)
 {
 	FHitResult HitInfo;
@@ -44,8 +45,18 @@ void AProjectile::OnCompHit(UPrimitiveComponent * HitComp, AActor * OtherActor, 
 
 	Destroy();
 }
+*/
 
-void AProjectile::LaunchProjectile()
+void AProjectile::OnOverlapBegin(UPrimitiveComponent * OverlappedComp, AActor * OtherActor, UPrimitiveComponent * OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult & SweepResult)
 {
+	FHitResult HitInfo;
+	UGameplayStatics::ApplyDamage(OtherActor, Damage, GetInstigatorController(), this, UDamageType::StaticClass());
+
+	Destroy();
+}
+
+void AProjectile::LaunchProjectile(float LaunchSpeed)
+{
+	ProjectileMovementComponent->InitialSpeed = LaunchSpeed;
 	ProjectileMovementComponent->Activate();
 }

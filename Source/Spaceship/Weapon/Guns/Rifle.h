@@ -27,4 +27,7 @@ protected:
 private:
 	UPROPERTY(EditAnywhere)
 	TSubclassOf<class AProjectile> Projectile;
+
+	UPROPERTY(EditAnywhere)
+	float InitialProjectileSpeed = 100000.f;
 };

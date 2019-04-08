@@ -22,6 +22,8 @@ public:
 
 	virtual void FireIfOnTarget(AActor* Target) override;
 
+	void AimAtActor(AActor * Actor) override;
+
 protected:
 
 private:

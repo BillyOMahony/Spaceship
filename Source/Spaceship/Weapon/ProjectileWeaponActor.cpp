@@ -8,22 +8,33 @@
 
 void AProjectileWeaponActor::FireIfOnTarget(AActor * Target)
 {
-	// Raycast
-	FHitResult HitResult;
+	if (GetAngleToTarget(Target) < AimAcceptanceAngle) {
+		Fire();
+	}
+}
 
-	bool HitFound = GetWorld()->LineTraceSingleByChannel(
-		HitResult,
-		MunitionSpawnPoint->GetComponentLocation(),
-		MunitionSpawnPoint->GetComponentLocation() + (MunitionSpawnPoint->GetForwardVector() * TraceRange),
-		ECollisionChannel::ECC_Camera
-	);
+void AProjectileWeaponActor::AimAtActor(AActor * Actor)
+{
+	if (!ensure(Turret && Barrel)) return;
 
-	if(HitResult.GetActor())
+	float DistanceToActor = (Actor->GetActorLocation() - MunitionSpawnPoint->GetComponentLocation()).Size();
+	float Time = DistanceToActor / InitialProjectileSpeed;
+	FVector PredictedPosition = Actor->GetActorLocation() + (Actor->GetVelocity() * Time);
+
+	FTransform BarrelTipTransform = MunitionSpawnPoint->GetComponentTransform();
+	FVector AimDirection = BarrelTipTransform.InverseTransformPosition(PredictedPosition).GetSafeNormal();
+
+	auto DeltaRotator = AimDirection.Rotation();
+
+	RotateBarrel(DeltaRotator.Pitch);
+
+	if (DeltaRotator.Yaw > 180 || DeltaRotator.Yaw < -180)
 	{
-		if(HitResult.GetActor() == Target)
-		{
-			Fire();
-		}
+		RotateTurret(-DeltaRotator.Yaw);
+	}
+	else
+	{
+		RotateTurret(DeltaRotator.Yaw);
 	}
 }
 
@@ -47,7 +58,7 @@ void AProjectileWeaponActor::Fire()
 		SpawnRotation += AngleOffset;
 		FActorSpawnParameters SpawnParams;
 		auto SpawnedProjectile = GetWorld()->SpawnActor<AProjectile>(Projectile, SpawnLocation, SpawnRotation);
-		SpawnedProjectile->LaunchProjectile();
+		SpawnedProjectile->LaunchProjectile(InitialProjectileSpeed);
 		bCanFireProjectile = false;
 		GetWorld()->GetTimerManager().SetTimer(
 			RateOfFireTimerHandle,

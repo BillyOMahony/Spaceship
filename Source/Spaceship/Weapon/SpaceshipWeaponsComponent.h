@@ -32,6 +32,13 @@ public:
 	void AimAt(FVector Location);
 
 	/*
+	 *	Aims all weapons at the predicted location of the Actor.
+	 *	Takes into account projectile travel time.
+	 *	@param Actor - Actor being aimed at
+	 */
+	void AimAtActor(AActor * Actor);
+
+	/*
 	 *	Starts firing weapons
 	 */
 	UFUNCTION(BlueprintCallable)

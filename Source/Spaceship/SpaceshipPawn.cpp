@@ -177,10 +177,10 @@ void ASpaceshipPawn::MoveTowardsTargetActor()
 	}
 }
 
-void ASpaceshipPawn::AimTowardsTarget()
+void ASpaceshipPawn::AimTowardsTarget(AActor * Target)
 {
-	if (TargetActor && WeaponsComponent) {
-		WeaponsComponent->AimAt(TargetActor->GetActorLocation());
+	if (Target && WeaponsComponent) {
+		WeaponsComponent->AimAt(Target->GetActorLocation());
 	}
 }
 

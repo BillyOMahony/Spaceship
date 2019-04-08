@@ -20,6 +20,6 @@ void ASpaceshipAIController::AimTowardAndFireAtTargetActor()
 {
 	if (ControlledPawn)
 	{
-		ControlledPawn->AimTowardsTarget();
+		//ControlledPawn->AimTowardsTarget();
 	}
 }

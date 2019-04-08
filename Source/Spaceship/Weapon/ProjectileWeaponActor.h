@@ -18,12 +18,9 @@ public:
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;
 
-	/*
-	 *
-	 */
 	virtual void FireIfOnTarget(AActor* Target) override;
 
-protected:
+	void AimAtActor(AActor * Actor) override;
 
 private:
 	/*
@@ -50,6 +47,9 @@ private:
 
 	UPROPERTY(EditAnywhere)
 	float AngleOffset = 0.f;
+
+	UPROPERTY(EditAnywhere)
+	float InitialProjectileSpeed = 100000.f;
 
 	bool bCanFireProjectile = true;
 

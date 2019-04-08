@@ -68,6 +68,13 @@ void UHardpointComponent::DestroyWeapon()
 	}
 }
 
+void UHardpointComponent::AimWeaponAtActor(AActor * Actor)
+{
+	if (SpawnedWeapon) {
+		SpawnedWeapon->AimAtActor(Actor);
+	}
+}
+
 void UHardpointComponent::BeginFireWeapon()
 {
 	if(SpawnedWeapon)

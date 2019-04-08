@@ -31,31 +31,18 @@ void ABeamWeaponActor::Tick(float DeltaTime)
 
 void ABeamWeaponActor::FireIfOnTarget(AActor * Target)
 {
-	// Raycast
-	FHitResult HitResult;
-
-	bool HitFound = GetWorld()->LineTraceSingleByChannel(
-		HitResult,
-		MunitionSpawnPoint->GetComponentLocation(),
-		MunitionSpawnPoint->GetComponentLocation() + (MunitionSpawnPoint->GetForwardVector() * TraceRange),
-		ECollisionChannel::ECC_Camera
-	);
-
-	if (HitResult.GetActor())
-	{
-		if (HitResult.GetActor() == Target)
-		{
-			bAttemptingToFire = true;
-		}
-		else
-		{
-			bAttemptingToFire = false;
-		}
+	if (GetAngleToTarget(Target) < AimAcceptanceAngle) {
+		bAttemptingToFire = true;
 	}
-	else
-	{
+	else {
 		bAttemptingToFire = false;
 	}
+}
+
+void ABeamWeaponActor::AimAtActor(AActor * Actor)
+{
+	// Beams have instant travel time so just aim at the actor
+	AimAt(Actor->GetActorLocation());
 }
 
 void ABeamWeaponActor::Fire()

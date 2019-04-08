@@ -29,6 +29,19 @@ AWeaponActor::AWeaponActor()
 	MuzzleFlash->bAutoActivate = false;
 }
 
+float AWeaponActor::GetAngleToTarget(AActor * Target)
+{
+	FVector TurretAimVector = MunitionSpawnPoint->GetForwardVector();
+
+	FVector ActorVectorFromGun = (Target->GetActorLocation() - MunitionSpawnPoint->GetComponentLocation()).GetSafeNormal();
+
+	float DotProduct = FVector::DotProduct(ActorVectorFromGun, TurretAimVector);
+
+	float RadiansAngle = acosf(DotProduct);
+
+	return FMath::RadiansToDegrees(RadiansAngle);
+}
+
 void AWeaponActor::AimAt(FVector Location)
 {
 	if (!ensure(Turret && Barrel)) return;
@@ -49,6 +62,11 @@ void AWeaponActor::AimAt(FVector Location)
 		RotateTurret(DeltaRotator.Yaw);
 	}
 	
+}
+
+void AWeaponActor::AimAtActor(AActor * Actor)
+{
+	UE_LOG(LogTemp, Error, TEXT("AWeaponActor::AimAtActor - Not Overriden"));
 }
 
 void AWeaponActor::BeginFireWeapon()

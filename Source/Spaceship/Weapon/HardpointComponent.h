@@ -35,6 +35,12 @@ public:
 	void AimWeaponAt(FVector Location);
 
 	/*
+	 *	Instructs weapon to aim at the predicted location Actor taking projectile travel time into account.
+	 *	@param Actor - Actor to aim at
+	 */
+	void AimWeaponAtActor(AActor * Actor);
+
+	/*
 	 *	Instructs weapon to fire
 	 */
 	void BeginFireWeapon();

@@ -62,7 +62,7 @@ public:
 	/*
 	 *	Aims towards TargetActor and fires at it if aiming at it
 	 */
-	void AimTowardsTarget();
+	void AimTowardsTarget(AActor * Target);
 
 	/*
 	 *	Fires at the target if the weapon is on target

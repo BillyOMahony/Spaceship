@@ -2,6 +2,7 @@
 
 #include "SpaceshipAimTowardsTarget.h"
 #include "SpaceshipPawn.h"
+#include "BehaviorTree/BlackboardComponent.h"
 #include "AIController.h"
 
 EBTNodeResult::Type USpaceshipAimTowardsTarget::ExecuteTask(UBehaviorTreeComponent& OwnerComp, uint8* NodeMemory)
@@ -13,7 +14,12 @@ EBTNodeResult::Type USpaceshipAimTowardsTarget::ExecuteTask(UBehaviorTreeCompone
 		return EBTNodeResult::Failed;
 	}
 
-	ControlledSpaceship->AimTowardsTarget();
+	// Get the Waypoint
+	UBlackboardComponent * BlackboardComponent = OwnerComp.GetBlackboardComponent();
+
+	AActor * TargetActor = Cast<AActor>(BlackboardComponent->GetValueAsObject(TargetActorKey.SelectedKeyName));
+
+	ControlledSpaceship->AimTowardsTarget(TargetActor);
 
 	return EBTNodeResult::Succeeded;
 }

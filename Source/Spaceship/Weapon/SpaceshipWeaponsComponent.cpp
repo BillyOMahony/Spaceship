@@ -45,6 +45,14 @@ void USpaceshipWeaponsComponent::AimAt(FVector Location)
 	}
 }
 
+void USpaceshipWeaponsComponent::AimAtActor(AActor * Actor)
+{
+	for (int32 i = 0; i < Hardpoints.Num(); i++)
+	{
+		Hardpoints[i]->AimWeaponAtActor(Actor);
+	}
+}
+
 void USpaceshipWeaponsComponent::BeginFireWeapons()
 {
 	for (int32 i = 0; i < Hardpoints.Num(); i++)

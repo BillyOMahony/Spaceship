@@ -16,6 +16,12 @@ public:
 	AWeaponActor();
 
 protected:
+	UPROPERTY(VisibleAnywhere)
+	UStaticMeshComponent * Turret;
+
+	UPROPERTY(VisibleAnywhere)
+	UStaticMeshComponent * Barrel;
+
 	UPROPERTY(VisibleAnywhere, meta = (AllowPrivateAccess = "true"))
 	USceneComponent * MunitionSpawnPoint;
 
@@ -25,7 +31,17 @@ protected:
 	UPROPERTY(EditAnywhere)
 	float TraceRange = 50000.f;
 
+	UPROPERTY(EditAnywhere)
+	float AimAcceptanceAngle = 10.f;
+
 	bool bAttemptingToFire = false;
+
+	/*
+	 *	Finds the angle from munition spawn point to the Target
+	 *	@param Target - The Actor to find the angle to
+	 *	@return the angle between munition spawn point and Target
+	 */
+	float GetAngleToTarget(AActor * Target);
 
 public:	
 
@@ -34,6 +50,12 @@ public:
 	 *	@param Location - The Vector to aim at
 	 */
 	void AimAt(FVector Location);
+
+	/*
+	 *	Aims the turret at the predicted location of Actor based off bullet travel time
+	 *	@param Actor - The Actor to aim at
+	 */
+	virtual void AimAtActor(AActor * Actor);
 
 	/*
 	 *	Sets this weapon to automatically fire when possible
@@ -57,13 +79,19 @@ public:
 	 */
 	void SetTargetActor(AActor * TargetActor);
 
+	/*
+	 *	Rotates the turret
+	 *	@param RelativeSpeed - Decides the direction of rotation
+	 */
+	void RotateTurret(float RelativeSpeed);
+
+	/*
+	 *	Rotates the barrel
+	 *	@param RelativeSpeed - Decides the direction of rotation
+	 */
+	void RotateBarrel(float RelativeSpeed);
+
 private:
-	UPROPERTY(VisibleAnywhere)
-	UStaticMeshComponent * Turret;
-
-	UPROPERTY(VisibleAnywhere)
-	UStaticMeshComponent * Barrel;
-
 	UPROPERTY(EditAnywhere)
 	float MaxTurretDegPerSec = 90;
 
@@ -80,16 +108,4 @@ private:
 	float MinBarrelElevation = -30;
 
 	AActor * TargetActor = nullptr;
-
-	/*
-	 *	Rotates the turret
-	 *	@param RelativeSpeed - Decides the direction of rotation
-	 */
-	void RotateTurret(float RelativeSpeed);
-
-	/*
-	 *	Rotates the barrel
-	 *	@param RelativeSpeed - Decides the direction of rotation
-	 */
-	void RotateBarrel(float RelativeSpeed);
 };
