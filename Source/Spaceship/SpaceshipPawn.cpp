@@ -47,10 +47,6 @@ void ASpaceshipPawn::Tick(float DeltaTime)
 
 	if (bAIControlsPawn) {
 		HandleAIMovement();
-		if(!TargetActor)
-		{
-			DoNotFire();
-		}
 	}
 }
 

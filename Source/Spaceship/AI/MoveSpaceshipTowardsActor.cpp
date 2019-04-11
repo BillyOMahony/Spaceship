@@ -20,8 +20,9 @@ EBTNodeResult::Type UMoveSpaceshipTowardsActor::ExecuteTask(UBehaviorTreeCompone
 
 	TargetActor = Cast<AActor>(BlackboardComponent->GetValueAsObject(TargetActorKey.SelectedKeyName));
 
+	//ControlledSpaceship->SetWayPoint(TargetActor->GetActorLocation());
 	ControlledSpaceship->SetMovingTowardsWayPoint(false);
 	ControlledSpaceship->SetTargetActor(TargetActor);
 
-	return EBTNodeResult::Succeeded;
+	return EBTNodeResult::InProgress;
 }
