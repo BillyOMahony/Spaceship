@@ -41,5 +41,6 @@ private:
 	UPROPERTY(EditAnywhere)
 	TSubclassOf<class AHomingGrenadeProjectile> Projectile;
 
+	UPROPERTY(VisibleAnywhere)
 	class URadarComponent * RadarComponent;
 };

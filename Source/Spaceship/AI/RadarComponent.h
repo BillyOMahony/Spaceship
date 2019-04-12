@@ -21,16 +21,20 @@ public:
 	virtual void TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction) override;
 
 	/*
-	 *	@return the DetectedPawns array
+	 *	@return the DetectedAllies array
 	 */
-	UFUNCTION(BlueprintCallable)
-	TArray<AActor*> GetDetectedActors() const;
+	TArray<AActor *> GetDetectedAllies() const;
+
+	/*
+	 *	@return the DetectedEnemies array
+	 */
+	TArray<AActor *> GetDetectedEnemies() const;
 
 	/*
 	 * @return the closest actor in DetectedPawns to the owner actor
 	 */
 	UFUNCTION(BlueprintCallable)
-	AActor* GetClosestActor(ETargetTypeEnum TargetType);
+	AActor* GetClosestEnemyActor(ETargetTypeEnum TargetType);
 
 	void SetIgnorePlayer(bool IgnorePlayer);
 
@@ -69,7 +73,9 @@ private:
 	UPROPERTY(EditAnywhere, Category = "Radar")
 	float RadarBurstRate = 1.f;
 
-	TArray<AActor*> DetectedActors;
+	TArray<AActor *> DetectedAllies;
+
+	TArray<AActor *> DetectedEnemies;
 
 	bool bIgnorePlayer = false;
 

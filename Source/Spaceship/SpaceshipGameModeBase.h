@@ -84,9 +84,14 @@ public:
 	TArray<AActor *> GetAllRadarDetectableActors();
 
 	/*
-	 *  @return RadarDetectablePawns in opposing Factions
+	 *  @return RadarDetectablePawns not in specified faction
 	 */
 	TArray<AActor *> GetOpposingRadarDetectableActors(EFactionEnum MyFaction);
+
+	/*
+	 *	@return RadarDetectableActors with specified faction
+	 */
+	TArray<AActor *> GetAlliedRadarDetectableActors(EFactionEnum MyFaction);
 
 private:
 	TMap<AActor *, FRadarActorInformation> RadarDetectableActors;

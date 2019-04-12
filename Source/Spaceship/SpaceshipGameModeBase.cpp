@@ -40,3 +40,16 @@ TArray<AActor*> ASpaceshipGameModeBase::GetOpposingRadarDetectableActors(EFactio
 	}
 	return OpposingRadarDetectableActors;
 }
+
+TArray<AActor*> ASpaceshipGameModeBase::GetAlliedRadarDetectableActors(EFactionEnum MyFaction)
+{
+	TArray<AActor *> AlliedRadarDetectableActors;
+
+	for (const TPair<AActor *, FRadarActorInformation>& pair : RadarDetectableActors)
+	{
+		if (pair.Value.Faction == MyFaction) {
+			AlliedRadarDetectableActors.Add(pair.Key);
+		}
+	}
+	return AlliedRadarDetectableActors;
+}

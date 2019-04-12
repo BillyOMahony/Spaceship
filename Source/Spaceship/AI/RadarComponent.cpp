@@ -56,15 +56,25 @@ void URadarComponent::TickComponent(float DeltaTime, ELevelTick TickType, FActor
 
 }
 
-AActor * URadarComponent::GetClosestActor(ETargetTypeEnum TargetType)
+TArray<AActor*> URadarComponent::GetDetectedAllies() const
 {
-	if (DetectedActors.Num() > 0)
+	return DetectedAllies;
+}
+
+TArray<AActor*> URadarComponent::GetDetectedEnemies() const
+{
+	return DetectedEnemies;
+}
+
+AActor * URadarComponent::GetClosestEnemyActor(ETargetTypeEnum TargetType)
+{
+	if (DetectedEnemies.Num() > 0)
 	{
 		TArray<AActor*> ActorsOfType;
 
-		for (int32 i = 0; i < DetectedActors.Num(); i++) {
-			if (DetectedActors[i]->FindComponentByClass<URadarRegistrarComponent>()->GetTargetType() == TargetType) {
-				ActorsOfType.Add(DetectedActors[i]);
+		for (int32 i = 0; i < DetectedEnemies.Num(); i++) {
+			if (DetectedEnemies[i]->FindComponentByClass<URadarRegistrarComponent>()->GetTargetType() == TargetType) {
+				ActorsOfType.Add(DetectedEnemies[i]);
 			}
 		}
 
@@ -105,11 +115,6 @@ void URadarComponent::SetIgnorePlayer(bool IgnorePlayer)
 	bIgnorePlayer = IgnorePlayer;
 }
 
-TArray<AActor*> URadarComponent::GetDetectedActors() const
-{
-	return DetectedActors;
-}
-
 void URadarComponent::RadarBurst()
 {
 	if (!bRadarEnabled) return;
@@ -122,29 +127,59 @@ void URadarComponent::RadarBurst()
 	if (RadarRegistrarComponent) {
 		MyFaction = RadarRegistrarComponent->GetFaction();
 	}
+	else {
+		// TODO Set Faction on weapon when picked up. This would however only be useful
+		// if there is an extension of this game to multiplayer, or humanoid based AI
+		// Assume Weapon is player weapon
+		MyFaction = EFactionEnum::FE_Good;
+	}
 
-	// Clear DetectedPawns
-	DetectedActors.Empty();
+	// Clear relevant arrays
+	DetectedAllies.Empty();
+	DetectedEnemies.Empty();
 
 	// Get Singleton List (GameMode)
 	auto GameMode = Cast<ASpaceshipGameModeBase>(GetWorld()->GetAuthGameMode());
-	TArray<AActor*> DetectableActors = GameMode->GetOpposingRadarDetectableActors(MyFaction);
 
-	for(int32 i = 0; i < DetectableActors.Num(); i++)
+	TArray<AActor *> DetectedAllieActors = GameMode->GetAlliedRadarDetectableActors(MyFaction);
+
+	TArray<AActor *> DetectedEnemieActors = GameMode->GetOpposingRadarDetectableActors(MyFaction);
+
+	
+
+	// Get Allies within range
+	for(int32 i = 0; i < DetectedAllieActors.Num(); i++)
 	{
-		FString PawnName = DetectableActors[i]->GetName();
+		FString PawnName = DetectedAllieActors[i]->GetName();
 
 		// If this pawn is not the owner pawn
-		if(DetectableActors[i] != Cast<AActor>(GetOwner()))
+		if(DetectedAllieActors[i] != Cast<AActor>(GetOwner()))
 		{
 			// Check if Actor is within range, if so raycast to pawn to check if it is in view
-			if (IsActorWithinRange(DetectableActors[i]) && IsActorRadarVisible(DetectableActors[i]))
+			if (IsActorWithinRange(DetectedAllieActors[i]) && IsActorRadarVisible(DetectedAllieActors[i]))
 			{
-				DetectedActors.Add(DetectableActors[i]);
+				DetectedAllies.Add(DetectedAllieActors[i]);
 			}
 		}
 	}
 
+	// Get Enemies within range
+	for (int32 i = 0; i < DetectedEnemieActors.Num(); i++)
+	{
+		FString PawnName = DetectedEnemieActors[i]->GetName();
+
+		// If this pawn is not the owner pawn
+		if (DetectedEnemieActors[i] != Cast<AActor>(GetOwner()))
+		{
+			// Check if Actor is within range, if so raycast to pawn to check if it is in view
+			if (IsActorWithinRange(DetectedEnemieActors[i]) && IsActorRadarVisible(DetectedEnemieActors[i]))
+			{
+				DetectedEnemies.Add(DetectedEnemieActors[i]);
+			}
+		}
+	}
+
+	
 	FTimerHandle RadarBurstTimerHandle;
 
 	GetWorld()->GetTimerManager().SetTimer(

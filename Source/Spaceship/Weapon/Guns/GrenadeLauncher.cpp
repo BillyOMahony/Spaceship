@@ -49,13 +49,17 @@ void AGrenadeLauncher::Fire()
 
 AActor * AGrenadeLauncher::FindTargetedActor()
 {
-	auto DetectedActors = RadarComponent->GetDetectedActors();
+	UE_LOG(LogTemp, Error, TEXT("AGrenadeLauncher::FindTargetedActor"));
+	auto DetectedActors = RadarComponent->GetDetectedEnemies();
 
 	if (DetectedActors.Num() > 0) {
 		AActor * ClosestActor = DetectedActors[0];
 		float ClosestActorDistance = (ClosestActor->GetActorLocation() - GetActorLocation()).Size();
 
 		for (int32 i = 1; i < DetectedActors.Num(); i++) {
+
+			UE_LOG(LogTemp, Warning, TEXT("AGrenadeLauncher::FindTargetedActor - Detected Actor %i: %s"), i, *(DetectedActors[i]->GetName()));
+
 			if (GetAngleOfActorFromBarrel(DetectedActors[i]) < HomingAimAngleAcceptance) {
 				float NewActorDistance = (DetectedActors[i]->GetActorLocation() - GetActorLocation()).Size();
 
