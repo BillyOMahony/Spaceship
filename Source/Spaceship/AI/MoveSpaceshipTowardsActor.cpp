@@ -22,7 +22,6 @@ EBTNodeResult::Type UMoveSpaceshipTowardsActor::ExecuteTask(UBehaviorTreeCompone
 
 	//ControlledSpaceship->SetWayPoint(TargetActor->GetActorLocation());
 	ControlledSpaceship->SetMovingTowardsWayPoint(false);
-	ControlledSpaceship->SetTargetActor(TargetActor);
 
 	return EBTNodeResult::InProgress;
 }
